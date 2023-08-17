@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+						http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="create-table-healthcheck" author="pao">
+		<createTable tableName="health_check">
+			<column name="id" autoIncrement="true" type="int">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="status" type="varchar(100)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet id="initial-data-healthcheck" author="pao">
+		<insert tableName="health_check">
+			<column name="status" value="I'm fine, thank you." />
+		</insert>
+	</changeSet>
+
+</databaseChangeLog>
