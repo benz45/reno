@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="fk-customer" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-customer-to-customer_leval"
+            baseColumnNames="customer_leval_id"
+            baseTableName="customer"
+            referencedColumnNames="id"
+            referencedTableName="customer_leval"
+        />
+    </changeSet>
+
+    <changeSet id="fk-customer_product_favority" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-customer_product_favority-to-customer"
+            baseColumnNames="customer_id"
+            baseTableName="customer_product_favority"
+            referencedColumnNames="id"
+            referencedTableName="customer"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-customer_product_favority-to-product"
+            baseColumnNames="product_id"
+            baseTableName="customer_product_favority"
+            referencedColumnNames="id"
+            referencedTableName="product"
+        />
+    </changeSet>
+
+    <changeSet id="fk-following_store" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-following_store-to-customer"
+            baseColumnNames="customer_id"
+            baseTableName="following_store"
+            referencedColumnNames="id"
+            referencedTableName="customer"
+        />
+    </changeSet>
+
+    <changeSet id="fk-cart" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-cart-to-customer"
+            baseColumnNames="customer_id"
+            baseTableName="cart"
+            referencedColumnNames="id"
+            referencedTableName="customer"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-cart-to-product"
+            baseColumnNames="product_id"
+            baseTableName="cart"
+            referencedColumnNames="id"
+            referencedTableName="product"
+        />
+    </changeSet>
+
+</databaseChangeLog>

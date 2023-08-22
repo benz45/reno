@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="fk-store-to-address" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-store-to-address"
+            baseColumnNames="address_id"
+            baseTableName="store"
+            referencedColumnNames="id"
+            referencedTableName="address"
+        />
+    </changeSet>
+
+    <changeSet id="fk-store_image" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-store_image-to-store"
+            baseColumnNames="store_id"
+            baseTableName="store_image"
+            referencedColumnNames="id"
+            referencedTableName="store"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-store_image-to-image"
+            baseColumnNames="image_id"
+            baseTableName="store_image"
+            referencedColumnNames="id"
+            referencedTableName="image"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-store_image-to-store_image_type"
+            baseColumnNames="store_image_type_id"
+            baseTableName="store_image"
+            referencedColumnNames="id"
+            referencedTableName="store_image_type"
+        />
+    </changeSet>
+
+    <changeSet id="fk-store_code" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-store_code_discount-to-store"
+            baseColumnNames="store_id"
+            baseTableName="store_code_discount"
+            referencedColumnNames="id"
+            referencedTableName="store"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-store_code_discount-to-code_discount_type"
+            baseColumnNames="code_discount_type_id"
+            baseTableName="store_code_discount"
+            referencedColumnNames="id"
+            referencedTableName="code_discount_type"
+        />
+    </changeSet>
+
+
+</databaseChangeLog>

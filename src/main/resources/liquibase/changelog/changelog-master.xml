@@ -6,6 +6,13 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <include file="healthcheck/20201016-initial-table-healthcheck.xml"
-        relativeToChangelogFile="true" />
+    <includeAll path="healthcheck/" relativeToChangelogFile="true" />
+    <includeAll path="product/" relativeToChangelogFile="true" />
+    <includeAll path="order/" relativeToChangelogFile="true" />
+    <includeAll path="payment/" relativeToChangelogFile="true" />
+    <includeAll path="customer/" relativeToChangelogFile="true" />
+    <includeAll path="store/" relativeToChangelogFile="true" />
+    <includeAll path="general/" relativeToChangelogFile="true" />
+
+    <includeAll path="relation/" relativeToChangelogFile="true" />
 </databaseChangeLog>
