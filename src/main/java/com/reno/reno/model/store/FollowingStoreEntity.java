@@ -25,4 +25,8 @@ public class FollowingStoreEntity extends BaseColumnCreatedUpdatedIsDeleted {
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private CustomerEntity customer;
 
+    @ManyToOne
+    @JoinColumn(name = "store_id", referencedColumnName = "id")
+    private StoreEntity store;
+
 }

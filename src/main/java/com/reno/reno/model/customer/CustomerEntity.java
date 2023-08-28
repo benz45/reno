@@ -28,7 +28,7 @@ public class CustomerEntity extends BaseColumnCreatedUpdatedIsDeleted {
     private String email;
 
     @Column(name = "tal")
-    private Integer tal;
+    private String tal;
 
     @ManyToOne
     @JoinColumn(name = "customer_leval_id", referencedColumnName = "id")

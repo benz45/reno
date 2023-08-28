@@ -14,7 +14,7 @@
             </column>
             <column name="name" type="varchar(100)" />
             <column name="email" type="varchar(50)" />
-            <column name="tal" type="int" />
+            <column name="tal" type="varchar(20)" />
             <column name="customer_leval_id" type="int" />
             <column name="updated_at" type="timestamptz" defaultValueComputed="now()">
                 <constraints nullable="false"></constraints>
@@ -46,6 +46,7 @@
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="customer_id" type="bigint" />
+            <column name="store_id" type="bigint" />
             <column name="created_at" type="timestamptz" defaultValueComputed="now()">
                 <constraints nullable="false"></constraints>
             </column>

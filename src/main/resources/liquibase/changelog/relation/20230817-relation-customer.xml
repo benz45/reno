@@ -42,6 +42,13 @@
             referencedColumnNames="id"
             referencedTableName="customer"
         />
+        <addForeignKeyConstraint
+            constraintName="fk-following_store-to-store"
+            baseColumnNames="store_id"
+            baseTableName="following_store"
+            referencedColumnNames="id"
+            referencedTableName="store"
+        />
     </changeSet>
 
     <changeSet id="fk-cart" author="pao">

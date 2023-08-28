@@ -12,14 +12,13 @@
             <column name="id" autoIncrement="true" type="bigint">
                 <constraints primaryKey="true" nullable="false" />
             </column>
-            <column name="tal" type="int" />
+            <column name="tal" type="varchar(20)" />
             <column name="is_active" type="boolean" />
             <column name="house_number" type="varchar(20)" />
             <column name="subdistrict" type="varchar(50)" />
             <column name="district" type="varchar(50)" />
             <column name="province" type="varchar(50)" />
             <column name="postalcode" type="int" />
-            <column name="customer_leval_id" type="int" />
             <column name="updated_at" type="timestamptz" defaultValueComputed="now()">
                 <constraints nullable="false"></constraints>
             </column>
