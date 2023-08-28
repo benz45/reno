@@ -46,5 +46,16 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="create-table-gender" author="pao">
+        <createTable tableName="gender">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name_th" type="varchar(50)" />
+            <column name="name_en" type="varchar(50)" />
+
+        </createTable>
+    </changeSet>
+
 
 </databaseChangeLog>

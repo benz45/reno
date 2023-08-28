@@ -15,6 +15,13 @@
             referencedColumnNames="id"
             referencedTableName="customer_leval"
         />
+        <addForeignKeyConstraint
+            constraintName="fk-customer-to-gender"
+            baseColumnNames="gender_id"
+            baseTableName="customer"
+            referencedColumnNames="id"
+            referencedTableName="gender"
+        />
     </changeSet>
 
     <changeSet id="fk-customer_product_favority" author="pao">

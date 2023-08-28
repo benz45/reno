@@ -15,4 +15,5 @@
     <includeAll path="general/" relativeToChangelogFile="true" />
 
     <includeAll path="relation/" relativeToChangelogFile="true" />
+    <includeAll path="seed/" relativeToChangelogFile="true" />
 </databaseChangeLog>

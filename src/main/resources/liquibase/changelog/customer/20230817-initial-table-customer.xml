@@ -13,8 +13,13 @@
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="name" type="varchar(100)" />
+            <column name="username" type="varchar(50)" />
             <column name="email" type="varchar(50)" />
             <column name="tal" type="varchar(20)" />
+            <column name="birthday" type="timestamptz" defaultValueComputed="now()">
+                <constraints nullable="false"></constraints>
+            </column>
+            <column name="gender_id" type="int" />
             <column name="customer_leval_id" type="int" />
             <column name="updated_at" type="timestamptz" defaultValueComputed="now()">
                 <constraints nullable="false"></constraints>

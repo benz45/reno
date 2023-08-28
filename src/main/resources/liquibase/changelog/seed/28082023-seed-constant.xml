@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="seed-table-gender" author="pao">
+        <insert tableName="gender">
+            <column name="id" value="1" />
+            <column name="name_th" value="ชาย" />
+            <column name="name_en" value="Male" />
+        </insert>
+        <insert tableName="gender">
+            <column name="id" value="2" />
+            <column name="name_th" value="หญิง" />
+            <column name="name_en" value="Female" />
+        </insert>
+    </changeSet>
+    <changeSet id="seed-table-store_image_type" author="pao">
+        <insert tableName="store_image_type">
+            <column name="id" value="1" />
+            <column name="name_th" value="โปรไฟล์" />
+            <column name="name_en" value="Profile" />
+        </insert>
+        <insert tableName="store_image_type">
+            <column name="id" value="2" />
+            <column name="name_th" value="หน้าปก" />
+            <column name="name_en" value="Cover" />
+        </insert>
+    </changeSet>
+    <changeSet id="seed-table-product_type" author="pao">
+        <insert tableName="product_type">
+            <column name="id" value="1" />
+            <column name="name_th" value="คอมพิวเตอร์และอุปกรณ์เสริม" />
+            <column name="name_en" value="Accessories" />
+        </insert>
+        <insert tableName="product_type">
+            <column name="id" value="2" />
+            <column name="name_th" value="หนังสือและนิตยสาร" />
+            <column name="name_en" value="Books and magazines" />
+        </insert>
+        <insert tableName="product_type">
+            <column name="id" value="3" />
+            <column name="name_th" value="เสื้อผ้าแฟชั่น" />
+            <column name="name_en" value="Fashion clothes" />
+        </insert>
+        <insert tableName="product_type">
+            <column name="id" value="4" />
+            <column name="name_th" value="เครื่องใช้ในบ้าน" />
+            <column name="name_en" value="Home appliances" />
+        </insert>
+    </changeSet>
+    <changeSet id="seed-table-payment_detail_type" author="pao">
+        <insert tableName="payment_detail_type">
+            <column name="id" value="1" />
+            <column name="name_th" value="เก็บเงินปลายทาง" />
+            <column name="name_en" value="Cash on delivery" />
+        </insert>
+        <insert tableName="payment_detail_type">
+            <column name="id" value="2" />
+            <column name="name_th" value="พร้อมเพย์" />
+            <column name="name_en" value="Promptpay" />
+        </insert>
+        <insert tableName="payment_detail_type">
+            <column name="id" value="3" />
+            <column name="name_th" value="บริการธนาคารทางโทรศัพท์มือถือ" />
+            <column name="name_en" value="Mobile banking" />
+        </insert>
+        <insert tableName="payment_detail_type">
+            <column name="id" value="4" />
+            <column name="name_th" value="เครดิตการ์ด" />
+            <column name="name_en" value="Credit card" />
+        </insert>
+    </changeSet>
+    <changeSet id="seed-table-code_discount_type" author="pao">
+        <insert tableName="code_discount_type">
+            <column name="id" value="1" />
+            <column name="name_th" value="บาท" />
+            <column name="name_en" value="Bath" />
+        </insert>
+        <insert tableName="code_discount_type">
+            <column name="id" value="2" />
+            <column name="name_th" value="เปอร์เซ็น" />
+            <column name="name_en" value="Percent" />
+        </insert>
+    </changeSet>
+    <changeSet id="seed-table-product_status" author="pao">
+        <insert tableName="product_status">
+            <column name="id" value="1" />
+            <column name="name_th" value="พร้อมขาย" />
+            <column name="name_en" value="Ready for sale" />
+        </insert>
+        <insert tableName="product_status">
+            <column name="id" value="2" />
+            <column name="name_th" value="สินค้าหมด" />
+            <column name="name_en" value="Out of stock" />
+        </insert>
+        <insert tableName="product_status">
+            <column name="id" value="3" />
+            <column name="name_th" value="พร้อมขายเร็วๆนี้" />
+            <column name="name_en" value="Ready for sale soon" />
+        </insert>
+    </changeSet>
+    <changeSet id="seed-table-order_status" author="pao">
+        <insert tableName="order_status">
+            <column name="id" value="1" />
+            <column name="name_th" value="รอชำระเงิน" />
+            <column name="name_en" value="To pay" />
+        </insert>
+        <insert tableName="order_status">
+            <column name="id" value="2" />
+            <column name="name_th" value="เตรียมจัดส่ง" />
+            <column name="name_en" value="To ship" />
+        </insert>
+        <insert tableName="order_status">
+            <column name="id" value="3" />
+            <column name="name_th" value="ระหว่างขนส่ง" />
+            <column name="name_en" value="To receive" />
+        </insert>
+        <insert tableName="order_status">
+            <column name="id" value="4" />
+            <column name="name_th" value="ยกเลิก" />
+            <column name="name_en" value="Cancel" />
+        </insert>
+        <insert tableName="order_status">
+            <column name="id" value="5" />
+            <column name="name_th" value="ตีกลับ" />
+            <column name="name_en" value="Reject" />
+        </insert>
+        <insert tableName="order_status">
+            <column name="id" value="6" />
+            <column name="name_th" value="เสร็จสิ้น" />
+            <column name="name_en" value="Completed" />
+        </insert>
+    </changeSet>
+    <changeSet id="seed-table-shipping_status_type" author="pao">
+        <insert tableName="shipping_status_type">
+            <column name="id" value="1" />
+            <column name="name_th" value="กำลังจัดส่งพัสดุ" />
+            <column name="name_en" value="Waiting for ship" />
+        </insert>
+        <insert tableName="shipping_status_type">
+            <column name="id" value="2" />
+            <column name="name_th" value="อยู่ระหว่างการขนส่ง" />
+            <column name="name_en" value="In transit" />
+        </insert>
+        <insert tableName="shipping_status_type">
+            <column name="id" value="3" />
+            <column name="name_th" value="พัสดุถูกจัดส่งสำเร็จแล้ว" />
+            <column name="name_en" value="Delivered" />
+        </insert>
+    </changeSet>
+    <changeSet id="seed-table-customer_leval" author="pao">
+        <insert tableName="customer_leval">
+            <column name="id" value="1" />
+            <column name="name_th" value="สั่งซื้อน้อยกว่า 10 ออเดอร์" />
+            <column name="name_en" value="Classic" />
+        </insert>
+        <insert tableName="customer_leval">
+            <column name="id" value="2" />
+            <column name="name_th" value="สั่งซื้อมากกว่า 10 ออเดอร์" />
+            <column name="name_en" value="Silver" />
+        </insert>
+        <insert tableName="customer_leval">
+            <column name="id" value="3" />
+            <column name="name_th" value="สั่งซื้อมากกว่า 25 ออเดอร์" />
+            <column name="name_en" value="Gold" />
+        </insert>
+        <insert tableName="customer_leval">
+            <column name="id" value="4" />
+            <column name="name_th" value="สั่งซื้อมากกว่า 55 ออเดอร์" />
+            <column name="name_en" value="Platinum" />
+        </insert>
+    </changeSet>
+
+
+</databaseChangeLog>
