@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import com.google.common.base.Predicate;
+
+import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -23,9 +26,10 @@ public class SwaggerConfiguration {
     @Bean
     public Docket selectApi() {
 
-        return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.ant("/api/**"))
-                .apis(RequestHandlerSelectors.basePackage("com.reno.reno.controller"))
+        return new Docket(DocumentationType.SWAGGER_2).select()
+                .apis((Predicate<RequestHandler>) RequestHandlerSelectors.any())
+                .paths((Predicate<String>) PathSelectors.ant("/**"))
+                .apis((Predicate<RequestHandler>) RequestHandlerSelectors.basePackage("com.reno.reno.controller"))
                 .build().apiInfo(apiInfo());
     }
 

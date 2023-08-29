@@ -58,5 +58,22 @@
         />
     </changeSet>
 
+    <changeSet id="fk-store_owner" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-store_owner-to-store"
+            baseColumnNames="store_id"
+            baseTableName="store_owner"
+            referencedColumnNames="id"
+            referencedTableName="store"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-store_owner-to-customer"
+            baseColumnNames="customer_id"
+            baseTableName="store_owner"
+            referencedColumnNames="id"
+            referencedTableName="customer"
+        />
+    </changeSet>
+
 
 </databaseChangeLog>

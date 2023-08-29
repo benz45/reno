@@ -1,4 +1,4 @@
-package com.reno.reno.model.customer;
+package com.reno.reno.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,10 +12,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
-@Table(name = "customer_leval", schema = "ecommerce_store")
+@Table(schema = "ecommerce_store", name = "gender")
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class CustomerLevalEntity extends BaseNameThNameEn {
+public class GenderEntity extends BaseNameThNameEn {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

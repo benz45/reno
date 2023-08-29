@@ -48,7 +48,7 @@
 
     <changeSet id="create-table-gender" author="pao">
         <createTable tableName="gender">
-            <column name="id" autoIncrement="true" type="bigint">
+            <column name="id" autoIncrement="true" type="int">
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="name_th" type="varchar(50)" />

@@ -14,7 +14,7 @@ public class StoteController {
 
     private @Autowired StoreBusiness storeBusiness;
 
-    @GetMapping("/api/get-stores")
+    @GetMapping("/store")
     public Page<StorePageResponse> getStores(String storeName, Pageable pageable) {
         return storeBusiness.getStores(storeName, pageable);
     }
