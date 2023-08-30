@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceUnit;
 
 import org.springframework.data.domain.Pageable;
@@ -44,10 +45,13 @@ public class BaseCustomRepository {
 	}
 
 	protected Long executeSqlStringCount(String sqlString) {
-		Long result = -1L;
-		EntityManager em = this._entityManagerFactory.createEntityManager();
+		Long result = 0L;
+		EntityManager em = _entityManagerFactory.createEntityManager();
 		try {
-			result = extractLongDataFromBigIntegerObject(em.createNativeQuery(sqlString).getSingleResult());
+			Object obj = em.createNativeQuery(sqlString).getSingleResult();
+			result = extractLongDataFromBigIntegerObject(obj);
+		} catch (NoResultException e) {
+			return result;
 		} finally {
 			em.close();
 		}

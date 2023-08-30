@@ -10,7 +10,7 @@ import com.reno.reno.business.StoreBusiness;
 import com.reno.reno.model.store.StorePageResponse;
 
 @RestController
-public class StoteController {
+public class StoreController {
 
     private @Autowired StoreBusiness storeBusiness;
 

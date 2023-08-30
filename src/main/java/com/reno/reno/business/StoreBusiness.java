@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.reno.reno.model.store.StorePageResponse;
 import com.reno.reno.repository.BaseCustomRepository;
+import com.reno.reno.util.StringUtil;
 
 @Component
 public class StoreBusiness extends BaseCustomRepository {
@@ -23,37 +24,48 @@ public class StoreBusiness extends BaseCustomRepository {
         for (Object[] queryResult : queryResults) {
             responses.add(extractStoreResponse(queryResult));
         }
-        Long storePageCountResponses = getCountStores();
-        return new PageImpl<>(responses, pageable, storePageCountResponses);
-    }
-
-    public Long getCountStores() {
-        String sqlString = generateQueryCountString();
-        return super.executeSqlStringCount(sqlString);
-    }
-
-    private String generateQueryCountString() {
-        StringBuilder s = new StringBuilder();
-        s.append("select count(s.id) from ecommerce_store.store s");
-        s.append(" where s.is_deleted = false");
-        s.append(" group by s.id");
-        return s.toString();
+        String sqlStringCount = generateQueryStringCount(filterStoreName, pageable);
+        Long count = super.executeSqlStringCount(sqlStringCount);
+        return new PageImpl<>(responses, pageable, count);
     }
 
     private String generateQueryString(String filterStoreName, Pageable pageble) {
         StringBuilder s = new StringBuilder();
         s.append(
                 "select s.id, s.store_name, s.detail, i.\"key\" as store_profile_url, s.updated_at, s.created_at, count(s.id) as following_customers from ecommerce_store.store s");
+        s.append(generateFromQuery());
+        s.append(generateFilterStoreNameQuery(filterStoreName));
+        s.append(" group by s.id, i.id order by following_customers desc\n");
+        s.append(pageCustomBusiness.generatePaginationQuery(pageble));
+        return s.toString();
+    }
+
+    private String generateQueryStringCount(String filterStoreName, Pageable pageble) {
+        StringBuilder s = new StringBuilder();
+        s.append(
+                "select count(s.id) from ecommerce_store.store s");
+        s.append(generateFromQuery());
+        s.append(generateFilterStoreNameQuery(filterStoreName));
+        s.append(" group by s.id ");
+        return s.toString();
+    }
+
+    private String generateFromQuery() {
+        StringBuilder s = new StringBuilder();
         s.append(
                 " left join ecommerce_store.store_image si on si.store_id = s.id and si.is_deleted = false");
         s.append(
                 " left join ecommerce_store.following_store fs2 on fs2.store_id = s.id and fs2.is_deleted = false and s.is_deleted = false");
         s.append(" left join ecommerce_store.image i on i.id = si.image_id and i.is_deleted = false ");
+        return s.toString();
+    }
+
+    private String generateFilterStoreNameQuery(String filterStoreName) {
+        StringBuilder s = new StringBuilder();
         if (filterStoreName != null) {
-            s.append(" where s.store_name like  '%" + filterStoreName + "%' ");
+            s.append(" where (lower(s.store_name) like  '%"
+                    + StringUtil.replaceSpecialString(filterStoreName).toLowerCase() + "%') ");
         }
-        s.append(" group by s.id, i.id order by following_customers desc\n");
-        s.append(pageCustomBusiness.generatePaginationQuery(pageble));
         return s.toString();
     }
 
