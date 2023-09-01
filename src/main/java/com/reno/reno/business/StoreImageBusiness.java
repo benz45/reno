@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.reno.reno.model.ImageEntity;
+import com.reno.reno.model.customer.CustomerEntity;
 import com.reno.reno.model.store.CreateStoreImageRequest;
 import com.reno.reno.model.store.StoreEntity;
 import com.reno.reno.model.store.StoreImageEntity;
@@ -25,7 +26,7 @@ public class StoreImageBusiness {
     private @Autowired ImageBusiness imageBusiness;
 
     public List<StoreImageEntity> shouldSaveStoreImage(List<CreateStoreImageRequest> storeImageRequestList,
-            StoreEntity store) {
+            StoreEntity store, CustomerEntity customer) {
         List<StoreImageEntity> storeImages = new ArrayList<>();
         if (!Util.isNullOrEmpty(storeImageRequestList)) {
             List<StoreImageTypeEntity> storeImageTypes = storeImageTypeRepository.findAll();
@@ -36,6 +37,7 @@ public class StoreImageBusiness {
                 if (storeImageType != null) {
                     ImageEntity image = imageBusiness.saveImage(storeImageRequest.getKey());
                     StoreImageEntity storeImage = saveStoreImage(image, store, storeImageType);
+                    image.setCreated_by(customer.getId());
                     storeImages.add(storeImage);
                 }
             }

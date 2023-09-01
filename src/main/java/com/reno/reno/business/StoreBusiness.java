@@ -121,16 +121,17 @@ public class StoreBusiness extends BaseCustomRepository {
         return storeRepository.save(store);
     }
 
-    public CreateStoreResponse convertToCreateStoreResponse(StoreEntity store, List<StoreImageEntity> storeImages) {
+    public CreateStoreResponse convertToCreateStoreResponse(StoreEntity store, List<StoreImageEntity> storeImages,
+            Long customerId) {
         CreateStoreResponse response = new CreateStoreResponse();
         Util.setIfNotNull(store.getId(), response::setId);
         Util.setIfNotNull(store.getStoreName(), response::setStoreName);
         Util.setIfNotNull(store.getDetail(), response::setDetail);
         Util.setIfNotNull(store.getAddress(), response::setAddress);
+        Util.setIfNotNull(storeImages, response::setStoreImages);
         Util.setIfNotNull(store.getCreatedAt(), response::setCreatedAt);
         Util.setIfNotNull(store.getUpdatedAt(), response::setUpdatedAt);
-        Util.setIfNotNull(store.getUpdatedAt(), response::setUpdatedAt);
-        Util.setIfNotNull(storeImages, response::setStoreImages);
+        Util.setIfNotNull(customerId, response::setCreatedBy);
         return response;
     }
 

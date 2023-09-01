@@ -1,10 +1,13 @@
 package com.reno.reno.model;
 
+import javax.validation.constraints.NotNull;
+
 import lombok.Data;
 
 @Data
 public class CreateAddressRequest {
 
+    @NotNull(message = "Address tal required.")
     private String tal;
 
     private boolean isActive;
@@ -17,5 +20,6 @@ public class CreateAddressRequest {
 
     private String province;
 
+    @NotNull(message = "Address postalcode required.")
     private Integer postalcode;
 }

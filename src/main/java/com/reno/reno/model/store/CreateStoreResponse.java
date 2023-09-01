@@ -30,4 +30,6 @@ public class CreateStoreResponse {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @UpdateTimestamp
     private Date updatedAt;
+
+    private Long createdBy;
 }

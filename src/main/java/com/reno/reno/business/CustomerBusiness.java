@@ -53,4 +53,9 @@ public class CustomerBusiness {
         customer.setCreatedAt(new Date());
         return customer;
     }
+
+    public CustomerEntity getCustomerById(Long id) throws ApiException {
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new ApiException("400", "Can't find customer by id: " + id));
+    }
 }
