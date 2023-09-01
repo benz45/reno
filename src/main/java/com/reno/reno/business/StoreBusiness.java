@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.reno.reno.model.AddressEntiry;
@@ -16,6 +15,7 @@ import com.reno.reno.model.store.CreateStoreRequest;
 import com.reno.reno.model.store.CreateStoreResponse;
 import com.reno.reno.model.store.StoreEntity;
 import com.reno.reno.model.store.StoreImageEntity;
+import com.reno.reno.model.store.StorePageFilter;
 import com.reno.reno.model.store.StorePageResponse;
 import com.reno.reno.repository.BaseCustomRepository;
 import com.reno.reno.repository.store.StoreRepository;
@@ -37,23 +37,23 @@ public class StoreBusiness extends BaseCustomRepository {
         return responses;
     }
 
-    public String generateQueryString(String filterStoreName, Pageable pageble) {
+    public String generateQueryString(StorePageFilter filter) {
         StringBuilder s = new StringBuilder();
         s.append(
-                "select distinct s.id, s.store_name, s.detail, i.\"key\" as store_profile_url, s.updated_at, s.created_at, count(s.id) as following_customers from ecommerce_store.store s");
+                "select distinct s.id, s.store_name, s.detail, i.\"key\" as store_profile_url, s.updated_at, s.created_at, count(s.id) as following_customers, so.customer_id as created_by from ecommerce_store.store s");
         s.append(generateFromQuery());
-        s.append(generateFilterStoreNameQuery(filterStoreName));
-        s.append(" group by s.id, i.id order by following_customers desc\n");
-        s.append(pageCustomBusiness.generatePaginationQuery(pageble));
+        s.append(generateFilterQuery(filter));
+        s.append(" group by s.id, i.id, so.id order by following_customers desc\n");
+        s.append(pageCustomBusiness.generatePaginationQuery(filter.getPageable()));
         return s.toString();
     }
 
-    public String generateQueryStringCount(String filterStoreName, Pageable pageble) {
+    public String generateQueryStringCount(StorePageFilter filter) {
         StringBuilder s = new StringBuilder();
         s.append(
                 "select distinct count(s.id) from ecommerce_store.store s");
         s.append(generateFromQuery());
-        s.append(generateFilterStoreNameQuery(filterStoreName));
+        s.append(generateFilterQuery(filter));
         s.append(" group by s.id ");
         return s.toString();
     }
@@ -63,16 +63,22 @@ public class StoreBusiness extends BaseCustomRepository {
         s.append(
                 " left join ecommerce_store.store_image si on si.store_id = s.id and si.is_deleted = false");
         s.append(
+                " left join ecommerce_store.store_owner so on so.store_id = s.id and so.is_deleted = false");
+        s.append(
                 " left join ecommerce_store.following_store fs2 on fs2.store_id = s.id and fs2.is_deleted = false and s.is_deleted = false");
         s.append(" left join ecommerce_store.image i on i.id = si.image_id and i.is_deleted = false ");
         return s.toString();
     }
 
-    public String generateFilterStoreNameQuery(String filterStoreName) {
+    public String generateFilterQuery(StorePageFilter filter) {
         StringBuilder s = new StringBuilder();
-        if (filterStoreName != null) {
-            s.append(" where true and (lower(s.store_name) like  '%"
-                    + StringUtil.replaceSpecialString(filterStoreName).toLowerCase() + "%') ");
+        s.append(" where true ");
+        if (filter.getStoreName() != null) {
+            s.append(" and (lower(s.store_name) like  '%"
+                    + StringUtil.replaceSpecialString(filter.getStoreName()).toLowerCase() + "%') ");
+        }
+        if (filter.getCustomerId() != null) {
+            s.append(" and so.customer_id = " + filter.getCustomerId());
         }
         return s.toString();
     }
@@ -86,6 +92,7 @@ public class StoreBusiness extends BaseCustomRepository {
         storePageResponse.setUpdatedAt(super.extractDateSafty(queryData[4]));
         storePageResponse.setCreatedAt(super.extractDateSafty(queryData[5]));
         storePageResponse.setFollowing_customers(super.convertToLongFromBigIntegerObject(queryData[6]));
+        storePageResponse.setCreatedBy(super.convertToLongFromBigIntegerObject(queryData[7]));
         return storePageResponse;
     }
 

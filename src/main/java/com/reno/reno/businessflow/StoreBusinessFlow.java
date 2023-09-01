@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +18,7 @@ import com.reno.reno.model.store.CreateStoreRequest;
 import com.reno.reno.model.store.CreateStoreResponse;
 import com.reno.reno.model.store.StoreEntity;
 import com.reno.reno.model.store.StoreImageEntity;
+import com.reno.reno.model.store.StorePageFilter;
 import com.reno.reno.model.store.StorePageResponse;
 
 @Component
@@ -28,13 +28,13 @@ public class StoreBusinessFlow {
     private @Autowired CustomerBusiness customerBusiness;
     private @Autowired StoreOwnerBusiness storeOwnerBusiness;
 
-    public Page<StorePageResponse> getStorePages(String filterStoreName, Pageable pageable) {
-        String sqlString = storeBusiness.generateQueryString(filterStoreName, pageable);
-        List<Object[]> queryResults = storeBusiness.exceutePageableSqlString(sqlString, pageable);
+    public Page<StorePageResponse> getStorePages(StorePageFilter filter) {
+        String sqlString = storeBusiness.generateQueryString(filter);
+        List<Object[]> queryResults = storeBusiness.exceutePageableSqlString(sqlString, filter.getPageable());
         List<StorePageResponse> responses = storeBusiness.convertQueryToResponse(queryResults);
-        String sqlStringCount = storeBusiness.generateQueryStringCount(filterStoreName, pageable);
+        String sqlStringCount = storeBusiness.generateQueryStringCount(filter);
         Long count = storeBusiness.executeCountSqlString(sqlStringCount);
-        return new PageImpl<>(responses, pageable, count);
+        return new PageImpl<>(responses, filter.getPageable(), count);
     }
 
     @Transactional(rollbackFor = Exception.class)

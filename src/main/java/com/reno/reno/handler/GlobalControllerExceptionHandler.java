@@ -76,6 +76,15 @@ public class GlobalControllerExceptionHandler {
         return new ApiError(statusCode, errorCode, ex.getMessage());
     }
 
+    @ExceptionHandler({ NumberFormatException.class })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ApiError handleNumberFormatException(HttpServletRequest req, Exception ex) {
+        String statusCode = getStatusCode(HttpStatus.BAD_REQUEST);
+        String errorCode = getErrorCode(HttpStatus.BAD_REQUEST);
+        return new ApiError(statusCode, errorCode, ex.getMessage());
+    }
+
     private String getErrorCode(HttpStatus httpStatus) {
         return String.valueOf(httpStatus.value());
     }

@@ -19,6 +19,8 @@ public class StorePageResponse {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createdAt;
 
+    private Long createdBy;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date updatedAt;
 

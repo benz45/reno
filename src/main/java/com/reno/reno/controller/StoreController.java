@@ -15,6 +15,7 @@ import com.reno.reno.businessflow.StoreBusinessFlow;
 import com.reno.reno.model.exception.ApiException;
 import com.reno.reno.model.store.CreateStoreRequest;
 import com.reno.reno.model.store.CreateStoreResponse;
+import com.reno.reno.model.store.StorePageFilter;
 import com.reno.reno.model.store.StorePageResponse;
 
 @Validated
@@ -24,8 +25,10 @@ public class StoreController {
     private @Autowired StoreBusinessFlow storeBusinessFlow;
 
     @GetMapping("/store")
-    public Page<StorePageResponse> getStorePages(String storeName, Pageable pageable) {
-        return storeBusinessFlow.getStorePages(storeName, pageable);
+    public Page<StorePageResponse> getStorePages(String storeName, Integer customerId, Pageable pageable)
+            throws ApiException {
+        StorePageFilter filter = new StorePageFilter(storeName, customerId, pageable);
+        return storeBusinessFlow.getStorePages(filter);
     }
 
     @PostMapping("/store")

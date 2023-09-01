@@ -16,6 +16,6 @@ public class ApiError {
 		this.statusCode = statusCode;
 		this.errorCode = errorCode;
 		this.errorMessage = errorMessage;
-		this.project = "Dragon";
+		this.project = "Reno";
 	}
 }

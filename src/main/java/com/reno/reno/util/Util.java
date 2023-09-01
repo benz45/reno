@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import com.reno.reno.model.exception.ApiException;
+
 public class Util {
     private Util() {
     }
@@ -22,6 +24,14 @@ public class Util {
     public static <T> boolean isNullOrEmpty(T value) {
         return value == null || ((boolean) (value instanceof String && ((String) value).isEmpty()))
                 || (value instanceof List && ((boolean) ((List<T>) value).isEmpty()));
+    }
+
+    public static Integer convertStringToInteger(String value) throws ApiException {
+        try {
+            return Integer.valueOf(value);
+        } catch (NumberFormatException ex) {
+            throw new ApiException("400", "Invalid " + ex.getMessage());
+        }
     }
 
 }
