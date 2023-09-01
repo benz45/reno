@@ -16,10 +16,10 @@ public class StorePageResponse {
 
     private String storeProfileUrl;
 
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createdAt;
 
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date updatedAt;
 
     private Long following_customers;

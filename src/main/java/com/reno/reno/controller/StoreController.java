@@ -1,21 +1,35 @@
 package com.reno.reno.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.reno.reno.business.StoreBusiness;
+import com.reno.reno.businessflow.StoreBusinessFlow;
+import com.reno.reno.model.exception.ApiException;
+import com.reno.reno.model.store.CreateStoreRequest;
+import com.reno.reno.model.store.CreateStoreResponse;
 import com.reno.reno.model.store.StorePageResponse;
 
+@Validated
 @RestController
 public class StoreController {
 
-    private @Autowired StoreBusiness storeBusiness;
+    private @Autowired StoreBusinessFlow storeBusinessFlow;
 
     @GetMapping("/store")
-    public Page<StorePageResponse> getStores(String storeName, Pageable pageable) {
-        return storeBusiness.getStores(storeName, pageable);
+    public Page<StorePageResponse> getStorePages(String storeName, Pageable pageable) {
+        return storeBusinessFlow.getStorePages(storeName, pageable);
+    }
+
+    @PostMapping("/store")
+    public CreateStoreResponse postStores(@Valid @RequestBody CreateStoreRequest request) throws ApiException {
+        return storeBusinessFlow.createStore(request);
     }
 }

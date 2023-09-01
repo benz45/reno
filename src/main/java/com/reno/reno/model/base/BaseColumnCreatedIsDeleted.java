@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
@@ -14,7 +16,8 @@ import lombok.Data;
 public class BaseColumnCreatedIsDeleted {
 
     @Column(name = "created_at", updatable = false)
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @CreationTimestamp
     private Date createdAt;
 
     @Column(name = "is_deleted")

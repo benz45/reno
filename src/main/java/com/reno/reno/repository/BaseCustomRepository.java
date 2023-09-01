@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceUnit;
+import javax.persistence.Query;
 
 import org.springframework.data.domain.Pageable;
 
@@ -33,7 +34,7 @@ public class BaseCustomRepository {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected List<Object[]> exceuteSqlStringPageable(String sqlString, Pageable page) {
+	public List<Object[]> exceutePageableSqlString(String sqlString, Pageable page) {
 		List<Object[]> resultList = new ArrayList<>();
 		EntityManager em = _entityManagerFactory.createEntityManager();
 		try {
@@ -44,34 +45,31 @@ public class BaseCustomRepository {
 		return resultList;
 	}
 
-	protected Long executeSqlStringCount(String sqlString) {
-		Long result = 0L;
+	public Long executeCountSqlString(String sqlString) {
 		EntityManager em = _entityManagerFactory.createEntityManager();
 		try {
-			Object obj = em.createNativeQuery(sqlString).getSingleResult();
-			result = extractLongDataFromBigIntegerObject(obj);
+			Query query = em.createNativeQuery(sqlString);
+			Object resultObj = query.getSingleResult();
+			return convertToLongFromBigIntegerObject(resultObj);
 		} catch (NoResultException e) {
-			return result;
+			return 0L;
 		} finally {
 			em.close();
 		}
-		return result;
 	}
 
-	protected Long extractLongDataFromBigIntegerObject(Object data) {
-		Long result = null;
-		if (data != null) {
-			result = ((BigInteger) data).longValue();
+	protected Long convertToLongFromBigIntegerObject(Object data) {
+		if (data instanceof BigInteger) {
+			return ((BigInteger) data).longValue();
 		}
-		return result;
+		return null;
 	}
 
-	protected Long extractLongDataFromIntegerObject(Object data) {
-		Long result = null;
-		if (data != null) {
-			result = ((Integer) data).longValue();
+	protected Long convertToLongFromIntegerObject(Object data) {
+		if (data instanceof Integer) {
+			return ((Integer) data).longValue();
 		}
-		return result;
+		return null;
 	}
 
 	protected Double extractDoubleSafty(Object data) {

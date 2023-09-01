@@ -28,7 +28,7 @@ public class StoreEntity extends BaseColumnCreatedUpdatedIsDeleted {
     private Long id;
 
     @Column(name = "store_name")
-    private String name;
+    private String storeName;
 
     @Column(name = "detail")
     private String detail;

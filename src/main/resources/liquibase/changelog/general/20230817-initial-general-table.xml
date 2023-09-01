@@ -35,9 +35,6 @@
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="key" type="varchar(30)" />
-            <column name="updated_at" type="timestamptz" defaultValueComputed="now()">
-                <constraints nullable="false"></constraints>
-            </column>
             <column name="created_at" type="timestamptz" defaultValueComputed="now()">
                 <constraints nullable="false"></constraints>
             </column>

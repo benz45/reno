@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -64,6 +65,15 @@ public class GlobalControllerExceptionHandler {
         ex.printStackTrace(new PrintWriter(errors));
         log.error(errors.toString());
         return new ApiError(String.valueOf(httpStatus), apiException.getErrorCode(), apiException.getPropertyName());
+    }
+
+    @ExceptionHandler({ HttpRequestMethodNotSupportedException.class })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ApiError handleHttpRequestMethodNotSupportedException(HttpServletRequest req, Exception ex) {
+        String statusCode = getStatusCode(HttpStatus.FORBIDDEN);
+        String errorCode = getErrorCode(HttpStatus.FORBIDDEN);
+        return new ApiError(statusCode, errorCode, ex.getMessage());
     }
 
     private String getErrorCode(HttpStatus httpStatus) {
