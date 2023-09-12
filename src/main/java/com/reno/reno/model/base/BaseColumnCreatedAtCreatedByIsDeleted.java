@@ -12,6 +12,6 @@ import lombok.EqualsAndHashCode;
 public class BaseColumnCreatedAtCreatedByIsDeleted extends BaseColumnCreatedIsDeleted {
 
     @Column(name = "created_by")
-    private Long created_by;
+    private Long createdBy;
 
 }

@@ -8,8 +8,13 @@ import javax.persistence.Table;
 
 import com.reno.reno.model.base.BaseNameThNameEn;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 @Entity
 @Table(name = "product_status", schema = "ecommerce_store")
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class ProductStatusEntity extends BaseNameThNameEn {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

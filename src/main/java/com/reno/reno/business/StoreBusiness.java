@@ -37,6 +37,11 @@ public class StoreBusiness extends BaseCustomRepository {
         return responses;
     }
 
+    public StoreEntity shouldGetStoreByIdOrElseThrow(Long storeId) throws ApiException {
+        return storeRepository.findById(storeId)
+                .orElseThrow(() -> new ApiException("400", "Can't find store id: " + storeId));
+    }
+
     public String generateQueryString(StorePageFilter filter) {
         StringBuilder s = new StringBuilder();
         s.append(

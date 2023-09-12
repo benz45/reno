@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import org.modelmapper.ModelMapper;
+
 import com.reno.reno.model.exception.ApiException;
 
 public class Util {
@@ -32,6 +34,11 @@ public class Util {
         } catch (NumberFormatException ex) {
             throw new ApiException("400", "Invalid " + ex.getMessage());
         }
+    }
+
+    public static <V, T> T map(V value, Class<T> type) {
+        ModelMapper modelMapper = new ModelMapper();
+        return (T) modelMapper.map(value, type);
     }
 
 }

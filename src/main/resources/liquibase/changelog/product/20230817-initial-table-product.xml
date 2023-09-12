@@ -26,7 +26,6 @@
             </column>
             <column name="store_id" type="bigint" />
             <column name="status_id" type="int" />
-            <column name="product_detail_type_id" type="bigint" />
             <column name="is_active" type="boolean" />
             <column name="updated_at" type="timestamptz" defaultValueComputed="now()">
                 <constraints nullable="false"></constraints>

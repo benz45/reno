@@ -13,9 +13,14 @@ import org.hibernate.annotations.Where;
 import com.reno.reno.model.ImageEntity;
 import com.reno.reno.model.base.BaseColumnCreatedIsDeleted;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 @Entity
 @Table(name = "product_image", schema = "ecommerce_store")
 @Where(clause = "is_deleted = false")
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class ProductImageEntity extends BaseColumnCreatedIsDeleted {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

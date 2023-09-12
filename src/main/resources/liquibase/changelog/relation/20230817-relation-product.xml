@@ -23,13 +23,6 @@
             referencedColumnNames="id"
             referencedTableName="product_status"
         />
-        <addForeignKeyConstraint
-            constraintName="fk-product-to-product_detail_type"
-            baseColumnNames="product_detail_type_id"
-            baseTableName="product"
-            referencedColumnNames="id"
-            referencedTableName="product_detail_type"
-        />
     </changeSet>
 
     <changeSet id="fk-product_image" author="pao">

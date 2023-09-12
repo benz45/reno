@@ -35,9 +35,8 @@ public class StoreImageBusiness {
             for (CreateStoreImageRequest storeImageRequest : storeImageRequestList) {
                 StoreImageTypeEntity storeImageType = storeImageTypesMap.get(storeImageRequest.getStoreImageTypeId());
                 if (storeImageType != null) {
-                    ImageEntity image = imageBusiness.saveImage(storeImageRequest.getKey());
+                    ImageEntity image = imageBusiness.saveImage(storeImageRequest.getKey(), customer.getId());
                     StoreImageEntity storeImage = saveStoreImage(image, store, storeImageType);
-                    image.setCreated_by(customer.getId());
                     storeImages.add(storeImage);
                 }
             }

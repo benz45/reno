@@ -12,10 +12,11 @@ import com.reno.reno.repository.ImageRepository;
 public class ImageBusiness {
     private @Autowired ImageRepository imageRepository;
 
-    public ImageEntity saveImage(String key) {
+    public ImageEntity saveImage(String key, Long customerId) {
         ImageEntity image = new ImageEntity();
         image.setKey(key);
         image.setCreatedAt(new Date());
+        image.setCreatedBy(customerId);
         return imageRepository.save(image);
     }
 }
