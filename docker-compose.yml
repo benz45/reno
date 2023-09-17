@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  reno:
+    container_name: "reno"
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "8089:8080"
+    entrypoint:
+      - ./run.sh
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://spartan.cdywjq0qsx42.ap-southeast-1.rds.amazonaws.com:5432/spartan
+      SPRING_DATASOURCE_USERNAME: developer
+      SPRING_DATASOURCE_PASSWORD: goteamspartan
+    external_links:
+      - postgres:pgsql
+    network_mode: "bridge"
