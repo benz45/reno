@@ -3,8 +3,6 @@ package com.reno.reno.businessflow;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +10,7 @@ import com.reno.reno.business.CustomerBusiness;
 import com.reno.reno.business.StoreBusiness;
 import com.reno.reno.business.StoreImageBusiness;
 import com.reno.reno.business.StoreOwnerBusiness;
+import com.reno.reno.model.base.PageResponse;
 import com.reno.reno.model.customer.CustomerEntity;
 import com.reno.reno.model.exception.ApiException;
 import com.reno.reno.model.store.CreateStoreRequest;
@@ -28,13 +27,13 @@ public class StoreBusinessFlow {
     private @Autowired CustomerBusiness customerBusiness;
     private @Autowired StoreOwnerBusiness storeOwnerBusiness;
 
-    public Page<StorePageResponse> getStorePages(StorePageFilter filter) {
-        String sqlString = storeBusiness.generateQueryString(filter);
-        List<Object[]> queryResults = storeBusiness.exceutePageableSqlString(sqlString, filter.getPageable());
+    public PageResponse<StorePageResponse> getStorePages(StorePageFilter filter) {
+        String sqlQuery = storeBusiness.generateQueryString(filter);
+        String sqlCount = storeBusiness.generateQueryStringCount(filter);
+        List<Object[]> queryResults = storeBusiness.exceutePageableSqlString(sqlQuery);
         List<StorePageResponse> responses = storeBusiness.convertQueryToResponse(queryResults);
-        String sqlStringCount = storeBusiness.generateQueryStringCount(filter);
-        Long count = storeBusiness.executeCountSqlString(sqlStringCount);
-        return new PageImpl<>(responses, filter.getPageable(), count);
+        Long count = storeBusiness.executeCountSqlString(sqlCount);
+        return PageResponse.create(responses, count, filter.getPageable(), StorePageResponse.class);
     }
 
     @Transactional(rollbackFor = Exception.class)

@@ -3,6 +3,7 @@ package com.reno.reno.businessflow;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,11 +12,13 @@ import com.reno.reno.business.ProductImageBusiness;
 import com.reno.reno.business.StoreBusiness;
 import com.reno.reno.business.StoreOwnerBusiness;
 import com.reno.reno.model.ImageEntity;
+import com.reno.reno.model.base.PageResponse;
 import com.reno.reno.model.exception.ApiException;
 import com.reno.reno.model.product.CreateProductRequest;
 import com.reno.reno.model.product.CreateProductResponse;
 import com.reno.reno.model.product.ProductDetailTypeEntity;
 import com.reno.reno.model.product.ProductEntity;
+import com.reno.reno.model.product.ProductPageResponse;
 import com.reno.reno.model.store.StoreEntity;
 import com.reno.reno.model.store.StoreOwnerEntity;
 import com.reno.reno.util.Util;
@@ -45,5 +48,15 @@ public class ProductBusinessFlow {
         CreateProductResponse response = Util.map(product, CreateProductResponse.class);
         response.setImages(productImages);
         return response;
+    }
+
+    public PageResponse<ProductPageResponse> shouldGetProductPage(String productName, Pageable pageable) {
+        String sqlQuery = productBusiness.generateQueryStringGetProduct(productName, pageable);
+        String sqlCount = productBusiness.generateQueryStringGetProductCount(productName, pageable);
+        List<Object[]> queryResults = productBusiness.exceutePageableSqlString(sqlQuery);
+        List<ProductPageResponse> productPageResponses = productBusiness
+                .convertQueryResultToProductPageResponse(queryResults);
+        Long count = productBusiness.executeCountSqlString(sqlCount);
+        return PageResponse.create(productPageResponses, count, pageable, ProductPageResponse.class);
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.reno.reno.businessflow.StoreBusinessFlow;
+import com.reno.reno.model.base.PageResponse;
 import com.reno.reno.model.exception.ApiException;
 import com.reno.reno.model.store.CreateStoreRequest;
 import com.reno.reno.model.store.CreateStoreResponse;
@@ -25,7 +26,7 @@ public class StoreController {
     private @Autowired StoreBusinessFlow storeBusinessFlow;
 
     @GetMapping("/store")
-    public Page<StorePageResponse> getStorePages(String storeName, Integer customerId, Pageable pageable)
+    public PageResponse<StorePageResponse> getStorePages(String storeName, Integer customerId, Pageable pageable)
             throws ApiException {
         StorePageFilter filter = new StorePageFilter(storeName, customerId, pageable);
         return storeBusinessFlow.getStorePages(filter);

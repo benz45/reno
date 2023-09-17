@@ -59,7 +59,6 @@ public class StoreBusiness extends BaseCustomRepository {
                 "select distinct count(s.id) from ecommerce_store.store s");
         s.append(generateFromQuery());
         s.append(generateFilterQuery(filter));
-        s.append(" group by s.id ");
         return s.toString();
     }
 
@@ -90,14 +89,14 @@ public class StoreBusiness extends BaseCustomRepository {
 
     public StorePageResponse extractStoreResponse(Object[] queryData) {
         StorePageResponse storePageResponse = new StorePageResponse();
-        storePageResponse.setId(super.convertToLongFromBigIntegerObject(queryData[0]));
-        storePageResponse.setName(super.extractStringSafty(queryData[1]));
-        storePageResponse.setDetail(super.extractStringSafty(queryData[2]));
-        storePageResponse.setStoreProfileUrl(super.extractStringSafty(queryData[3]));
-        storePageResponse.setUpdatedAt(super.extractDateSafty(queryData[4]));
-        storePageResponse.setCreatedAt(super.extractDateSafty(queryData[5]));
-        storePageResponse.setFollowing_customers(super.convertToLongFromBigIntegerObject(queryData[6]));
-        storePageResponse.setCreatedBy(super.convertToLongFromBigIntegerObject(queryData[7]));
+        storePageResponse.setId(super.convertToLongFromBigInteger(queryData[0]));
+        storePageResponse.setName(super.convertToString(queryData[1]));
+        storePageResponse.setDetail(super.convertToString(queryData[2]));
+        storePageResponse.setStoreProfileUrl(super.convertToString(queryData[3]));
+        storePageResponse.setUpdatedAt(super.convertToDate(queryData[4]));
+        storePageResponse.setCreatedAt(super.convertToDate(queryData[5]));
+        storePageResponse.setFollowing_customers(super.convertToLongFromBigInteger(queryData[6]));
+        storePageResponse.setCreatedBy(super.convertToLongFromBigInteger(queryData[7]));
         return storePageResponse;
     }
 

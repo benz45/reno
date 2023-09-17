@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-@EnableAutoConfiguration
 @SpringBootApplication
+@EnableAutoConfiguration
 public class RenoApplication {
 
 	public static void main(String[] args) {

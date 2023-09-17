@@ -11,8 +11,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 
-import org.springframework.data.domain.Pageable;
-
 public class BaseCustomRepository {
 	protected EntityManagerFactory _entityManagerFactory;
 
@@ -34,7 +32,7 @@ public class BaseCustomRepository {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Object[]> exceutePageableSqlString(String sqlString, Pageable page) {
+	public List<Object[]> exceutePageableSqlString(String sqlString) {
 		List<Object[]> resultList = new ArrayList<>();
 		EntityManager em = _entityManagerFactory.createEntityManager();
 		try {
@@ -50,7 +48,7 @@ public class BaseCustomRepository {
 		try {
 			Query query = em.createNativeQuery(sqlString);
 			Object resultObj = query.getSingleResult();
-			return convertToLongFromBigIntegerObject(resultObj);
+			return convertToLongFromBigInteger(resultObj);
 		} catch (NoResultException e) {
 			return 0L;
 		} finally {
@@ -58,7 +56,7 @@ public class BaseCustomRepository {
 		}
 	}
 
-	protected Long convertToLongFromBigIntegerObject(Object data) {
+	protected Long convertToLongFromBigInteger(Object data) {
 		if (data instanceof BigInteger) {
 			return ((BigInteger) data).longValue();
 		}
@@ -72,53 +70,59 @@ public class BaseCustomRepository {
 		return null;
 	}
 
-	protected Double extractDoubleSafty(Object data) {
-		Double result = null;
-		if (data != null) {
-			result = (Double) data;
+	protected Double convertToDouble(Object data) {
+		if (data instanceof Double) {
+			return (Double) data;
 		}
-		return result;
+		return null;
 	}
 
-	protected Integer extractIntegerSafty(Object data) {
-		Integer result = null;
-		if (data != null) {
-			result = (Integer) data;
+	protected Integer convertToInteger(Object data) {
+		if (data instanceof Integer) {
+			return (Integer) data;
 		}
-		return result;
+		return null;
 	}
 
-	protected String extractStringSafty(Object data) {
-		String result = null;
-		if (data != null) {
-			result = data.toString();
+	protected String convertToString(Object data) {
+		if (data instanceof String) {
+			return data.toString();
 		}
-		return result;
+		return null;
 	}
 
-	protected Date extractDateSafty(Object data) {
-		Date result = null;
-		if (data != null) {
-			result = (Date) data;
+	protected Date convertToDate(Object data) {
+		if (data instanceof Date) {
+			return (Date) data;
 		}
-		return result;
+		return null;
 	}
 
-	protected <T> T extractDataSafty(Object data, Class<T> cls) {
-		if (data == null) {
+	protected Boolean convertToBoolean(Object data) {
+		if (data instanceof Boolean) {
+			return (Boolean) data;
+		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <T> T convertToUniqueType(Object data) {
+		if (data instanceof BigInteger) {
+			return (T) Long.valueOf(((BigInteger) data).longValue());
+		}
+		if (data instanceof Long | data instanceof Integer | data instanceof Double | data instanceof String
+				| data instanceof Date | data instanceof Boolean) {
+			return (T) data;
+		}
+		return null;
+	}
+
+	protected <T> T convertToModel(Object data, Class<T> cls) {
+		if (data == null)
 			return null;
-		}
 		if (!cls.isInstance(data)) {
 			throw new IllegalArgumentException("extractDataSafty: Data is not of the expected type");
 		}
 		return cls.cast(data);
-	}
-
-	protected Boolean extractBooleanSafty(Object data) {
-		Boolean result = null;
-		if (data != null) {
-			result = (Boolean) data;
-		}
-		return result;
 	}
 }
