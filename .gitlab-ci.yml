@@ -1,0 +1,16 @@
+stages:
+  - build
+  - deploy
+
+build:
+  image: alpine
+  script:
+    - echo "Hello World" > index.html
+  artifacts:
+      paths:
+            - "index.html"
+deploy:
+  stage: deploy
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  script:
+    - echo "Deploying the application..."

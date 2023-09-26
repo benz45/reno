@@ -11,9 +11,10 @@ services:
     entrypoint:
       - ./run.sh
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://spartan.cdywjq0qsx42.ap-southeast-1.rds.amazonaws.com:5432/spartan
-      SPRING_DATASOURCE_USERNAME: developer
-      SPRING_DATASOURCE_PASSWORD: goteamspartan
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${SECRET_ENV_DB_MASTER_URL}:${SECRET_ENV_DB_PORT}/${SECRET_ENV_DB_DATABASE_NAME}
+      SPRING_DATASOURCE_USERNAME: ${SECRET_ENV_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SECRET_ENV_DB_PASSWORD}
+      ACTIVE_PROFILE: dev
     external_links:
       - postgres:pgsql
     network_mode: "bridge"
