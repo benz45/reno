@@ -3,7 +3,7 @@ services:
   reno:
     container_name: reno
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-dev
       context: .
     ports:
       - "8089:8080"

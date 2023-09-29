@@ -5,10 +5,6 @@ ARG API_VERSION="latest"
 ENV API_VERSION ${API_VERSION}
 ENV PROJECT_NAME="reno"
 
-COPY target/reno-0.0.1-SNAPSHOT.jar .
-EXPOSE 8080
-ENTRYPOINT ["java","-jar","reno-0.0.1-SNAPSHOT.jar"]
-
 # install python
 RUN apt-get update
 RUN apt-get -y install python3-pip
