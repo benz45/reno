@@ -19,11 +19,11 @@ build docker image:
   variables:
     DOCKER_TLS_CERTDIR: ""
   before_script:
-    - echo $CI_BUILD_TOKEN | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
-  script:
     - echo $CI_REGISTRY_USER
     - echo $CI_REGISTRY_PASSWORD
     - echo $CI_REGISTRY
+    - echo "${REGISTRY_PASSWORD:?}" | docker login --password-stdin -u "${REGISTRY_USER:?}" -- "${CI_REGISTRY:?}"
+  script:
     - docker-compose up
     - docker-compose ls
     - docker-compose push --all-tags $CI_REGISTRY_IMAGE
