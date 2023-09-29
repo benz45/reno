@@ -19,7 +19,8 @@ build docker image:
   variables:
     DOCKER_TLS_CERTDIR: ""
   script:
-    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+    - echo $CI_REGISTRY_PASSWORD
+    - docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
     - docker build -t $CI_REGISTRY_IMAGE .
     - docker image ls
     - docker push --all-tags $CI_REGISTRY_IMAGE
