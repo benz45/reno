@@ -1,8 +1,7 @@
-version: "3.8"
-
+version: "3"
 services:
   reno:
-    container_name: "reno"
+    container_name: reno
     build:
       dockerfile: Dockerfile
       context: .
