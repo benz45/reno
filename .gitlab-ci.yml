@@ -1,7 +1,4 @@
 build:
   image: alpine
   script:
-    - echo "Hello World" > index.html
-  artifacts:
-      paths:
-        - "index.html"
+    - echo "Hello World"
