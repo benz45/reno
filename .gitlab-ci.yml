@@ -1,8 +1,10 @@
 stages:
-  - "build"
-  - "build docker image"
+  - build
+  - package
+
 build:
   image: alpine
+  stage: build
   script:
     - echo "Hello World" > index.html
   artifacts:
