@@ -6,5 +6,5 @@ build:
   script:
     - echo "Hello World" > index.html
   artifacts:
-    paths:
-      - "index.html"
+      paths:
+        - "index.html"
