@@ -8,7 +8,7 @@ services:
     ports:
       - "8089:8080"
     entrypoint:
-      - ./run.sh
+      - ./run-dev.sh
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${SECRET_ENV_DB_MASTER_URL}:${SECRET_ENV_DB_PORT}/${SECRET_ENV_DB_DATABASE_NAME}
       SPRING_DATASOURCE_USERNAME: ${SECRET_ENV_DB_USERNAME}

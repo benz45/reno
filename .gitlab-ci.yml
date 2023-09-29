@@ -2,14 +2,13 @@ stages:
   - build
   - package
 
-build:
-  image: alpine
+maven-build:
+  image: maven:3-jdk-11
   stage: build
-  script:
-    - echo "Hello World" > index.html
+  script: "mvn package -B"
   artifacts:
     paths:
-      - index.html
+      - target/*.jar
 
 build docker image:
   image: docker
