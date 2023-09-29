@@ -18,13 +18,11 @@ build docker image:
     - docker:dind
   variables:
     DOCKER_TLS_CERTDIR: ""
-  before_script:
+  script:
     - echo $CI_REGISTRY_USER
     - echo $CI_REGISTRY_PASSWORD
     - echo $CI_REGISTRY
-    # - docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
-    - docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD $CI_REGISTRY
-  script:
+    - docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
     - docker-compose up
     - docker-compose ls
     - docker-compose push --all-tags $CI_REGISTRY_IMAGE
