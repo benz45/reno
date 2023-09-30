@@ -2,7 +2,6 @@
 echo "Start"
 echo ACTIVE_PROFILE: $ACTIVE_PROFILE
 echo API_VERSION: $API_VERSION
-echo JAVA_OPTS: $JAVA_OPTS
 echo PROJECT_NAME: $PROJECT_NAME
 echo "Get Environment Variables"
 
@@ -17,4 +16,6 @@ export SPRING_DATASOURCE_USERNAME=${SECRET_ENV_DB_USERNAME}
 export SPRING_DATASOURCE_PASSWORD=${SECRET_ENV_DB_PASSWORD}
 export
 
+cd /app
+jar uf /app/target/${PROJECT_NAME}-0.0.1-SNAPSHOT.jar BOOT-INF/classes/*
 java -jar $JAVA_OPTS -Dspring.profiles.active=$ACTIVE_PROFILE /app/${PROJECT_NAME}-0.0.1-SNAPSHOT.jar

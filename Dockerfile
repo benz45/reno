@@ -5,6 +5,8 @@ ARG API_VERSION="latest"
 ENV API_VERSION ${API_VERSION}
 ENV PROJECT_NAME="reno"
 
+ADD /target/${PROJECT_NAME}-0.0.1-SNAPSHOT.jar ${PROJECT_NAME}-0.0.1-SNAPSHOT.jar
+
 # install python
 RUN apt-get update
 RUN apt-get -y install python3-pip
@@ -23,5 +25,3 @@ WORKDIR /app/src/main/resources
 ADD ./run.sh ./run.sh
 RUN sed -i 's/\r$//' run.sh
 RUN chmod +x 'run.sh'
-
-ADD /target/${PROJECT_NAME}-0.0.1-SNAPSHOT.jar ${PROJECT_NAME}-0.0.1-SNAPSHOT.jar
