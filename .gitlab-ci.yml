@@ -1,7 +1,15 @@
 stages:
+  - test
   - package
   - build
   - deploy
+
+test install:
+  stage: test
+  image: gitlab/dind:latest
+  script:
+    - apt-get install sudo -y
+    - sudo apt install openssh-server -y
 
 maven-build:
   image: maven:3-jdk-11
@@ -31,11 +39,7 @@ build docker image:
 
 deploy:
   stage: deploy
-  image: docker
-  services:
-    - docker:dind
-  variables:
-    DOCKER_TLS_CERTDIR: ""
+  image: gitlab/dind:latest
   before_script:
     - apt-get install sudo -y
     - sudo apt install openssh-server -y
