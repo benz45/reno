@@ -38,7 +38,7 @@ deploy:
     DOCKER_TLS_CERTDIR: ""
   script:
     - docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
-    - docker rmi $CI_REGISTRY_IMAGE
+    # - docker rmi $CI_REGISTRY_IMAGE
     - docker pull $CI_REGISTRY_IMAGE
     - docker stop $(docker ps -ql) || true
     - docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh $CI_REGISTRY_IMAGE
