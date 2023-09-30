@@ -8,7 +8,15 @@ test install:
   stage: test
   image: gitlab/dind:latest
   script:
-    - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker ps"
+    - mkdir -p ~/.ssh
+    - echo "$AWS_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval "$(ssh-agent -s)"
+    - ssh-add ~/.ssh/id_rsa
+    - ssh-keyscan -H $AWS_SERVER_IP >> ~/.ssh/known_hosts
+    - ssh ec2-user@$AWS_SERVER_IP docker ps
+    
 
 maven-build:
   image: maven:3-jdk-11
