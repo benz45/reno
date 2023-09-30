@@ -9,7 +9,7 @@ test install:
   image: gitlab/dind:latest
   script:
     - apt-get install sudo -y
-    - sudo apt-get remove openssh-client openssh-server --purge
+    - rm /var/lib/apt/lists/*
     - sudo apt install openssh-server -y
     
     
