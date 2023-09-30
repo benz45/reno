@@ -9,7 +9,9 @@ test install:
   image: gitlab/dind:latest
   script:
     - apt-get install sudo -y
+    - sudo apt-get remove openssh-client openssh-server
     - sudo apt install openssh-server -y
+    
     
 
 maven-build:
