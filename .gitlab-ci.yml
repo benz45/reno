@@ -3,6 +3,10 @@ stages:
   - build
   - deploy
 
+image: docker
+services:
+    - docker:dind
+
 maven-build:
   image: maven:3-jdk-11
   stage: package
@@ -12,10 +16,7 @@ maven-build:
       - target/*.jar
 
 build docker image:
-  image: docker
   stage: build
-  services:
-    - docker:dind
   variables:
     DOCKER_TLS_CERTDIR: ""
   script:
