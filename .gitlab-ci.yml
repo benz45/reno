@@ -2,13 +2,14 @@ stages:
   - build
   - package
 
-maven-build:
-  image: maven:3-jdk-11
+build:
+  image: alpine
   stage: build
-  script: "mvn package -B"
+  script:
+    - echo "Hello World" > index.html
   artifacts:
     paths:
-      - target/*.jar
+      - index.html
 
 build docker image:
   image: docker
@@ -23,6 +24,7 @@ build docker image:
     - echo $CI_REGISTRY
     - echo "Logging into ${CI_REGISTRY}"
     - docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
-    - docker-compose up
-    - docker-compose ls
-    - docker-compose push --all-tags $CI_REGISTRY_IMAGE
+    - docker build -t $CI_REGISTRY_IMAGE .
+    - docker images
+    - docker run -d -p 8080:8080 --name $CI_REGISTRY_IMAGE --entrypoint /app/src/main/resources/run.sh $CI_REGISTRY_IMAGE
+    - docker push --all-tag $CI_REGISTRY_IMAGE
