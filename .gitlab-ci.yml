@@ -36,10 +36,16 @@ deploy:
     - docker:dind
   variables:
     DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - apt-get install sudo -y
+    - sudo apt install openssh-server -y
   script:
-    - docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
+    - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE"
+    - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker rm --force $CI_REGISTRY_IMAGE"
+    - ssh -i $AWS_PRIVATE_KEY $docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh $CI_REGISTRY_IMAGE"
+    - ssh -i $AWS_PRIVATE_KEY $docker ps"
+    # - docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
     # - docker rmi $CI_REGISTRY_IMAGE
-    - docker pull $CI_REGISTRY_IMAGE
-    - docker stop $(docker ps -ql) || true
-    - docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh $CI_REGISTRY_IMAGE
-    - docker ps
+    # - docker pull $CI_REGISTRY_IMAGE
+    # - docker stop $(docker ps -ql) || true
+    # - docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh $CI_REGISTRY_IMAGE
