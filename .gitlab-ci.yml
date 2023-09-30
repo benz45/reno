@@ -30,3 +30,5 @@ build docker image:
     - docker images
     - docker ps -a
     - docker push --all-tags $CI_REGISTRY_IMAGE
+    - hostname
+    - echo "Deploy Success!!" > index.html
