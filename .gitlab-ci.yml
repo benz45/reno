@@ -3,10 +3,6 @@ stages:
   - build
   - deploy
 
-image: docker
-services:
-    - docker:dind
-
 maven-build:
   image: maven:3-jdk-11
   stage: package
@@ -17,6 +13,9 @@ maven-build:
 
 build docker image:
   stage: build
+  image: docker
+  services:
+    - docker:dind
   variables:
     DOCKER_TLS_CERTDIR: ""
   script:
@@ -32,6 +31,9 @@ build docker image:
 
 deploy:
   stage: deploy
+  image: docker
+  services:
+    - docker:dind
   script:
     - docker ps
     - docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
