@@ -9,7 +9,8 @@ test install:
   image: gitlab/dind:latest
   script:
     - apt-get install sudo -y
-    - rm /var/lib/apt/lists/*
+    - sudo apt-get install -f
+    - sudo rm -rf /var/lib/apt/lists/*
     - sudo apt install openssh-server -y
     
     
