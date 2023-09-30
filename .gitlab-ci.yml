@@ -8,14 +8,8 @@ test install:
   stage: test
   image: gitlab/dind:latest
   script:
-    - mkdir -p ~/.ssh
-    - echo "$AWS_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - eval "$(ssh-agent -s)"
-    - ssh-add ~/.ssh/id_rsa
-    - ssh-keyscan -H $AWS_SERVER_IP >> ~/.ssh/known_hosts
-    - ssh ec2-user@$AWS_SERVER_IP docker ps
+    - apt-get install sudo -y
+    - sudo apt install openssh-server -y
     
 
 maven-build:
