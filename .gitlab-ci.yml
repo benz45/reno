@@ -10,7 +10,7 @@ test install:
   script:
     - command -v ssh-agent >/dev/null || (apk add --update openssh)
     - eval $(ssh-agent -s)
-    - echo "$AWS_PRIVATE_KEY" | tr -d '\r' | ssh-add
+    - echo "$AWS_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
