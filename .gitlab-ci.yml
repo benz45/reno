@@ -89,9 +89,9 @@ deploy:
     - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker pull registry.gitlab.com/v2/spartan6970837/reno"
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker rm --force registry.gitlab.com/v2/spartan6970837/reno"
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh registry.gitlab.com/v2/spartan6970837/reno"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE:latest"
+    # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker rm --force $CI_REGISTRY_IMAGE:latest"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh $CI_REGISTRY_IMAGE:latest"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps"
     # - docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
     # - docker rmi $CI_REGISTRY_IMAGE
