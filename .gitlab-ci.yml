@@ -8,8 +8,8 @@ test install:
   stage: test
   image: alpine:3.11
   before_script:
-    - chmod og= $AWS_PRIVATE_KEY
     - apk update && apk add openssh-client
+    - chmod og= $AWS_PRIVATE_KEY
     - ssh -i $AWS_PRIVATE_KEY -o StrictHostKeyChecking=no ec2-user@$AWS_SERVER_IP 
   # - apk update && apk add openssh
   # before_script:
