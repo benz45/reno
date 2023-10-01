@@ -9,7 +9,7 @@ test install:
   image: alpine:3.11
   before_script:
     - apk update && apk add openssh
-    - echo "$AWS_EC2_KEY" > Main.pem
+    - echo "$AWS_PUBLIC_KEY" > Main.pem
     - chmod 0400 Main.pem
   script:
     - cat Main.pem
