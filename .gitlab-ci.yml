@@ -15,14 +15,14 @@ test install:
   before_script:
     - apk update && apk add openssh
     - echo $AWS_PRIVATE_KEY
-    - echo $AWS_PRIVATE_KEY >> main.pem
+    - echo $AWS_PRIVATE_KEY > main.pem
     - chmod 0400 main.pem
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - cat main.pem
+    # - cat main.pem
     - echo $AWS_SERVER_IP
     - echo "docker info" | ssh-keyscan $AWS_SERVER_IP | ssh -o StrictHostKeyChecking=no -i main.pem ec2-user@$AWS_SERVER_IP
     # - 'command -v ssh-agent >/dev/null || (apk --update && apk add openssh-server)'
