@@ -7,19 +7,26 @@ stages:
 test install:
   stage: test
   image: alpine:3.11
+  before_script:
+    - apk update && apk add openssh
+    - echo "$AWS_EC2_KEY" > Main.pem
+    - chmod 0400 Main.pem
   script:
-    - 'command -v ssh-agent >/dev/null || (apk --update && apk add openssh-server)'
-    - eval $(ssh-agent -s)
-    - chmod 400 "$AWS_PRIVATE_KEY"
-    - ssh-add "$AWS_PRIVATE_KEY"
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-    - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker ps -a"
-    - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker login --username gitlab-ci-token --password $CI_JOB_TOKEN $CI_REGISTRY"
-    - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE"
-    - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker rm --force $CI_REGISTRY_IMAGE"
+    - cat Main.pem
+    - echo $AWS_SERVER_IP
+    - echo "docker info" | ssh -o StrictHostKeyChecking=no -i Main.pem ec2-user@$AWS_SERVER_IP
+    # - 'command -v ssh-agent >/dev/null || (apk --update && apk add openssh-server)'
+    # - eval $(ssh-agent -s)
+    # - chmod 400 "$AWS_PRIVATE_KEY"
+    # - ssh-add "$AWS_PRIVATE_KEY"
+    # - mkdir -p ~/.ssh
+    # - chmod 700 ~/.ssh
+    # - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
+    # - chmod 644 ~/.ssh/known_hosts
+    # - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker ps -a"
+    # - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker login --username gitlab-ci-token --password $CI_JOB_TOKEN $CI_REGISTRY"
+    # - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE"
+    # - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker rm --force $CI_REGISTRY_IMAGE"
     
 
 maven-build:
