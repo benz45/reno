@@ -11,6 +11,10 @@ test install:
     - apk update && apk add openssh
     - echo "$AWS_PUBLIC_KEY" > Main.pem
     - chmod 0400 Main.pem
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   script:
     - cat Main.pem
     - echo $AWS_SERVER_IP
