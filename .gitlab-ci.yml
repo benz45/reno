@@ -73,7 +73,7 @@ build docker image:
 
 deploy:
   stage: deploy
-  image: alpine:latest
+  image: alpine:3.11
   before_script:
     - apk update && apk add openssh
     - echo $AWS_PRIVATE_KEY > main.txt
