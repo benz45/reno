@@ -8,10 +8,14 @@ test install:
   stage: test
   image: gitlab/dind:latest
   script:
-    - apt-get install sudo -y
-    - sudo apt-get install -f
-    - sudo rm -rf /var/lib/apt/lists/*
-    - sudo apt install openssh-server -y
+    - command -s ssh-agen >/dev/null || (apk add --update openssh)
+    - eval $(ssh-agen -s)
+    - echo "$AWS_PRIVATE_KEY" | tr -d '\r' | ssh-add
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - ssh -o StricHostKeyChecking=no ec2-user@$AWS_SERVER_IP "docker images"
     
     
 
