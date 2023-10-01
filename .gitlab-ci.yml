@@ -1,5 +1,5 @@
 stages:
-  - test
+  # - test
   - package
   - build
   - deploy
@@ -74,16 +74,26 @@ build docker image:
 
 deploy:
   stage: deploy
-  image: gitlab/dind:latest
+  image: alpine:latest
   before_script:
-    - apt-get install sudo -y
-    - sudo apt-get update
-    - sudo apt install openssh-server -y
+    - apk update && apk add openssh
+    - echo $AWS_PRIVATE_KEY > main.txt
+    - sed -ie 's/-----BEGIN RSA PRIVATE KEY-----/-BEGIN-/g' main.txt
+    - sed -ie 's/-----END RSA PRIVATE KEY-----/-END-/g' main.txt
+    - sed -ie 's/ /\n/g' main.txt 
+    - sed -ie 's/-BEGIN-/-----BEGIN RSA PRIVATE KEY-----/g' main.txt
+    - sed -ie 's/-END-/-----END RSA PRIVATE KEY-----/g' main.txt
+    - cat main.txt > main.pem
+    - chmod 0400 main.pem
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE"
-    - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker rm --force $CI_REGISTRY_IMAGE"
-    - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh $CI_REGISTRY_IMAGE"
-    - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker ps"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker rm --force $CI_REGISTRY_IMAGE"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh $CI_REGISTRY_IMAGE"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps"
     # - docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
     # - docker rmi $CI_REGISTRY_IMAGE
     # - docker pull $CI_REGISTRY_IMAGE
