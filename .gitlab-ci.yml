@@ -8,6 +8,8 @@ test install:
   stage: test
   image: alpine:3.11
   before_script:
+    - cd .secure_files && ls
+    - cd ..
     - apk update && apk add openssh
     - echo "$AWS_PUBLIC_KEY" >> Main.pem
     - chmod 0400 Main.pem
