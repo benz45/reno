@@ -8,15 +8,20 @@ test install:
   stage: test
   image: alpine:3.11
   before_script:
-    - cd .secure_files && ls
-    - cd ..
-    - apk update && apk add openssh
-    - echo "$AWS_PUBLIC_KEY" >> Main.pem
-    - chmod 0400 Main.pem
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
+    - chmod og= $AWS_PRIVATE_KEY
+    - apk update && apk add openssh-client
+    - ssh -i $AWS_PRIVATE_KEY -o StrictHostKeyChecking=no ec2-user@$AWS_SERVER_IP 
+  # - apk update && apk add openssh
+  # before_script:
+  #   - cd .secure_files && ls
+  #   - cd ..
+  # - apk update && apk add openssh
+  #   - echo "$AWS_PUBLIC_KEY" >> Main.pem
+  #   - chmod 0400 Main.pem
+  #   - mkdir -p ~/.ssh
+  #   - chmod 700 ~/.ssh
+  #   - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
+  #   - chmod 644 ~/.ssh/known_hosts
   script:
     - cat Main.pem
     - echo $AWS_SERVER_IP
