@@ -14,8 +14,13 @@ test install:
   # - apk update && apk add openssh
   before_script:
     - apk update && apk add openssh
-    - echo $AWS_PRIVATE_KEY
-    - echo $AWS_PRIVATE_KEY > main.pem
+    - echo $AWS_PRIVATE_KEY > main.txt
+    - sed -ie 's/-----BEGIN RSA PRIVATE KEY-----/-BEGIN-/g' main.txt
+    - sed -ie 's/-----END RSA PRIVATE KEY-----/-END-/g' main.txt
+    - sed -ie 's/ /\n/g' main.txt 
+    - sed -ie 's/-BEGIN-/-----BEGIN RSA PRIVATE KEY-----/g' main.txt
+    - sed -ie 's/-END-/-----END RSA PRIVATE KEY-----/g' main.txt
+    - cat main.txt > main.pem
     - chmod 0400 main.pem
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
