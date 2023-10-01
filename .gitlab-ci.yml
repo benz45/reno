@@ -9,6 +9,7 @@ test install:
   image: alpine:3.11
   script:
     - apk add openssh-client
+    - apk add openssh-server
     - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker ps -a"
     - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker login --username gitlab-ci-token --password $CI_JOB_TOKEN $CI_REGISTRY"
     - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE"
