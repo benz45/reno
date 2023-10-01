@@ -14,7 +14,7 @@ test install:
   # - apk update && apk add openssh
   before_script:
     - apk update && apk add openssh
-    - echo $AWS_PRIVATE_KEY > Main.pem
+    - echo $AWS_PRIVATE_KEY >> Main.pem
     - chmod 0400 Main.pem
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
