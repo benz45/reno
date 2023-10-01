@@ -8,15 +8,9 @@ test install:
   stage: test
   image: gitlab/dind:latest
   script:
-    - command -s ssh-agen >/dev/null || (apk add --update openssh)
-    - eval $(ssh-agen -s)
-    - echo "$AWS_PRIVATE_KEY" | tr -d '\r' | ssh-add
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-    - ssh -o StricHostKeyChecking=no ec2-user@$AWS_SERVER_IP "docker images"
-    
+    - apk add openssh-client
+    - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE"
+    - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker rm --force $CI_REGISTRY_IMAGE"
     
 
 maven-build:
