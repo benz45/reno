@@ -8,7 +8,7 @@ test install:
   stage: test
   image: alpine:3.11
   script:
-    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-server -y )'
+    - 'command -v ssh-agent >/dev/null || (apk --update && apk add openssh-server)'
     - eval $(ssh-agent -s)
     - chmod 400 "$AWS_PRIVATE_KEY"
     - ssh-add "$AWS_PRIVATE_KEY"
