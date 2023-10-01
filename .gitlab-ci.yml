@@ -13,7 +13,7 @@ test install:
     - chmod 0400 Main.pem
   script:
     - cat Main.pem
-    - echo $AWS_SERVER_IP
+    - echo "$AWS_SERVER_IP"
     - echo "docker info" | ssh -o StrictHostKeyChecking=no -i Main.pem ec2-user@$AWS_SERVER_IP
     # - 'command -v ssh-agent >/dev/null || (apk --update && apk add openssh-server)'
     # - eval $(ssh-agent -s)
