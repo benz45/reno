@@ -45,7 +45,7 @@ stages:
 #     # - ssh -i $AWS_PRIVATE_KEY $AWS_SERVER_IP "docker rm --force $CI_REGISTRY_IMAGE"
     
 
-maven-build:
+maven build:
   image: maven:3-jdk-11
   stage: package
   script: "mvn package -B"
@@ -56,6 +56,8 @@ maven-build:
 build docker image:
   stage: build
   image: docker
+  dependencies:
+    - "maven build"
   services:
     - docker:dind
   variables:
@@ -74,6 +76,8 @@ build docker image:
 deploy:
   stage: deploy
   image: alpine:3.11
+  dependencies:
+    - "build docker image"
   before_script:
     - apk update && apk add openssh
     - echo $AWS_PRIVATE_KEY > main.txt
