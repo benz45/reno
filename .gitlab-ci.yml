@@ -49,9 +49,6 @@ maven build:
   image: maven:3-jdk-11
   stage: package
   script: "mvn package -B"
-  needs:
-    - job: "maven build"
-      artifacts: true
   artifacts:
     paths:
       - target/*.jar
