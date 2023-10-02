@@ -50,7 +50,7 @@ maven build:
   stage: package
   script: "mvn package -B"
   needs:
-    - job: build_mvn
+    - job: "maven build"
       artifacts: true
   artifacts:
     paths:
@@ -60,7 +60,7 @@ build docker image:
   stage: build
   image: docker
   needs:
-    - job: build_mvn
+    - job: "maven build"
       artifacts: true
   services:
     - docker:dind
