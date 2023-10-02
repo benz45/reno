@@ -1,3 +1,5 @@
+image: maven:3-jdk-11
+
 stages:
   - Packaging
   - Test
@@ -14,12 +16,12 @@ Maven Build:
 
 Unit Test:
   stage: Test
-  image: maven:3-jdk-11
+  needs: ["Maven Build"]
   script: "mvn test"
 
 Regression Test:
   stage: Test
-  image: maven:3-jdk-11
+  needs: ["Maven Build"]
   script: "mvn test"
 
 Build Docker Image:
