@@ -56,9 +56,9 @@ maven build:
 build docker image:
   stage: build
   image: docker
-  needs:
-    - job: "maven build"
-      artifacts: true
+  # needs:
+  #   - job: "maven build"
+  #     artifacts: true
   services:
     - docker:dind
   variables:
@@ -77,7 +77,7 @@ build docker image:
 deploy:
   stage: deploy
   image: alpine:3.11
-  needs: ["build docker image"]
+  # needs: ["build docker image"]
   before_script:
     - apk update && apk add openssh
     - echo $AWS_PRIVATE_KEY > main.txt
