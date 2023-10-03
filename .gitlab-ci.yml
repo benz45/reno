@@ -56,7 +56,7 @@ Deploy:
     - echo $AWS_PRIVATE_KEY > main.txt
     - sed -ie 's/-----BEGIN RSA PRIVATE KEY-----/-BEGIN-/g' main.txt
     - sed -ie 's/-----END RSA PRIVATE KEY-----/-END-/g' main.txt
-    - sed -ie 's/ /\n/g' main.txt 
+    - sed -ie 's/ /\n/g' main.txt
     - sed -ie 's/-BEGIN-/-----BEGIN RSA PRIVATE KEY-----/g' main.txt
     - sed -ie 's/-END-/-----END RSA PRIVATE KEY-----/g' main.txt
     - cat main.txt > main.pem
@@ -69,5 +69,5 @@ Deploy:
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -f"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE:latest"
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh $CI_REGISTRY_IMAGE:latest"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e AWS_ACCESS_KEY_ID='${AWS_ACCESS_KEY_ID}' -e AWS_SECRET_ACCESS_KEY='${AWS_SECRET_ACCESS_KEY}' $CI_REGISTRY_IMAGE:latest"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps"
