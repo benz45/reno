@@ -67,7 +67,8 @@ Deploy:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -f"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker rm -f $(docker ps -aq) >/dev/null 2>&1 || true"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -a -f --volumes"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE:latest"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e AWS_ACCESS_KEY_ID='${AWS_ACCESS_KEY_ID}' -e AWS_SECRET_ACCESS_KEY='${AWS_SECRET_ACCESS_KEY}' $CI_REGISTRY_IMAGE:latest"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps"
