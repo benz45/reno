@@ -2,6 +2,7 @@
 
 stages:
   - Packaging
+  - Secret
   # - Packaging
   # - Test
   # - Build
@@ -23,7 +24,7 @@ AWS Checking:
       dotenv: secret.txt
 
 job02:
-  stage: Packaging
+  stage: Secret
   script:
     - echo $PROJECT_CONFIG
 
