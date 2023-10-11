@@ -1,13 +1,13 @@
 image: maven:3-jdk-11
 
 stages:
-  - Packaging
+  - Package
   - Test
   - Build
   - Deploy
 
 Load Package:
-  stage: Packaging
+  stage: Package
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script:
     - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
@@ -24,15 +24,7 @@ Load Package:
 
 Maven Build:
   image: maven:3-jdk-11
-  stage: Packaging
-  script: "mvn package -B"
-  artifacts:
-    paths:
-      - target/*.jar
-
-Environments Build:
-  image: amazon/aws-cli:latest
-  stage: Packaging
+  stage: Package
   script: "mvn package -B"
   artifacts:
     paths:
