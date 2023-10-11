@@ -1,6 +1,4 @@
-services:
-  - name: maven:3-jdk-11
-  - name: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+image: maven:3-jdk-11
 
 stages:
   - Packaging
@@ -8,32 +6,21 @@ stages:
   - Build
   - Deploy
 
-Checking Environment:
+Load Package:
   stage: Packaging
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script:
     - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
     - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
     - aws configure set default.region ap-southeast-1
     - aws configure set default.output json
     - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" >> .env
-  artifacts:
-    reports:
-      dotenv: .env
-
-Load Config:
-  stage: Packaging
-  script:
     - aws s3 cp s3://${AWS_S3_BUCKET}/rouge.py .
   artifacts:
     paths:
       - rouge.py
-# job02:
-#   stage: Secret
-#   needs:
-#     - job: "AWS Checking"
-#       artifacts: true
-#   script:
-#     - echo $PROJECT_CONFIG
+    reports:
+      dotenv: .env
 
 Maven Build:
   image: maven:3-jdk-11
@@ -69,7 +56,7 @@ Build Docker Image:
   needs:
     - job: "Maven Build"
       artifacts: true
-    - job: "Load Config"
+    - job: "Load Package"
       artifacts: true
     - job: "Unit Test"
     - job: "Regression Test"
