@@ -24,7 +24,7 @@ job01:
 job02:
   stage: stage02
   script:
-    - echo ${environment}
+    - echo $DYNAMIC_ENV_URL
 
 # Maven Build:
 #   image: maven:3-jdk-11
