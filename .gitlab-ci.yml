@@ -1,12 +1,12 @@
-image:
-  - maven:3-jdk-11
-  - registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+services:
+  - name: maven:3-jdk-11
+  - name: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
 
 stages:
   - Packaging
-  # - Test
-  # - Build
-  # - Deploy
+  - Test
+  - Build
+  - Deploy
 
 Checking Environment:
   stage: Packaging
