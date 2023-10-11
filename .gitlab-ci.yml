@@ -16,17 +16,17 @@ AWS Checking:
     - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
     - aws configure set default.region ap-southeast-1
     - aws configure set default.output json
-    - echo "PROJECT_CONFIG=abc" > build.env
+    - echo "DYNAMIC_ENV_URL=http://dynamictestenvironment1" >> deploy.env
     # - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" > .env
-    - echo "$PROJECT_CONFIG"
+    - echo "$DYNAMIC_ENV_URL"
   artifacts:
     reports:
-      dotenv: build.env
+      dotenv: deploy.env
 
 job02:
   stage: Secret
   script:
-    - echo $PROJECT_CONFIG
+    - echo $DYNAMIC_ENV_URL
 
 # Maven Build:
 #   image: maven:3-jdk-11
