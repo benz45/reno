@@ -20,8 +20,7 @@ AWS Checking:
     # - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" > .env
     - echo $PROJECT_CONFIG
   artifacts:
-    reports:
-      dotenv: secret.txt
+    paths: ['secret.txt']
 
 job02:
   stage: Secret
