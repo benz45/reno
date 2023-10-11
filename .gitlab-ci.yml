@@ -9,7 +9,7 @@ stages:
 .aws-base:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
 
-Load Package:
+Load Environment:
   stage: Package
   extends: .aws-base
   script:
@@ -18,23 +18,20 @@ Load Package:
     - aws configure set default.region ap-southeast-1
     - aws configure set default.output json
     - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" >> .env
-    - ls -a
   artifacts:
     reports:
       dotenv: .env
 
-Load Env:
+Load Config:
   stage: Package
   extends: .aws-base
   script:
-    - aws s3 cp s3://${AWS_S3_BUCKET}/rouge.py .
-    - ls -a
+    - aws s3 cp s3://${AWS_S3_BUCKET}/rogue.py .
   artifacts:
     paths:
-      - ./rouge.py
+      - ./rogue.py
 
 Maven Build:
-  image: maven:3-jdk-11
   stage: Package
   script: "mvn package -B"
   artifacts:
@@ -59,14 +56,15 @@ Build Docker Image:
   needs:
     - job: "Maven Build"
       artifacts: true
-    - job: "Load Package"
+    - job: "Load Environment"
+      artifacts: true
+    - job: "Load Config"
       artifacts: true
     - job: "Unit Test"
     # - job: "Regression Test"
   variables:
     DOCKER_TLS_CERTDIR: ""
   script:
-    - ls -a
     - echo $CI_REGISTRY_USER
     - echo $CI_REGISTRY_PASSWORD
     - echo $CI_REGISTRY
