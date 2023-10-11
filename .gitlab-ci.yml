@@ -17,6 +17,7 @@ Load Package:
     - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" >> .env
     - aws s3 cp s3://${AWS_S3_BUCKET}/rouge.py .
   artifacts:
+    when: always
     paths:
       - ./rouge.py
     reports:
@@ -35,10 +36,10 @@ Unit Test:
   needs: ["Maven Build"]
   script: "mvn test"
 
-Regression Test:
-  stage: Test
-  needs: ["Maven Build"]
-  script: "mvn test"
+# Regression Test:
+#   stage: Test
+#   needs: ["Maven Build"]
+#   script: "mvn test"
 
 Build Docker Image:
   stage: Build
@@ -51,7 +52,7 @@ Build Docker Image:
     - job: "Load Package"
       artifacts: true
     - job: "Unit Test"
-    - job: "Regression Test"
+    # - job: "Regression Test"
   variables:
     DOCKER_TLS_CERTDIR: ""
   script:
