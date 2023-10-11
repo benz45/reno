@@ -56,8 +56,6 @@ Build Docker Image:
   needs:
     - job: "Maven Build"
       artifacts: true
-    - job: "Load Environment"
-      artifacts: true
     - job: "Load Config"
       artifacts: true
     - job: "Unit Test"
@@ -78,7 +76,10 @@ Build Docker Image:
 Deploy:
   stage: Deploy
   image: alpine:latest
-  needs: ["Build Docker Image"]
+  needs:
+    - job: "Build Docker Image"
+    - job: "Load Environment"
+      artifacts: true
   before_script:
     - apk update && apk add openssh
     - echo $AWS_PRIVATE_KEY > main.txt
