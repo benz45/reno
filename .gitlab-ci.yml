@@ -18,7 +18,7 @@ Load Package:
     - aws s3 cp s3://${AWS_S3_BUCKET}/rouge.py .
   artifacts:
     paths:
-      - rouge.py
+      - ./rouge.py
     reports:
       dotenv: .env
 
