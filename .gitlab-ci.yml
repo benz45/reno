@@ -2,6 +2,7 @@ image: maven:3-jdk-11
 
 stages:
   - stage01
+  - stage02
   # - Packaging
   # - Test
   # - Build
@@ -19,6 +20,11 @@ job01:
   artifacts:
     reports:
       dotenv: deploy.env
+
+job02:
+  stage: stage02
+  script:
+    - echo $DYNAMIC_ENV_URL
 
 # Maven Build:
 #   image: maven:3-jdk-11
