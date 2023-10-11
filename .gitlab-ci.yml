@@ -11,13 +11,13 @@ stages:
 job01:
   stage: stage01
   script:
-    - echo "DYNAMIC_ENV_URL=http://dynamictestenvironment1" > deploy.txt
+    - echo "DYNAMIC_ENV_URL=http://dynamictestenvironment1" > deploy.env
   environment:
     name: $CI_PIPELINE_ID
     url: $DYNAMIC_ENV_URL
   artifacts:
     reports:
-      dotenv: deploy.txt
+      dotenv: deploy.env
 
 job02:
   stage: stage02
