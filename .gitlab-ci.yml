@@ -15,6 +15,7 @@ AWS Checking:
     - aws configure set default.region ap-southeast-1
     - aws configure set default.output json
     - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" >> .env
+    - echo ${AWS_S3_BUCKET}
     - aws s3 cp s3://${AWS_S3_BUCKET}/rouge.py .
   artifacts:
     reports:
