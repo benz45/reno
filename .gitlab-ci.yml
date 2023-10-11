@@ -1,13 +1,35 @@
 image: maven:3-jdk-11
 
 stages:
-  - Packaging
-  - Test
-  - Build
-  - Deploy
+  - stage01
+  # - Packaging
+  # - Test
+  # - Build
+  # - Deploy
+
+job01:
+  stage: stage01
+  script:
+    - echo "DYNAMIC_ENV_URL=http://dynamictestenvironment1" >> deploy.env
+  environment:
+    # Name cannot be dynamically set from file
+    name: $CI_PIPELINE_ID # can use CI + other vars
+    # URL can be dynamically set from file
+    url: $DYNAMIC_ENV_URL
+  artifacts:
+    reports:
+      dotenv: deploy.env
 
 Maven Build:
   image: maven:3-jdk-11
+  stage: Packaging
+  script: "mvn package -B"
+  artifacts:
+    paths:
+      - target/*.jar
+
+Environments Build:
+  image: amazon/aws-cli:latest
   stage: Packaging
   script: "mvn package -B"
   artifacts:
@@ -70,5 +92,5 @@ Deploy:
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker rm -f $(docker ps -aq) >/dev/null 2>&1 || true"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -a -f --volumes"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE:latest"
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e AWS_ACCESS_KEY_ID='${AWS_ACCESS_KEY_ID}' -e AWS_SECRET_ACCESS_KEY='${AWS_SECRET_ACCESS_KEY}' $CI_REGISTRY_IMAGE:latest"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e AWS_ACCESS_KEY_ID='${AWS_ACCESS_KEY_ID}' -e AWS_SECRET_ACCESS_KEY='${AWS_SECRET_ACCESS_KEY}' -e GIT_BRANCH=${CI_COMMIT_BRANCH} $CI_REGISTRY_IMAGE:latest"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps"
