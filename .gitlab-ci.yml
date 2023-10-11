@@ -1,25 +1,28 @@
 # image: maven:3-jdk-11
 
 stages:
-  - stage01
-  - stage02
+  - Packaging
   # - Packaging
   # - Test
   # - Build
   # - Deploy
 
-job01:
-  stage: stage01
+AWS Checking:
+  stage: Packaging
   script:
-    - echo "DYNAMIC_ENV_URL=http://dynamictestenvironment1" > deploy.env
+    - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+    - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+    - aws configure set default.region ap-southeast-1
+    - aws configure set default.output json
+    - echo PROJECT_CONFIG=aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text > .env
   artifacts:
     reports:
-      dotenv: deploy.env
+      dotenv: .env
 
 job02:
-  stage: stage02
+  stage: Packaging
   script:
-    - echo $DYNAMIC_ENV_URL
+    - echo $PROJECT_CONFIG
 
 # Maven Build:
 #   image: maven:3-jdk-11
