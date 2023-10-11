@@ -16,9 +16,9 @@ AWS Checking:
     - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
     - aws configure set default.region ap-southeast-1
     - aws configure set default.output json
-    - echo "DYNAMIC_ENV_URL=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" >> deploy.env
+    - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" >> deploy.env
     # - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" > .env
-    - echo "$DYNAMIC_ENV_URL"
+    - echo "$PROJECT_CONFIG"
   artifacts:
     reports:
       dotenv: deploy.env
@@ -29,7 +29,7 @@ job02:
     - job: "AWS Checking"
       artifacts: true
   script:
-    - echo $DYNAMIC_ENV_URL
+    - echo $PROJECT_CONFIG
 
 # Maven Build:
 #   image: maven:3-jdk-11
