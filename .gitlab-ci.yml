@@ -11,15 +11,15 @@ stages:
 job01:
   stage: stage01
   script:
-    - echo "DYNAMIC_ENV_URL=http://dynamictestenvironment1" >> deploy.env
-  environment:
-    # Name cannot be dynamically set from file
-    name: $CI_PIPELINE_ID # can use CI + other vars
-    # URL can be dynamically set from file
-    url: $DYNAMIC_ENV_URL
-  artifacts:
-    reports:
-      dotenv: deploy.env
+    - echo "DYNAMIC_ENV_URL=http://dynamictestenvironment1"
+  # environment:
+  #   # Name cannot be dynamically set from file
+  #   name: $CI_PIPELINE_ID # can use CI + other vars
+  #   # URL can be dynamically set from file
+  #   url: $DYNAMIC_ENV_URL
+  # artifacts:
+  #   reports:
+  #     dotenv: deploy.env
 
 job02:
   stage: stage02
