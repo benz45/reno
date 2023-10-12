@@ -31,7 +31,7 @@ Load Environment:
 Test:
   stage: Test
   script:
-    - echo $PROJECT_CONFIG
+    - echo "$PROJECT_CONFIG"
   needs:
     - job: "Load Environment"
       artifacts: true
