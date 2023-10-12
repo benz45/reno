@@ -5,7 +5,7 @@ ARG API_VERSION="latest"
 ENV API_VERSION ${API_VERSION}
 ENV PROJECT_NAME="reno"
 
-ADD /target/${PROJECT_NAME}-0.0.1-SNAPSHOT.jar ${PROJECT_NAME}-0.0.1-SNAPSHOT.jar
+ADD /target/${PROJECT_NAME}-0.0.1-SNAPSHOT.jar target/${PROJECT_NAME}-0.0.1-SNAPSHOT.jar
 
 # install python
 RUN apt-get update

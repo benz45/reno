@@ -20,4 +20,4 @@ export
 
 cd /app
 jar uf /app/target/${PROJECT_NAME}-0.0.1-SNAPSHOT.jar BOOT-INF/classes/*
-java -jar $JAVA_OPTS -Dspring.profiles.active=$ACTIVE_PROFILE /app/${PROJECT_NAME}-0.0.1-SNAPSHOT.jar
+java -jar $JAVA_OPTS -Dspring.profiles.active=$ACTIVE_PROFILE -Dapi.version=$API_VERSION /app/target/${PROJECT_NAME}-0.0.1-SNAPSHOT.jar
