@@ -13,7 +13,7 @@ Test:
     - script="A"
     - script+="B"
     - script+="C"
-    - echo $script
+    - echo ${script}
 
 
 # .aws-base:
