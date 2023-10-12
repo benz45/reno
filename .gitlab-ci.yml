@@ -10,9 +10,9 @@ stages:
 Test:
   stage: Test
   script:
-    - script="A"
-    - script+="B"
-    - script+="C"
+    - scriptA="A"
+    - scriptB="B"
+    - scriptC="C${scriptB}${scriptA}"
     - echo ${script}
 
 
