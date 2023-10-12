@@ -38,7 +38,7 @@ Maven Build:
   script: "mvn package -B"
   artifacts:
     paths:
-      - target/*.jara
+      - target/*.jar
 
 Unit Test:
   stage: Test
@@ -82,6 +82,8 @@ Deploy:
     - job: "Build Docker Image"
     - job: "Load Environment"
       artifacts: true
+  dependencies:
+    - Load Environment
   before_script:
     - apk update && apk add openssh
     - echo $AWS_PRIVATE_KEY > main.txt
@@ -97,7 +99,6 @@ Deploy:
     - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - echo ${PROJECT_CONFIG}
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker rm -f $(docker ps -aq) >/dev/null 2>&1 || true"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -a -f --volumes"
