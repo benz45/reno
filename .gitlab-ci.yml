@@ -38,7 +38,7 @@ Maven Build:
   script: "mvn package -B"
   artifacts:
     paths:
-      - target/*.jar
+      - target/*.jara
 
 Unit Test:
   stage: Test
@@ -103,5 +103,5 @@ Deploy:
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -a -f --volumes"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE:latest"
     # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e AWS_ACCESS_KEY_ID='${AWS_ACCESS_KEY_ID}' -e AWS_SECRET_ACCESS_KEY='${AWS_SECRET_ACCESS_KEY}' -e ACTIVE_PROFILE=${CI_COMMIT_BRANCH} -e PROJECT_CONFIG='${PROJECT_CONFIG}' $CI_REGISTRY_IMAGE:latest"
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e ACTIVE_PROFILE=${CI_COMMIT_BRANCH} -e --env-file .env $CI_REGISTRY_IMAGE:latest"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e ACTIVE_PROFILE=${CI_COMMIT_BRANCH} --env-file .env $CI_REGISTRY_IMAGE:latest"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps"
