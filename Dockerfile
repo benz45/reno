@@ -23,6 +23,6 @@ ADD src/main/resources/application-template.properties BOOT-INF/classes/
 WORKDIR /app/src/main/resources
 
 ADD ./run.sh ./run.sh
-# ADD ./rogue.py ./rogue.py
+ADD ./rogue.py ./rogue.py
 RUN sed -i 's/\r$//' run.sh
 RUN chmod +x 'run.sh'
