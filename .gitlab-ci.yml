@@ -96,8 +96,11 @@ Deploy:
     - job: "Build Docker Image"
     - job: "Load Environment"
       artifacts: true
+    - job: "Load Config"
+      artifacts: true
   dependencies:
     - Load Environment
+    - Load Config
   before_script:
     - apk update && apk add openssh
     - echo $AWS_PRIVATE_KEY > main.txt
