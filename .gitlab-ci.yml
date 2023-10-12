@@ -70,8 +70,8 @@ Build Docker Image:
   needs:
     - job: "Maven Build"
       artifacts: true
-    - job: "Load Config"
-      artifacts: true
+    # - job: "Load Config"
+    #   artifacts: true
     - job: "Unit Test"
     # - job: "Regression Test"
   variables:
