@@ -11,7 +11,9 @@ Test:
   stage: Test
   script:
     - script="A"
-    - echo ${script}
+    - script+="B"
+    - script+="C"
+    - echo $script
 
 
 # .aws-base:
