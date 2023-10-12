@@ -13,7 +13,7 @@ Test:
     - scriptA="A"
     - scriptB="B"
     - scriptC="C${scriptB}${scriptA}"
-    - echo ${script}
+    - echo ${scriptC}
 
 
 # .aws-base:
