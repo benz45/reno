@@ -119,6 +119,6 @@ Deploy:
     - SCRIPT="docker run -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e ACTIVE_PROFILE=${CI_COMMIT_BRANCH} "
     - SCRIPT+="${PROJECT_CONFIG} "
     - SCRIPT+="$CI_REGISTRY_IMAGE:latest"
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP $SCRIPT
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP ${SCRIPT}
     # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e ACTIVE_PROFILE=${CI_COMMIT_BRANCH} ${PROJECT_CONFIG} $CI_REGISTRY_IMAGE:latest"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps"
