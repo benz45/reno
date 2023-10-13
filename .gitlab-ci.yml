@@ -55,7 +55,9 @@ Maven Build:
 Unit Test:
   stage: Test
   needs: ["Maven Build"]
-  script: "mvn test"
+  script:
+    - "mvn clean install"
+    - "mvn test"
 
 # Regression Test:
 #   stage: Test
