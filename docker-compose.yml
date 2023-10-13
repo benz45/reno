@@ -1,4 +1,4 @@
-version: "3"
+version: "2"
 services:
   reno:
     container_name: reno
@@ -10,10 +10,11 @@ services:
     entrypoint:
       - ./run-dev.sh
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://${SECRET_ENV_DB_MASTER_URL}:${SECRET_ENV_DB_PORT}/${SECRET_ENV_DB_DATABASE_NAME}
-      SPRING_DATASOURCE_USERNAME: ${SECRET_ENV_DB_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${SECRET_ENV_DB_PASSWORD}
-      ACTIVE_PROFILE: dev
+      - JAVA_OPTS=-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMPercentage=90 -Djava.security.egd=file:/dev/urandom -XX:+UseStringDeduplication -Xshareclasses -Xquickstart -XX:+IdleTuningGcOnIdle -XX:+IgnoreUnrecognizedVMOptions
+      # SPRING_DATASOURCE_URL: jdbc:postgresql://${SECRET_ENV_DB_MASTER_URL}:${SECRET_ENV_DB_PORT}/${SECRET_ENV_DB_DATABASE_NAME}
+      # SPRING_DATASOURCE_USERNAME: ${SECRET_ENV_DB_USERNAME}
+      # SPRING_DATASOURCE_PASSWORD: ${SECRET_ENV_DB_PASSWORD}
+      - ACTIVE_PROFILE=dev
     external_links:
       - postgres:pgsql
     network_mode: "bridge"
