@@ -13,6 +13,9 @@ echo PROJECT_NAME: $PROJECT_NAME
 # export $(xargs <.env)
 
 python3 -u rogue.py '/app/BOOT-INF/classes/application-template.properties' "$PROJECT_CONFIG" "$ACTIVE_PROFILE"
+ls app/BOOT-INF/classes/
+cat app/BOOT-INF/classes/application-$ACTIVE_PROFILE.properties
+
 # export SPRING_DATASOURCE_URL=jdbc:postgresql://${SECRET_ENV_DB_MASTER_URL}:${SECRET_ENV_DB_PORT}/${SECRET_ENV_DB_DATABASE_NAME}
 # export SPRING_DATASOURCE_USERNAME=${SECRET_ENV_DB_USERNAME}
 # export SPRING_DATASOURCE_PASSWORD=${SECRET_ENV_DB_PASSWORD}
