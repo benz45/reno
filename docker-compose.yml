@@ -3,18 +3,16 @@ services:
   reno:
     container_name: reno
     build:
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
       context: .
     ports:
       - "8089:8080"
     entrypoint:
-      - ./run-dev.sh
+      - ./run.sh
     environment:
-      - JAVA_OPTS=-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMPercentage=90 -Djava.security.egd=file:/dev/urandom -XX:+UseStringDeduplication -Xshareclasses -Xquickstart -XX:+IdleTuningGcOnIdle -XX:+IgnoreUnrecognizedVMOptions
-      # SPRING_DATASOURCE_URL: jdbc:postgresql://${SECRET_ENV_DB_MASTER_URL}:${SECRET_ENV_DB_PORT}/${SECRET_ENV_DB_DATABASE_NAME}
-      # SPRING_DATASOURCE_USERNAME: ${SECRET_ENV_DB_USERNAME}
-      # SPRING_DATASOURCE_PASSWORD: ${SECRET_ENV_DB_PASSWORD}
       - ACTIVE_PROFILE=dev
+      - JAVA_OPTS=-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMPercentage=90 -Djava.security.egd=file:/dev/urandom -XX:+UseStringDeduplication -Xshareclasses -Xquickstart -XX:+IdleTuningGcOnIdle -XX:+IgnoreUnrecognizedVMOptions
+      - PROJECT_CONFIG={"SECRET_ENV_DB_MASTER_URL":"pgsql","SECRET_ENV_DB_PORT":"5432","SECRET_ENV_DB_DATABASE_NAME":"postgres","SECRET_ENV_DB_USERNAME":"postgres","SECRET_ENV_DB_PASSWORD":""}
     external_links:
       - postgres:pgsql
     network_mode: "bridge"
