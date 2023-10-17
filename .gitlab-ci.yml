@@ -6,14 +6,6 @@ stages:
   - Build
   - Deploy
 
-# Test:
-#   stage: Test
-#   script:
-#     - scriptA="A"
-#     - scriptB="B"
-#     - scriptC="C${scriptB}${scriptA}"
-#     - echo ${scriptC}
-
 .aws-base:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
 
@@ -26,15 +18,11 @@ Load Environment:
     - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
     - aws configure set default.region ap-southeast-1
     - aws configure set default.output json
-    # - echo "PROJECT_CONFIG='`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text | jq -jr 'to_entries|map(" -e \(.key)=\(.value)")|.[]'`'" >> .env
-    # - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U | jq --raw-output '.SecretString' | jq -r`" >> env.json
     - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" >> .env
     # - aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]' >> .env
   artifacts:
     reports:
       dotenv: .env
-    # paths:
-    #   - .env
 
 Load Config:
   stage: Package
@@ -74,10 +62,7 @@ Build Docker Image:
       artifacts: true
     - job: "Load Config"
       artifacts: true
-    # - job: "Load Config"
-    #   artifacts: true
     - job: "Unit Test"
-    # - job: "Regression Test"
   variables:
     DOCKER_TLS_CERTDIR: ""
   script:
@@ -122,8 +107,5 @@ Deploy:
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker rm -f $(docker ps -aq) >/dev/null 2>&1 || true"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -a -f --volumes"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE:latest"
-    # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e AWS_ACCESS_KEY_ID='${AWS_ACCESS_KEY_ID}' -e AWS_SECRET_ACCESS_KEY='${AWS_SECRET_ACCESS_KEY}' -e ACTIVE_PROFILE=${CI_COMMIT_BRANCH} -e PROJECT_CONFIG='${PROJECT_CONFIG}' $CI_REGISTRY_IMAGE:latest"
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e AWS_ACCESS_KEY_ID='${AWS_ACCESS_KEY_ID}' -e AWS_SECRET_ACCESS_KEY='${AWS_SECRET_ACCESS_KEY}' -e ACTIVE_PROFILE='${CI_COMMIT_BRANCH}' -e PROJECT_CONFIG='${PROJECT_CONFIG}' $CI_REGISTRY_IMAGE:latest --name $CI_REGISTRY_IMAGE"
-    # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e ACTIVE_PROFILE=${CI_COMMIT_BRANCH} -e PROJECT_CONFIG=${PROJECT_CONFIG} $CI_REGISTRY_IMAGE:latest"
-    # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e ACTIVE_PROFILE=${CI_COMMIT_BRANCH} ${PROJECT_CONFIG} $CI_REGISTRY_IMAGE:latest"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e AWS_ACCESS_KEY_ID='${AWS_ACCESS_KEY_ID}' -e AWS_SECRET_ACCESS_KEY='${AWS_SECRET_ACCESS_KEY}' -e ACTIVE_PROFILE='${CI_COMMIT_BRANCH}' -e PROJECT_CONFIG='${PROJECT_CONFIG}' $CI_REGISTRY_IMAGE:latest --name $CI_REGISTRY_IMAGE"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps"
