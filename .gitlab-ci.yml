@@ -47,8 +47,9 @@ Load Config:
       - ./rogue.py
       - ./main.pem
 
-Maven Package:
+Load Maven:
   stage: Package
+  needs: ["Unit Test"]
   script: "mvn package -B"
   extends: .mvn-base
   artifacts:
@@ -57,7 +58,7 @@ Maven Package:
 
 # Regression Test:
 #   stage: Test
-#   needs: ["Maven Package"]
+#   needs: ["Load Maven"]
 #   script: "mvn test"
 
 Build Docker Image:
@@ -66,7 +67,7 @@ Build Docker Image:
   services:
     - docker:dind
   needs:
-    - job: "Maven Package"
+    - job: "Load Maven"
       artifacts: true
     - job: "Load Config"
       artifacts: true
