@@ -19,7 +19,6 @@ Load Environment:
     - aws configure set default.region ap-southeast-1
     - aws configure set default.output json
     - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" >> .env
-    # - aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]' >> .env
   artifacts:
     reports:
       dotenv: .env
@@ -29,6 +28,7 @@ Load Config:
   extends: .aws-base
   script:
     - aws s3 cp s3://${AWS_S3_BUCKET}/rogue.py .
+    - aws s3 cp s3://${AWS_S3_BUCKET}/beauty_pem.sh .
   artifacts:
     paths:
       - ./rogue.py
@@ -90,13 +90,14 @@ Deploy:
     - Load Config
   before_script:
     - apk update && apk add openssh
-    - echo $AWS_PRIVATE_KEY > main.txt
-    - sed -ie 's/-----BEGIN RSA PRIVATE KEY-----/-BEGIN-/g' main.txt
-    - sed -ie 's/-----END RSA PRIVATE KEY-----/-END-/g' main.txt
-    - sed -ie 's/ /\n/g' main.txt
-    - sed -ie 's/-BEGIN-/-----BEGIN RSA PRIVATE KEY-----/g' main.txt
-    - sed -ie 's/-END-/-----END RSA PRIVATE KEY-----/g' main.txt
-    - cat main.txt > main.pem
+    - ./beauty_pem.sh "${PRIVATE_KEY}" main.pem
+    # - echo $AWS_PRIVATE_KEY > main.txt
+    # - sed -ie 's/-----BEGIN RSA PRIVATE KEY-----/-BEGIN-/g' main.txt
+    # - sed -ie 's/-----END RSA PRIVATE KEY-----/-END-/g' main.txt
+    # - sed -ie 's/ /\n/g' main.txt
+    # - sed -ie 's/-BEGIN-/-----BEGIN RSA PRIVATE KEY-----/g' main.txt
+    # - sed -ie 's/-END-/-----END RSA PRIVATE KEY-----/g' main.txt
+    # - cat main.txt > main.pem
     - chmod 0400 main.pem
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
