@@ -30,7 +30,8 @@ Load Config:
     - aws s3 cp s3://${AWS_S3_BUCKET}/rogue.py .
     - aws s3 cp s3://${AWS_S3_BUCKET}/beauty_pem.sh .
     - chmod 700 ./beauty_pem.sh
-    - ./beauty_pem.sh "${AWS_PRIVATE_KEY}" ./main.pem
+    - ./beauty_pem.sh "${AWS_PRIVATE_KEY}" ./main.pem > /dev/null
+    - chmod 0400 main.pem
   artifacts:
     paths:
       - ./rogue.py
@@ -72,12 +73,12 @@ Build Docker Image:
     - echo $CI_REGISTRY_USER
     - echo $CI_REGISTRY_PASSWORD
     - echo $CI_REGISTRY
-    # - echo "Logging into ${CI_REGISTRY}"
-    # - docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
-    # - docker build -t $CI_REGISTRY_IMAGE .
-    # - docker images
-    # - docker ps
-    # - docker push --all-tags $CI_REGISTRY_IMAGE
+    - echo "Logging into ${CI_REGISTRY}"
+    - docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
+    - docker build -t $CI_REGISTRY_IMAGE .
+    - docker images
+    - docker ps
+    - docker push --all-tags $CI_REGISTRY_IMAGE
 
 Deploy:
   stage: Deploy
@@ -93,15 +94,6 @@ Deploy:
     - Load Config
   before_script:
     - apk update && apk add openssh
-    - ls
-    # - echo $AWS_PRIVATE_KEY > main.txt
-    # - sed -ie 's/-----BEGIN RSA PRIVATE KEY-----/-BEGIN-/g' main.txt
-    # - sed -ie 's/-----END RSA PRIVATE KEY-----/-END-/g' main.txt
-    # - sed -ie 's/ /\n/g' main.txt
-    # - sed -ie 's/-BEGIN-/-----BEGIN RSA PRIVATE KEY-----/g' main.txt
-    # - sed -ie 's/-END-/-----END RSA PRIVATE KEY-----/g' main.txt
-    # - cat main.txt > main.pem
-    - chmod 0400 main.pem
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
