@@ -32,6 +32,7 @@ Load Config:
   artifacts:
     paths:
       - ./rogue.py
+      - ./beauty_pem.sh
 
 Maven Build:
   stage: Package
@@ -69,12 +70,12 @@ Build Docker Image:
     - echo $CI_REGISTRY_USER
     - echo $CI_REGISTRY_PASSWORD
     - echo $CI_REGISTRY
-    - echo "Logging into ${CI_REGISTRY}"
-    - docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
-    - docker build -t $CI_REGISTRY_IMAGE .
-    - docker images
-    - docker ps
-    - docker push --all-tags $CI_REGISTRY_IMAGE
+    # - echo "Logging into ${CI_REGISTRY}"
+    # - docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
+    # - docker build -t $CI_REGISTRY_IMAGE .
+    # - docker images
+    # - docker ps
+    # - docker push --all-tags $CI_REGISTRY_IMAGE
 
 Deploy:
   stage: Deploy
