@@ -90,7 +90,7 @@ Deploy:
     - Load Config
   before_script:
     - apk update && apk add openssh
-    - ./beauty_pem.sh "${PRIVATE_KEY}" main.pem
+    - ./beauty_pem.sh "${AWS_PRIVATE_KEY}" main.pem
     # - echo $AWS_PRIVATE_KEY > main.txt
     # - sed -ie 's/-----BEGIN RSA PRIVATE KEY-----/-BEGIN-/g' main.txt
     # - sed -ie 's/-----END RSA PRIVATE KEY-----/-END-/g' main.txt
