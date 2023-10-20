@@ -50,6 +50,7 @@ Load Config:
       - ./rogue.py
       - ./main.pem
 
+
 Load Maven:
   stage: Package
   needs: ["Unit Test"]
@@ -87,11 +88,26 @@ Build Docker Image:
     - docker ps
     - docker push --all-tags $CI_REGISTRY_IMAGE
 
+
+Generate SSH:
+  stage: Checkout
+  needs:
+    - job: "Build Docker Image"
+  extends: .aws-base
+  script:
+    - aws s3 cp s3://${AWS_S3_BUCKET}/beauty_pem.sh .
+    - chmod 700 ./beauty_pem.sh
+    - ./beauty_pem.sh "${AWS_PRIVATE_KEY}" ./main.pem > /dev/null
+  artifacts:
+    paths:
+      - ./main.pem
+
 Checkout Image:
   stage: Checkout
   extends: .alpine-base
   needs:
-    - job: "Build Docker Image"
+    - job: "Generate SSH"
+      artifacts: true
   script:
     - ls -a
     - apk update && apk add openssh
@@ -108,10 +124,9 @@ Deploy:
   extends: .alpine-base
   needs:
     - job: "Checkout Image"
-    - job: "Build Docker Image"
     - job: "Load Environment"
       artifacts: true
-    - job: "Load Config"
+    - job: "Generate SSH"
       artifacts: true
   # dependencies:
   #   - Load Environment
