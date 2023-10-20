@@ -78,15 +78,12 @@ Build Docker Image:
   variables:
     DOCKER_TLS_CERTDIR: ""
   script:
-    - echo $CI_REGISTRY_USER
-    - echo $CI_REGISTRY_PASSWORD
-    - echo $CI_REGISTRY
     - echo "Logging into ${CI_REGISTRY}"
     - docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
-    - docker build -t $CI_REGISTRY_IMAGE .
+    - docker build -t $CI_PROJECT_NAME .
     - docker images
     - docker ps
-    - docker push --all-tags $CI_REGISTRY_IMAGE
+    - docker push --all-tags $CI_PROJECT_NAME
 
 
 Generate SSH:
@@ -117,7 +114,8 @@ Checkout Image:
     - chmod 644 ~/.ssh/known_hosts
     - chmod 0400 main.pem
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $(docker ps -a -q) || true"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $CI_PROJECT_NAME || true" && "docker rm $CI_PROJECT_NAME || true" && "docker rmi $CI_PROJECT_NAME || true"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -a -f --volumes"
 
 Deploy:
   stage: Deploy
@@ -128,9 +126,6 @@ Deploy:
       artifacts: true
     - job: "Generate SSH"
       artifacts: true
-  # dependencies:
-  #   - Load Environment
-  #   - Load Config
   script:
     - ls -a
     - apk update && apk add openssh
@@ -141,8 +136,7 @@ Deploy:
     - chmod 0400 main.pem
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
     # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $(docker ps -a -q) || true"
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps -a || true && docker rm -f $(docker ps -aq) >/dev/null 2>&1 || true"
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -a -f --volumes"
+    # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps -a || true && docker rm -f $(docker ps -aq) >/dev/null 2>&1 || true"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE:latest"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e ACTIVE_PROFILE='${CI_COMMIT_BRANCH}' -e PROJECT_CONFIG='${PROJECT_CONFIG}' --name reno $CI_REGISTRY_IMAGE:latest"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps"
