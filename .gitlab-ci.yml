@@ -1,3 +1,6 @@
+.alpine-base:
+  image: alpine:3.16
+
 .aws-base:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
 
@@ -84,10 +87,22 @@ Build Docker Image:
     - docker ps
     - docker push --all-tags $CI_REGISTRY_IMAGE
 
+Checkout Image:
+  stage: Deploy
+  extends: .alpine-base
+  script:
+    - ls -a
+    - apk update && apk add openssh
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $(docker ps -a -q) || true"
 
 Deploy:
   stage: Deploy
-  image: alpine:3.16
+  extends: .alpine-base
   needs:
     - job: "Build Docker Image"
     - job: "Load Environment"
@@ -105,7 +120,7 @@ Deploy:
     - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $(docker ps -a -q) || true"
+    # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $(docker ps -a -q) || true"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps -a || true && docker rm -f $(docker ps -aq) >/dev/null 2>&1 || true"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -a -f --volumes"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE:latest"
