@@ -31,7 +31,6 @@ Load Config:
     paths:
       - ./rogue.py
 
-
 Load Maven:
   stage: Package
   needs: ["Unit Test"]
@@ -63,10 +62,9 @@ Build Docker Image:
     - docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
     - docker build -t $CI_REGISTRY_IMAGE .
     - docker images
-    - docker ps
     - docker push --all-tags $CI_REGISTRY_IMAGE
 
-Generate Env:
+Generate ENV:
   stage: Checkout
   needs: ["Build Docker Image"]
   extends: .aws-base
@@ -101,7 +99,6 @@ Checkout Image:
     - job: "Generate SSH"
       artifacts: true
   script:
-    - ls -a
     - apk update && apk add openssh
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
@@ -117,12 +114,11 @@ Deploy:
   extends: .alpine-base
   needs:
     - job: "Checkout Image"
-    - job: "Generate Env"
+    - job: "Generate ENV"
       artifacts: true
     - job: "Generate SSH"
       artifacts: true
   script:
-    - ls -a
     - apk update && apk add openssh
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
