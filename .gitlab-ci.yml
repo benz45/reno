@@ -138,6 +138,7 @@ Deploy:
     - chmod 700 ~/.ssh
     - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
+    - chmod 0400 main.pem
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
     # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $(docker ps -a -q) || true"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps -a || true && docker rm -f $(docker ps -aq) >/dev/null 2>&1 || true"
