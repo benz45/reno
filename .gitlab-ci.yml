@@ -91,6 +91,8 @@ Build Docker Image:
 Checkout Image:
   stage: Checkout
   extends: .alpine-base
+  needs:
+    - job: Build Docker Image
   script:
     - ls -a
     - apk update && apk add openssh
