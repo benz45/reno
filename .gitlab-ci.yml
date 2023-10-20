@@ -1,130 +1,25 @@
-# .aws-base:
-#   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-
-# .mvn-base:
-#   image: maven:3-jdk-11
-
-# stages:
-#   - Test
-#   - Package
-#   - Build
-#   - Deploy
-
-# Unit Test:
-#   stage: Test
-#   extends: .mvn-base
-#   script:
-#     - "mvn clean install"
-#     - "mvn test"
-
-# Load Environment:
-#   stage: Package
-#   needs: ["Unit Test"]
-#   extends: .aws-base
-#   script:
-#     - apt-get update && apt-get install -y jq
-#     - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
-#     - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
-#     - aws configure set default.region ap-southeast-1
-#     - aws configure set default.output json
-#     - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" >> .env
-#   artifacts:
-#     reports:
-#       dotenv: .env
-
-# Load Config:
-#   stage: Package
-#   needs: ["Unit Test"]
-#   extends: .aws-base
-#   script:
-#     - aws s3 cp s3://${AWS_S3_BUCKET}/rogue.py .
-#     - aws s3 cp s3://${AWS_S3_BUCKET}/beauty_pem.sh .
-#     - chmod 700 ./beauty_pem.sh
-#     - ./beauty_pem.sh "${AWS_PRIVATE_KEY}" ./main.pem > /dev/null
-#     - chmod 0400 main.pem
-#   artifacts:
-#     paths:
-#       - ./rogue.py
-#       - ./main.pem
-
-# Load Maven:
-#   stage: Package
-#   needs: ["Unit Test"]
-#   script: "mvn package -B"
-#   extends: .mvn-base
-#   artifacts:
-#     paths:
-#       - target/*.jar
-
-# # Regression Test:
-# #   stage: Test
-# #   needs: ["Load Maven"]
-# #   script: "mvn test"
-
-# Build Docker Image:
-#   stage: Build
-#   image: docker
-#   services:
-#     - docker:dind
-#   needs:
-#     - job: "Load Maven"
-#       artifacts: true
-#     - job: "Load Config"
-#       artifacts: true
-#   variables:
-#     DOCKER_TLS_CERTDIR: ""
-#   script:
-#     - echo $CI_REGISTRY_USER
-#     - echo $CI_REGISTRY_PASSWORD
-#     - echo $CI_REGISTRY
-#     - echo "Logging into ${CI_REGISTRY}"
-#     - docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
-#     - docker build -t $CI_REGISTRY_IMAGE .
-#     - docker images
-#     - docker ps
-#     - docker push --all-tags $CI_REGISTRY_IMAGE
-
-
-# Deploy:
-#   stage: Deploy
-#   image: alpine:3.16
-#   needs:
-#     - job: "Build Docker Image"
-#     - job: "Load Environment"
-#       artifacts: true
-#     - job: "Load Config"
-#       artifacts: true
-#   # dependencies:
-#   #   - Load Environment
-#   #   - Load Config
-#   script:
-#     - ls -a
-#     - apk update && apk add openssh
-#     - mkdir -p ~/.ssh
-#     - chmod 700 ~/.ssh
-#     - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
-#     - chmod 644 ~/.ssh/known_hosts
-#     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
-#     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $(docker ps -a -q) || true"
-#     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps -a || true && docker rm -f $(docker ps -aq) >/dev/null 2>&1 || true"
-#     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -a -f --volumes"
-#     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE:latest"
-#     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e ACTIVE_PROFILE='${CI_COMMIT_BRANCH}' -e PROJECT_CONFIG='${PROJECT_CONFIG}' $CI_REGISTRY_IMAGE:latest --name $CI_REGISTRY_IMAGE"
-#     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps"
-
-image: maven:3-jdk-11
-
-stages:
-  - Package
-  - Test
-  - Build
-  - Deploy
-
 .aws-base:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
 
+.mvn-base:
+  image: maven:3-jdk-11
+
+stages:
+  - Test
+  - Package
+  - Build
+  - Deploy
+
+Unit Test:
+  stage: Test
+  extends: .mvn-base
+  script:
+    - "mvn clean install"
+    - "mvn test"
+
 Load Environment:
   stage: Package
+  needs: ["Unit Test"]
   extends: .aws-base
   script:
     - apt-get update && apt-get install -y jq
@@ -133,37 +28,37 @@ Load Environment:
     - aws configure set default.region ap-southeast-1
     - aws configure set default.output json
     - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" >> .env
-    # - aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]' >> .env
   artifacts:
     reports:
       dotenv: .env
 
 Load Config:
   stage: Package
+  needs: ["Unit Test"]
   extends: .aws-base
   script:
     - aws s3 cp s3://${AWS_S3_BUCKET}/rogue.py .
+    - aws s3 cp s3://${AWS_S3_BUCKET}/beauty_pem.sh .
+    - chmod 700 ./beauty_pem.sh
+    - ./beauty_pem.sh "${AWS_PRIVATE_KEY}" ./main.pem > /dev/null
+    - chmod 0400 main.pem
   artifacts:
     paths:
       - ./rogue.py
+      - ./main.pem
 
-Maven Build:
+Load Maven:
   stage: Package
+  needs: ["Unit Test"]
   script: "mvn package -B"
+  extends: .mvn-base
   artifacts:
     paths:
       - target/*.jar
 
-Unit Test:
-  stage: Test
-  needs: ["Maven Build"]
-  script:
-    - "mvn clean install"
-    - "mvn test"
-
 # Regression Test:
 #   stage: Test
-#   needs: ["Maven Build"]
+#   needs: ["Load Maven"]
 #   script: "mvn test"
 
 Build Docker Image:
@@ -172,11 +67,10 @@ Build Docker Image:
   services:
     - docker:dind
   needs:
-    - job: "Maven Build"
+    - job: "Load Maven"
       artifacts: true
     - job: "Load Config"
       artifacts: true
-    - job: "Unit Test"
   variables:
     DOCKER_TLS_CERTDIR: ""
   script:
@@ -190,37 +84,143 @@ Build Docker Image:
     - docker ps
     - docker push --all-tags $CI_REGISTRY_IMAGE
 
+
 Deploy:
   stage: Deploy
-  image: alpine:latest
+  image: alpine:3.16
   needs:
     - job: "Build Docker Image"
     - job: "Load Environment"
       artifacts: true
     - job: "Load Config"
       artifacts: true
-  dependencies:
-    - Load Environment
-    - Load Config
-  before_script:
+  # dependencies:
+  #   - Load Environment
+  #   - Load Config
+  script:
+    - ls -a
     - apk update && apk add openssh
-    - echo $AWS_PRIVATE_KEY > main.txt
-    - sed -ie 's/-----BEGIN RSA PRIVATE KEY-----/-BEGIN-/g' main.txt
-    - sed -ie 's/-----END RSA PRIVATE KEY-----/-END-/g' main.txt
-    - sed -ie 's/ /\n/g' main.txt
-    - sed -ie 's/-BEGIN-/-----BEGIN RSA PRIVATE KEY-----/g' main.txt
-    - sed -ie 's/-END-/-----END RSA PRIVATE KEY-----/g' main.txt
-    - cat main.txt > main.pem
-    - chmod 0400 main.pem
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-  script:
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $(docker ps -a -q) || true"
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker rm -f $(docker ps -aq) >/dev/null 2>&1 || true"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps -a || true && docker rm -f $(docker ps -aq) >/dev/null 2>&1 || true"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -a -f --volumes"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE:latest"
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e AWS_ACCESS_KEY_ID='${AWS_ACCESS_KEY_ID}' -e AWS_SECRET_ACCESS_KEY='${AWS_SECRET_ACCESS_KEY}' -e ACTIVE_PROFILE='${CI_COMMIT_BRANCH}' -e PROJECT_CONFIG='${PROJECT_CONFIG}' $CI_REGISTRY_IMAGE:latest --name $CI_REGISTRY_IMAGE"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e ACTIVE_PROFILE='${CI_COMMIT_BRANCH}' -e PROJECT_CONFIG='${PROJECT_CONFIG}' $CI_REGISTRY_IMAGE:latest --name $CI_REGISTRY_IMAGE"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps"
+
+# image: maven:3-jdk-11
+
+# stages:
+#   - Package
+#   - Test
+#   - Build
+#   - Deploy
+
+# .aws-base:
+#   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+
+# Load Environment:
+#   stage: Package
+#   extends: .aws-base
+#   script:
+#     - apt-get update && apt-get install -y jq
+#     - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+#     - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+#     - aws configure set default.region ap-southeast-1
+#     - aws configure set default.output json
+#     - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" >> .env
+#     # - aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]' >> .env
+#   artifacts:
+#     reports:
+#       dotenv: .env
+
+# Load Config:
+#   stage: Package
+#   extends: .aws-base
+#   script:
+#     - aws s3 cp s3://${AWS_S3_BUCKET}/rogue.py .
+#   artifacts:
+#     paths:
+#       - ./rogue.py
+
+# Maven Build:
+#   stage: Package
+#   script: "mvn package -B"
+#   artifacts:
+#     paths:
+#       - target/*.jar
+
+# Unit Test:
+#   stage: Test
+#   needs: ["Maven Build"]
+#   script:
+#     - "mvn clean install"
+#     - "mvn test"
+
+# # Regression Test:
+# #   stage: Test
+# #   needs: ["Maven Build"]
+# #   script: "mvn test"
+
+# Build Docker Image:
+#   stage: Build
+#   image: docker
+#   services:
+#     - docker:dind
+#   needs:
+#     - job: "Maven Build"
+#       artifacts: true
+#     - job: "Load Config"
+#       artifacts: true
+#     - job: "Unit Test"
+#   variables:
+#     DOCKER_TLS_CERTDIR: ""
+#   script:
+#     - echo $CI_REGISTRY_USER
+#     - echo $CI_REGISTRY_PASSWORD
+#     - echo $CI_REGISTRY
+#     - echo "Logging into ${CI_REGISTRY}"
+#     - docker login --username gitlab-ci-token --password "${CI_JOB_TOKEN}" "${CI_REGISTRY}"
+#     - docker build -t $CI_REGISTRY_IMAGE .
+#     - docker images
+#     - docker ps
+#     - docker push --all-tags $CI_REGISTRY_IMAGE
+
+# Deploy:
+#   stage: Deploy
+#   image: alpine:latest
+#   needs:
+#     - job: "Build Docker Image"
+#     - job: "Load Environment"
+#       artifacts: true
+#     - job: "Load Config"
+#       artifacts: true
+#   dependencies:
+#     - Load Environment
+#     - Load Config
+#   before_script:
+#     - apk update && apk add openssh
+#     - echo $AWS_PRIVATE_KEY > main.txt
+#     - sed -ie 's/-----BEGIN RSA PRIVATE KEY-----/-BEGIN-/g' main.txt
+#     - sed -ie 's/-----END RSA PRIVATE KEY-----/-END-/g' main.txt
+#     - sed -ie 's/ /\n/g' main.txt
+#     - sed -ie 's/-BEGIN-/-----BEGIN RSA PRIVATE KEY-----/g' main.txt
+#     - sed -ie 's/-END-/-----END RSA PRIVATE KEY-----/g' main.txt
+#     - cat main.txt > main.pem
+#     - chmod 0400 main.pem
+#     - mkdir -p ~/.ssh
+#     - chmod 700 ~/.ssh
+#     - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
+#     - chmod 644 ~/.ssh/known_hosts
+#   script:
+#     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
+#     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $(docker ps -a -q) || true"
+#     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker rm -f $(docker ps -aq) >/dev/null 2>&1 || true"
+#     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -a -f --volumes"
+#     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE:latest"
+#     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e AWS_ACCESS_KEY_ID='${AWS_ACCESS_KEY_ID}' -e AWS_SECRET_ACCESS_KEY='${AWS_SECRET_ACCESS_KEY}' -e ACTIVE_PROFILE='${CI_COMMIT_BRANCH}' -e PROJECT_CONFIG='${PROJECT_CONFIG}' $CI_REGISTRY_IMAGE:latest --name $CI_REGISTRY_IMAGE"
+#     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps"
