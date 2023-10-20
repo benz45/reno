@@ -21,34 +21,15 @@ Unit Test:
     - "mvn clean install"
     - "mvn test"
 
-Load Environment:
-  stage: Package
-  needs: ["Unit Test"]
-  extends: .aws-base
-  script:
-    - apt-get update && apt-get install -y jq
-    - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
-    - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
-    - aws configure set default.region ap-southeast-1
-    - aws configure set default.output json
-    - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" >> .env
-  artifacts:
-    reports:
-      dotenv: .env
-
 Load Config:
   stage: Package
   needs: ["Unit Test"]
   extends: .aws-base
   script:
     - aws s3 cp s3://${AWS_S3_BUCKET}/rogue.py .
-    - aws s3 cp s3://${AWS_S3_BUCKET}/beauty_pem.sh .
-    - chmod 700 ./beauty_pem.sh
-    - ./beauty_pem.sh "${AWS_PRIVATE_KEY}" ./main.pem > /dev/null
   artifacts:
     paths:
       - ./rogue.py
-      - ./main.pem
 
 
 Load Maven:
@@ -83,8 +64,22 @@ Build Docker Image:
     - docker build -t $CI_PROJECT_NAME .
     - docker images
     - docker ps
-    - docker push --all-tags $CI_PROJECT_NAME
+    - docker push --all-tags $CI_REGISTRY_IMAGE
 
+Generate Env:
+  stage: Checkout
+  needs: ["Build Docker Image"]
+  extends: .aws-base
+  script:
+    - apt-get update && apt-get install -y jq
+    - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+    - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+    - aws configure set default.region ap-southeast-1
+    - aws configure set default.output json
+    - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" >> .env
+  artifacts:
+    reports:
+      dotenv: .env
 
 Generate SSH:
   stage: Checkout
@@ -122,7 +117,7 @@ Deploy:
   extends: .alpine-base
   needs:
     - job: "Checkout Image"
-    - job: "Load Environment"
+    - job: "Generate Env"
       artifacts: true
     - job: "Generate SSH"
       artifacts: true
@@ -135,9 +130,7 @@ Deploy:
     - chmod 644 ~/.ssh/known_hosts
     - chmod 0400 main.pem
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
-    # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $(docker ps -a -q) || true"
-    # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps -a || true && docker rm -f $(docker ps -aq) >/dev/null 2>&1 || true"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE:latest"
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e ACTIVE_PROFILE='${CI_COMMIT_BRANCH}' -e PROJECT_CONFIG='${PROJECT_CONFIG}' --name reno $CI_REGISTRY_IMAGE:latest"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e ACTIVE_PROFILE='${CI_COMMIT_BRANCH}' -e PROJECT_CONFIG='${PROJECT_CONFIG}' --name $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:latest"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps"
 
