@@ -45,7 +45,6 @@ Load Config:
     - aws s3 cp s3://${AWS_S3_BUCKET}/beauty_pem.sh .
     - chmod 700 ./beauty_pem.sh
     - ./beauty_pem.sh "${AWS_PRIVATE_KEY}" ./main.pem > /dev/null
-    - chmod 0400 main.pem
   artifacts:
     paths:
       - ./rogue.py
@@ -92,7 +91,7 @@ Checkout Image:
   stage: Checkout
   extends: .alpine-base
   needs:
-    - job: Build Docker Image
+    - job: "Build Docker Image"
   script:
     - ls -a
     - apk update && apk add openssh
@@ -100,6 +99,7 @@ Checkout Image:
     - chmod 700 ~/.ssh
     - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
+    - chmod 0400 main.pem
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $(docker ps -a -q) || true"
 
@@ -107,6 +107,7 @@ Deploy:
   stage: Deploy
   extends: .alpine-base
   needs:
+    - job: "Checkout Image"
     - job: "Build Docker Image"
     - job: "Load Environment"
       artifacts: true
