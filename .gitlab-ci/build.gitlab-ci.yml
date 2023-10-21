@@ -1,8 +1,8 @@
 Build Docker Image:
   stage: Build
   image: docker
-  rules:
-    - if: $CI_COMMIT_BRANCH == "dev" && $CI_COMMIT_BRANCH == "master"
+  # rules:
+  #   - if: $CI_COMMIT_BRANCH == "dev" && $CI_COMMIT_BRANCH == "master"
   services:
     - docker:dind
   needs:
