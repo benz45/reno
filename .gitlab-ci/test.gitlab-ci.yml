@@ -1,0 +1,7 @@
+Unit Test:
+  stage: Test
+  extends: .mvn-base
+  needs: []
+  script:
+    - "mvn clean install"
+    - "mvn test"

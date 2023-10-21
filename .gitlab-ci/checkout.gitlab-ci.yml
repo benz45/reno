@@ -1,0 +1,38 @@
+Generate ENV:
+  stage: Checkout
+  needs: ["Build Docker Image"]
+  extends: .aws-base
+  script:
+    - apt-get update && apt-get install -y jq
+    - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+    - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+    - aws configure set default.region ap-southeast-1
+    - aws configure set default.output json
+    - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" >> .env
+  artifacts:
+    reports:
+      dotenv: .env
+
+Generate SSH:
+  stage: Checkout
+  needs:
+    - job: "Build Docker Image"
+  extends: .aws-base
+  script:
+    - aws s3 cp s3://${AWS_S3_BUCKET}/beauty_pem.sh .
+    - chmod 700 ./beauty_pem.sh
+    - ./beauty_pem.sh "${AWS_PRIVATE_KEY}" ./main.pem > /dev/null
+  artifacts:
+    paths:
+      - ./main.pem
+
+Checkout Image:
+  stage: Checkout
+  extends: .ssh
+  needs:
+    - job: "Generate SSH"
+      artifacts: true
+  script:
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $CI_PROJECT_NAME || true" && "docker rm $CI_PROJECT_NAME || true" && "docker rmi $CI_REGISTRY_IMAGE || true"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -a -f --volumes"

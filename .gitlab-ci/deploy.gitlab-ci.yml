@@ -1,0 +1,14 @@
+Deploy:
+  stage: Deploy
+  extends: .ssh
+  needs:
+    - job: "Checkout Image"
+    - job: "Generate ENV"
+      artifacts: true
+    - job: "Generate SSH"
+      artifacts: true
+  script:
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker pull $CI_REGISTRY_IMAGE:latest"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e ACTIVE_PROFILE='${CI_COMMIT_BRANCH}' -e PROJECT_CONFIG='${PROJECT_CONFIG}' --name $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:latest"
+    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker ps"
