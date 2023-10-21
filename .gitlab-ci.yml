@@ -1,2 +1,2 @@
 include:
-  local: gitlab-ci/dev.gitlab-ci.yml
+  local: /.gitlab-ci/dev.gitlab-ci.yml
