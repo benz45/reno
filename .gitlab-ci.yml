@@ -1,7 +1,5 @@
 include:
   - local: /.gitlab-ci/test.gitlab-ci.yml
-    rules:
-      - if: $CI_COMMIT_BRANCH == "dev"
   - local: /.gitlab-ci/package.gitlab-ci.yml
   - local: /.gitlab-ci/build.gitlab-ci.yml
   - local: /.gitlab-ci/checkout.gitlab-ci.yml
