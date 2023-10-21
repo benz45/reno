@@ -1,0 +1,18 @@
+Load Config:
+  stage: Package
+  needs: ["Unit Test"]
+  extends: .aws-base
+  script:
+    - aws s3 cp s3://${AWS_S3_BUCKET}/rogue.py .
+  artifacts:
+    paths:
+      - ./rogue.py
+
+Load Maven:
+  stage: Package
+  needs: ["Unit Test"]
+  script: "mvn package -B"
+  extends: .mvn-base
+  artifacts:
+    paths:
+      - target/*.jar
