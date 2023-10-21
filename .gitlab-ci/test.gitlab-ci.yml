@@ -1,8 +1,8 @@
 Unit Test:
   stage: Test
   extends: .mvn-base
-  rules:
-    - if: $CI_COMMIT_BRANCH == "dev"
+  # rules:
+  #   - if: $CI_COMMIT_BRANCH == "dev"
   script:
     - "mvn clean install"
     - "mvn test"
