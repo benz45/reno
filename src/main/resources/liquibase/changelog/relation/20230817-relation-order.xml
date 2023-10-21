@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+    <changeSet id="fk-order" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-order-to-order_product_detail"
+            baseColumnNames="order_product_detail_id"
+            baseTableName="order"
+            referencedColumnNames="id"
+            referencedTableName="order_product_detail"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-order-to-order_status"
+            baseColumnNames="order_status_id"
+            baseTableName="order"
+            referencedColumnNames="id"
+            referencedTableName="order_status"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-order-to-shipping"
+            baseColumnNames="shipping_id"
+            baseTableName="order"
+            referencedColumnNames="id"
+            referencedTableName="shipping"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-order-to-payment_detail"
+            baseColumnNames="payment_detail_id"
+            baseTableName="order"
+            referencedColumnNames="id"
+            referencedTableName="payment_detail"
+        />
+    </changeSet>
+
+    <changeSet id="fk-shipping" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-shipping-to-shipping_status"
+            baseColumnNames="shipping_status_id"
+            baseTableName="shipping"
+            referencedColumnNames="id"
+            referencedTableName="shipping_status"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-shipping-to-shipping_address"
+            baseColumnNames="shipping_address_id"
+            baseTableName="shipping"
+            referencedColumnNames="id"
+            referencedTableName="shipping_address"
+        />
+    </changeSet>
+
+    <changeSet id="fk-shipping_status" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-shipping_status-to-shipping"
+            baseColumnNames="shipping_id"
+            baseTableName="shipping_status"
+            referencedColumnNames="id"
+            referencedTableName="shipping"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-shipping_status-to-shipping_status_type"
+            baseColumnNames="shipping_status_type_id"
+            baseTableName="shipping_status"
+            referencedColumnNames="id"
+            referencedTableName="shipping_status_type"
+        />
+    </changeSet>
+
+    <changeSet id="fk-shipping_address" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-shipping_address-to-address"
+            baseColumnNames="address_id"
+            baseTableName="shipping_address"
+            referencedColumnNames="id"
+            referencedTableName="address"
+        />
+    </changeSet>
+
+    <changeSet id="fk-order_product_detail" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-order_product_detail-to-product"
+            baseColumnNames="product_id"
+            baseTableName="order_product_detail"
+            referencedColumnNames="id"
+            referencedTableName="product"
+        />
+    </changeSet>
+
+
+</databaseChangeLog>

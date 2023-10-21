@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="create-table-payment-detail" author="pao">
+        <createTable tableName="payment_detail">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="is_paid_success" type="boolean" />
+            <column name="payment_detail_type_id" type="int" />
+            <column name="updated_at" type="timestamptz" defaultValueComputed="now()">
+                <constraints nullable="false"></constraints>
+            </column>
+            <column name="created_at" type="timestamptz" defaultValueComputed="now()">
+                <constraints nullable="false"></constraints>
+            </column>
+            <column name="is_deleted" type="boolean" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-payment_detail_type" author="pao">
+        <createTable tableName="payment_detail_type">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name_th" type="varchar(50)" />
+            <column name="name_en" type="varchar(50)" />
+        </createTable>
+    </changeSet>
+
+
+</databaseChangeLog>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+    <changeSet id="fk-product" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-product-to-store"
+            baseColumnNames="store_id"
+            baseTableName="product"
+            referencedColumnNames="id"
+            referencedTableName="store"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-product-to-product_status"
+            baseColumnNames="status_id"
+            baseTableName="product"
+            referencedColumnNames="id"
+            referencedTableName="product_status"
+        />
+    </changeSet>
+
+    <changeSet id="fk-product_image" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-product_image-to-product"
+            baseColumnNames="product_id"
+            baseTableName="product_image"
+            referencedColumnNames="id"
+            referencedTableName="product"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-product_image-to-image"
+            baseColumnNames="image_id"
+            baseTableName="product_image"
+            referencedColumnNames="id"
+            referencedTableName="image"
+        />
+    </changeSet>
+
+    <changeSet id="fk-product_detail_type" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-product_detail_type-to-product"
+            baseColumnNames="product_id"
+            baseTableName="product_detail_type"
+            referencedColumnNames="id"
+            referencedTableName="product"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-product_detail_type-to-product_type"
+            baseColumnNames="product_type_id"
+            baseTableName="product_detail_type"
+            referencedColumnNames="id"
+            referencedTableName="product_type"
+        />
+    </changeSet>
+
+    <changeSet id="fk-product_review" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-product_review-to-product"
+            baseColumnNames="product_id"
+            baseTableName="product_review"
+            referencedColumnNames="id"
+            referencedTableName="product"
+        />
+    </changeSet>
+
+    <changeSet id="fk-product_review_image" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-product_review_image-to-product"
+            baseColumnNames="product_id"
+            baseTableName="product_review_image"
+            referencedColumnNames="id"
+            referencedTableName="product"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-product_review_image-to-image"
+            baseColumnNames="image_id"
+            baseTableName="product_review_image"
+            referencedColumnNames="id"
+            referencedTableName="image"
+        />
+    </changeSet>
+
+
+</databaseChangeLog>

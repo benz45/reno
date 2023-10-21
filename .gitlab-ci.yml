@@ -1,0 +1,4 @@
+include:
+  - project: spartan/reno
+    file: ci/dev-ci.yml
+    ref: dev

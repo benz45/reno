@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="create-table-store" author="pao">
+        <createTable tableName="store">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="store_name" type="varchar(100)" />
+            <column name="detail" type="varchar(200)" />
+            <column name="address_id" type="bigint" />
+            <column name="updated_at" type="timestamptz" defaultValueComputed="now()">
+                <constraints nullable="false"></constraints>
+            </column>
+            <column name="created_at" type="timestamptz" defaultValueComputed="now()">
+                <constraints nullable="false"></constraints>
+            </column>
+            <column name="is_deleted" type="boolean" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-store_image" author="pao">
+        <createTable tableName="store_image">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="store_id" type="bigint" />
+            <column name="image_id" type="bigint" />
+            <column name="store_image_type_id" type="int" />
+            <column name="is_deleted" type="boolean" />
+            <column name="created_at" type="timestamptz" defaultValueComputed="now()">
+                <constraints nullable="false"></constraints>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-store_image_type" author="pao">
+        <createTable tableName="store_image_type">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name_th" type="varchar(50)" />
+            <column name="name_en" type="varchar(50)" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-store_code_discount" author="pao">
+        <createTable tableName="store_code_discount">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="amount" type="int" />
+            <column name="store_id" type="bigint" />
+            <column name="code_discount_type_id" type="int" />
+            <column name="min_amount" type="int" />
+            <column name="max_discount" type="int" />
+            <column name="is_active" type="boolean" />
+            <column name="exprid_date" type="timestamptz">
+                <constraints nullable="false"></constraints>
+            </column>
+            <column name="created_at" type="timestamptz" defaultValueComputed="now()">
+                <constraints nullable="false"></constraints>
+            </column>
+            <column name="updated_at" type="timestamptz" defaultValueComputed="now()">
+                <constraints nullable="false"></constraints>
+            </column>
+            <column name="is_deleted" type="boolean" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-code_discount_type" author="pao">
+        <createTable tableName="code_discount_type">
+            <column name="id" autoIncrement="true" type="int">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name_th" type="varchar(50)" />
+            <column name="name_en" type="varchar(50)" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-store_owner" author="pao">
+        <createTable tableName="store_owner">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="store_id" type="bigint" />
+            <column name="customer_id" type="bigint" />
+            <column name="is_deleted" type="boolean" />
+            <column name="created_at" type="timestamptz" defaultValueComputed="now()">
+                <constraints nullable="false"></constraints>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
