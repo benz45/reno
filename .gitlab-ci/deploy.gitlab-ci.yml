@@ -1,6 +1,8 @@
 Deploy:
   stage: Deploy
   extends: .ssh
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev" && $CI_COMMIT_BRANCH == "master"
   needs:
     - job: "Checkout Image"
     - job: "Generate ENV"

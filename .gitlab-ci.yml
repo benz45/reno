@@ -5,6 +5,13 @@ include:
   - local: /.gitlab-ci/checkout.gitlab-ci.yml
   - local: /.gitlab-ci/deploy.gitlab-ci.yml
 
+stages:
+  - Test
+  - Package
+  - Build
+  - Checkout
+  - Deploy
+
 .alpine-base:
   image: alpine:3.16
 
@@ -23,10 +30,3 @@ include:
     - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     - chmod 0400 main.pem
-
-stages:
-  - Test
-  - Package
-  - Build
-  - Checkout
-  - Deploy

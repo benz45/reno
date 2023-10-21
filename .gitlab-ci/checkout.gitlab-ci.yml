@@ -18,6 +18,8 @@ Generate SSH:
   needs:
     - job: "Build Docker Image"
   extends: .aws-base
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev" && $CI_COMMIT_BRANCH == "master"
   script:
     - aws s3 cp s3://${AWS_S3_BUCKET}/beauty_pem.sh .
     - chmod 700 ./beauty_pem.sh
@@ -29,6 +31,8 @@ Generate SSH:
 Checkout Image:
   stage: Checkout
   extends: .ssh
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev" && $CI_COMMIT_BRANCH == "master"
   needs:
     - job: "Generate SSH"
       artifacts: true
