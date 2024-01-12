@@ -3,9 +3,7 @@ Load Config:
   # needs: ["Unit Test"]
   extends: .aws-base
   rules:
-    - if: $CI_COMMIT_BRANCH == "dev"
-      needs: ["Unit Test"]
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "dev" && $CI_COMMIT_BRANCH == "master"
   script:
     - aws s3 cp s3://${AWS_S3_BUCKET}/rogue.py .
   artifacts:
@@ -18,9 +16,7 @@ Load Maven:
   script: "mvn package -B"
   extends: .mvn-base
   rules:
-    - if: $CI_COMMIT_BRANCH == "dev"
-      needs: ["Unit Test"]
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "dev" && $CI_COMMIT_BRANCH == "master"
   artifacts:
     paths:
       - target/*.jar

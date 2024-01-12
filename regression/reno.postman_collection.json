@@ -1,0 +1,68 @@
+{
+	"info": {
+		"_postman_id": "85bdfce6-8483-43bd-bbae-e5f24f8a3f9c",
+		"name": "reno",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14957599"
+	},
+	"item": [
+		{
+			"name": "initial",
+			"item": [
+				{
+					"name": "healthcheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8089/api/e-commerce-store/healthcheck",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8089",
+							"path": [
+								"api",
+								"e-commerce-store",
+								"healthcheck"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "swagger local",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{HOST_NAME}}:{{POST}}/{{ENDPOINT}}/swagger-ui.html",
+							"protocol": "http",
+							"host": [
+								"{{HOST_NAME}}"
+							],
+							"port": "{{POST}}",
+							"path": [
+								"{{ENDPOINT}}",
+								"swagger-ui.html"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "store",
+			"item": []
+		},
+		{
+			"name": "customer",
+			"item": []
+		},
+		{
+			"name": "product",
+			"item": []
+		}
+	]
+}
