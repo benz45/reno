@@ -35,4 +35,8 @@ public class OrderProductDetailEntity extends BaseColumnCreatedIsDeleted {
     @Column(name = "amount")
     private Integer amount;
 
+    @ManyToOne
+    @JoinColumn(name = "order_store_id", referencedColumnName = "id")
+    private OrderStoreEntity orderStore;
+
 }
