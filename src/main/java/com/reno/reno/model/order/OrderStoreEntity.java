@@ -12,11 +12,17 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Where;
 
 import com.reno.reno.model.base.BaseColumnCreatedUpdatedIsDeleted;
+import com.reno.reno.model.store.StoreCodeDiscountEntity;
 import com.reno.reno.model.store.StoreEntity;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
 @Entity
 @Table(name = "order_store", schema = "ecommerce_store")
 @Where(clause = "is_deleted = false")
+@EqualsAndHashCode(callSuper = false)
 public class OrderStoreEntity extends BaseColumnCreatedUpdatedIsDeleted {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +37,10 @@ public class OrderStoreEntity extends BaseColumnCreatedUpdatedIsDeleted {
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private OrderEntity order;
+
+    @ManyToOne
+    @JoinColumn(name = "store_code_discount_id", referencedColumnName = "id")
+    private StoreCodeDiscountEntity storeCodeDiscount;
 
     @ManyToOne
     @JoinColumn(name = "store_id", referencedColumnName = "id")

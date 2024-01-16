@@ -13,4 +13,16 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="add-column-created_by-to-table-order" author="pao">
+        <addColumn tableName="order">
+            <column name="created_by" type="bigint" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-column-store_code_discount_id-to-table-order_store" author="pao">
+        <addColumn tableName="order_store">
+            <column name="store_code_discount_id" type="bigint" />
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

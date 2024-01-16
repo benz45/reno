@@ -14,6 +14,9 @@ public class RequestCreateOrder {
     @NotNull(message = "customerId required.")
     private Long customerId;
 
+    @NotNull(message = "paymentDetailTypeId required.")
+    private Integer paymentDetailTypeId;
+
     @Valid
     @NotEmpty(message = "orders not empty.")
     @NotNull(message = "orders required.")

@@ -14,9 +14,14 @@ import org.hibernate.annotations.Where;
 import com.reno.reno.model.base.BaseColumnCreatedIsDeleted;
 import com.reno.reno.model.product.ProductEntity;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
 @Entity
 @Table(name = "order_product_detail", schema = "ecommerce_store")
 @Where(clause = "is_deleted = false")
+@EqualsAndHashCode(callSuper = false)
 public class OrderProductDetailEntity extends BaseColumnCreatedIsDeleted {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

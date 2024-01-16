@@ -10,7 +10,7 @@ public class RequestProduct {
     @NotNull(message = "productId required.")
     private Long productId;
 
-    @NotNull(message = "count required.")
-    private Long count;
+    @NotNull(message = "amount required.")
+    private Integer amount;
 
 }

@@ -10,13 +10,18 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
 
-import com.reno.reno.model.base.BaseColumnCreatedUpdatedIsDeleted;
+import com.reno.reno.model.base.BaseColumnCreatedAtCreatedByIsDeleted;
 import com.reno.reno.model.payment.PaymentDetailEntity;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
 @Entity
 @Table(name = "order", schema = "ecommerce_store")
 @Where(clause = "is_deleted = false")
-public class OrderEntity extends BaseColumnCreatedUpdatedIsDeleted {
+@EqualsAndHashCode(callSuper = false)
+public class OrderEntity extends BaseColumnCreatedAtCreatedByIsDeleted {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
