@@ -25,4 +25,10 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="add-column-order_status_id-to-table-order_store" author="pao">
+        <addColumn tableName="order_store">
+            <column name="order_status_id" type="int" />
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

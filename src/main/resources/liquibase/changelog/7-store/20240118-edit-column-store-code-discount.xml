@@ -24,4 +24,10 @@
             newColumnName="discount_amount" />
     </changeSet>
 
+    <changeSet id="add-column-used_code_amount-to-table-store_code_discount" author="pao">
+        <addColumn tableName="store_code_discount">
+            <column name="used_code_amount" type="int" defaultValue="0" />
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

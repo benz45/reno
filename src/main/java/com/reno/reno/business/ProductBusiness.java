@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import com.reno.reno.constant.ProductStatusConstant;
 import com.reno.reno.model.ImageEntity;
 import com.reno.reno.model.exception.ApiException;
-import com.reno.reno.model.order.OrderProductDetailEntity;
 import com.reno.reno.model.product.CreateProductRequest;
 import com.reno.reno.model.product.CreateProductResponse;
 import com.reno.reno.model.product.ProductDetailTypeEntity;

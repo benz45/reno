@@ -43,4 +43,14 @@
         />
     </changeSet>
 
+    <changeSet id="add-fk-order_store-to-order-status" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-order_store-to-order_status"
+            baseColumnNames="order_status_id"
+            baseTableName="order_store"
+            referencedColumnNames="id"
+            referencedTableName="order_status"
+        />
+    </changeSet>
+
 </databaseChangeLog>

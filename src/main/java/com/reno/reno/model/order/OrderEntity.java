@@ -27,10 +27,6 @@ public class OrderEntity extends BaseColumnCreatedAtCreatedByIsDeleted {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "order_status_id", referencedColumnName = "id")
-    private OrderStatusEntity orderStatus;
-
-    @ManyToOne
     @JoinColumn(name = "payment_detail_id", referencedColumnName = "id")
     private PaymentDetailEntity paymentDetail;
 

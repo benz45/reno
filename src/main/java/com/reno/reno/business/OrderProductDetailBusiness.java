@@ -1,6 +1,7 @@
 package com.reno.reno.business;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,11 @@ public class OrderProductDetailBusiness {
 
     public OrderProductDetailEntity saveOrderProductDetail(OrderProductDetailEntity orderProductDetail) {
         return orderProductDetailRepository.save(orderProductDetail);
+    }
+
+    public List<OrderProductDetailEntity> saveAllOrderProductDetail(
+            List<OrderProductDetailEntity> orderProductDetails) {
+        return orderProductDetailRepository.saveAll(orderProductDetails);
     }
 
     public OrderProductDetailEntity convertNewOrderProductDetail(ProductEntity product, Integer amount,

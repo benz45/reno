@@ -18,5 +18,11 @@
         <dropColumn tableName="order" columnName="express_company" />
     </changeSet>
 
+    <changeSet id="drop-column-order_status_id-table-order" author="pao">
+        <dropForeignKeyConstraint baseTableName="order"
+            constraintName="fk-order-to-order_status" />
+        <dropColumn tableName="order" columnName="order_status_id" />
+    </changeSet>
+
 
 </databaseChangeLog>

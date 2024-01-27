@@ -50,4 +50,8 @@ public class OrderStoreEntity extends BaseColumnCreatedUpdatedIsDeleted {
     @JoinColumn(name = "shipping_id", referencedColumnName = "id")
     private ShippingEntity shipping;
 
+    @ManyToOne
+    @JoinColumn(name = "order_status_id", referencedColumnName = "id")
+    private OrderStatusEntity orderStatus;
+
 }
