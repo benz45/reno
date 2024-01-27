@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +39,7 @@ public class StoreBusiness extends BaseCustomRepository {
         return responses;
     }
 
-    public StoreEntity shouldGetStoreByIdOrElseThrow(Long storeId) throws ApiException {
+    public StoreEntity shouldGetStoreByIdOrElseThrow(@NotNull Long storeId) throws ApiException {
         return storeRepository.findById(storeId)
                 .orElseThrow(() -> new ApiException("400", "Can't find store id: " + storeId));
     }

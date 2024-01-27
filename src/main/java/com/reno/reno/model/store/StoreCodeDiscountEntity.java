@@ -16,16 +16,30 @@ import org.hibernate.annotations.Where;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.reno.reno.model.base.BaseColumnCreatedUpdatedIsDeleted;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
 @Entity
 @Table(name = "store_code_discount", schema = "ecommerce_store")
 @Where(clause = "is_deleted = false")
+@EqualsAndHashCode(callSuper = false)
 public class StoreCodeDiscountEntity extends BaseColumnCreatedUpdatedIsDeleted {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "amount")
-    private Integer amount;
+    @Column(name = "code_amount")
+    private Integer codeAmount;
+
+    @Column(name = "discount_amount")
+    private Integer discountAmount;
+
+    @Column(name = "used_code_amount")
+    private Integer usedCodeAmount = 0;
+
+    @Column(name = "code_text")
+    private String codeText;
 
     @ManyToOne
     @JoinColumn(name = "store_id", referencedColumnName = "id")

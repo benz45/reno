@@ -14,6 +14,8 @@ import com.reno.reno.model.customer.CustomerRequest;
 import com.reno.reno.model.exception.ApiException;
 import com.reno.reno.repository.customer.CustomerRepository;
 
+import lombok.NonNull;
+
 @Component
 public class CustomerBusiness {
 
@@ -54,7 +56,7 @@ public class CustomerBusiness {
         return customer;
     }
 
-    public CustomerEntity getCustomerById(Long id) throws ApiException {
+    public CustomerEntity getCustomerById(@NonNull Long id) throws ApiException {
         return customerRepository.findById(id)
                 .orElseThrow(() -> new ApiException("400", "Can't find customer by id: " + id));
     }

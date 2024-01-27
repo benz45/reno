@@ -1,0 +1,59 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "GenerateCoverageReport",
+      "type": "shell",
+      "command": "mvn clean jacoco:prepare-agent install jacoco:report",
+      "isBackground": false,
+      "problemMatcher": []
+    },
+    {
+      "label": "docker-compose-ci-down",
+      "type": "shell",
+      "command": "docker-compose -f docker-compose-ci.yml down --remove-orphans",
+      "isBackground": false,
+      "problemMatcher": [],
+      "dependsOn": ["mvn clean install"]
+    },
+    {
+      "label": "docker-compose-ci-up",
+      "type": "shell",
+      "command": "docker-compose -f docker-compose-ci.yml up --build",
+      "isBackground": false,
+      "dependsOn": ["docker-compose-ci-down"],
+      "problemMatcher": []
+    },
+    {
+      "label": "dockerRegressionRestart",
+      "dependsOn": ["docker-compose-ci-up"]
+    },
+    {
+      "label": "mvn clean install",
+      "dependsOn": [],
+      "type": "shell",
+      "command": "mvn clean install",
+      "isBackground": false
+    },
+    {
+      "label": "newman regression",
+      "type": "shell",
+      "command": "newman run ./regression/test.reno.regession.postman_collection.json -e ./regression/reno.regression.postman_environment.json",
+      "args": [],
+      "isBackground": false,
+      "group": "test",
+      "dependsOn": [],
+      "dependsOrder": "sequence"
+    },
+    {
+      "label": "docker volume prune",
+      "type": "shell",
+      "command": "docker volume prune",
+      "args": [],
+      "isBackground": false,
+      "group": "test",
+      "dependsOn": [],
+      "dependsOrder": "sequence"
+    }
+  ]
+}

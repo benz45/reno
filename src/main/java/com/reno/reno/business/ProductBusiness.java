@@ -34,9 +34,13 @@ public class ProductBusiness extends BaseCustomRepository {
     private @Autowired ProductTypeRepository productTypeRepository;
     private @Autowired PageCustomBusiness pageCustomBusiness;
 
-    public CreateProductResponse shouldGetProductByIdOrElseThrow(Long productId) throws ApiException {
-        ProductEntity product = productRepository.findById(productId)
+    public ProductEntity shouldGetProductByIdOrElseThrow(Long productId) throws ApiException {
+        return productRepository.findById(productId)
                 .orElseThrow(() -> new ApiException("400", "Can't find product id " + productId.toString()));
+    }
+
+    public CreateProductResponse shouldGetProductAndProductImageByIdOrElseThrow(Long productId) throws ApiException {
+        ProductEntity product = shouldGetProductByIdOrElseThrow(productId);
         CreateProductResponse response = Util.map(product, CreateProductResponse.class);
         List<ImageEntity> images = productImageBusiness.shouldGetProductImage(productId);
         response.setImages(images);
@@ -159,6 +163,18 @@ public class ProductBusiness extends BaseCustomRepository {
         productPageResponse.setImageId(super.convertToUniqueType(queryResult[6]));
         productPageResponse.setProductImageKey(super.convertToUniqueType(queryResult[7]));
         return productPageResponse;
+    }
+
+    public ProductEntity shouldSetProductAmountWithOrderAmount(Long productId, Integer orderAmount)
+            throws ApiException {
+        ProductEntity product = shouldGetProductByIdOrElseThrow(productId);
+        if (Integer.valueOf(orderAmount) < product.getAmount()) {
+            product.setAmount(product.getAmount() - orderAmount);
+            saveProduct(product);
+        } else {
+            throw new ApiException("400", product.getName() + "Not enough product");
+        }
+        return product;
     }
 
 }

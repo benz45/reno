@@ -32,7 +32,7 @@ public class ProductController {
 
     @GetMapping("/product/{id}")
     public CreateProductResponse getProductById(@PathVariable("id") Long id) throws ApiException {
-        return productBusiness.shouldGetProductByIdOrElseThrow(id);
+        return productBusiness.shouldGetProductAndProductImageByIdOrElseThrow(id);
     }
 
     @GetMapping("/product")

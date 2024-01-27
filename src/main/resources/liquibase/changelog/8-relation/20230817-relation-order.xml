@@ -93,5 +93,15 @@
         />
     </changeSet>
 
+    <changeSet id="fk-order_store-to-store_code_discount" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-order_store-to-store_code_discount"
+            baseColumnNames="store_code_discount_id"
+            baseTableName="order_store"
+            referencedColumnNames="id"
+            referencedTableName="store_code_discount"
+        />
+    </changeSet>
+
 
 </databaseChangeLog>
