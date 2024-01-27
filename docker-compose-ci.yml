@@ -1,0 +1,35 @@
+version: "2"
+services:
+  reno_regression:
+    container_name: "reno_regression"
+    build:
+      dockerfile: Dockerfile-dev
+      context: .
+    ports:
+      - "9099:8080"
+    depends_on:
+      postgres_reno_regression:
+        condition: service_healthy
+    environment:
+      - JAVA_OPTS=--XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMPercentage=90 -Djava.security.egd=file:/dev/urandom -XX:+UseStringDeduplication -Xshareclasses -Xquickstart -XX:+IdleTuningGcOnIdle -XX:+IgnoreUnrecognizedVMOptions
+      - ACTIVE_PROFILE=regression
+    links:
+      - postgres_reno_regression:postgres_reno_regression
+    entrypoint:
+      - ./run-dev.sh
+    network_mode: bridge
+
+  postgres_reno_regression:
+    container_name: "postgres_reno_regression"
+    image: postgres:9.6.6
+    ports:
+      - "5099:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=
+    network_mode: bridge
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

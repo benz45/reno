@@ -1,0 +1,996 @@
+{
+	"info": {
+		"_postman_id": "6b72a7f2-a743-40a9-b260-029e9be21786",
+		"name": "reno regession",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14957599"
+	},
+	"item": [
+		{
+			"name": "initial",
+			"item": [
+				{
+					"name": "healthcheck",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Reponse Object ok\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eq(\"I'm fine, thank you.\");",
+									"});",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{HOST_NAME}}:{{POST}}/{{ENDPOINT}}/healthcheck",
+							"protocol": "http",
+							"host": [
+								"{{HOST_NAME}}"
+							],
+							"port": "{{POST}}",
+							"path": [
+								"{{ENDPOINT}}",
+								"healthcheck"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "swagger local",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{HOST_NAME}}:{{POST}}/{{ENDPOINT}}/swagger-ui.html",
+							"protocol": "http",
+							"host": [
+								"{{HOST_NAME}}"
+							],
+							"port": "{{POST}}",
+							"path": [
+								"{{ENDPOINT}}",
+								"swagger-ui.html"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "customer",
+			"item": [
+				{
+					"name": "create customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"var response = pm.response.json();",
+									"pm.test(\"Reponse Object ok\", function () {",
+									"    pm.expect(response.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.id).to.eq(1);",
+									"    pm.expect(response.username).to.eq(\"pao45\");",
+									"    pm.expect(response.name).to.eq(\"pao\");",
+									"    pm.expect(response.email).to.eq(\"pao.veerapan@gmail.com\");",
+									"    pm.expect(response.tal).to.eq(\"0899999999\");",
+									"    pm.expect(response.birthday).to.eq(\"2024-01-14\");",
+									"    pm.expect(response.gender.nameTh).to.eq(\"ชาย\");",
+									"    pm.expect(response.gender.nameEn).to.eq(\"Male\");",
+									"    pm.expect(response.gender.id).to.eq(1);",
+									"    pm.expect(response.customerLeval.nameTh).to.eq(\"สั่งซื้อน้อยกว่า 10 ออเดอร์\");",
+									"    pm.expect(response.customerLeval.nameEn).to.eq(\"Classic\");",
+									"    pm.expect(response.customerLeval.id).to.eq(1);",
+									"});",
+									"",
+									"pm.environment.set(\"customerId1\", response.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"birthday\": \"2024-01-14\",\n    \"email\": \"pao.veerapan@gmail.com\",\n    \"gender\": {\n        \"id\": 1\n    },\n    \"name\": \"pao\",\n    \"tal\": \"0899999999\",\n    \"username\": \"pao45\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{HOST_NAME}}:{{POST}}/{{ENDPOINT}}/customer",
+							"protocol": "http",
+							"host": [
+								"{{HOST_NAME}}"
+							],
+							"port": "{{POST}}",
+							"path": [
+								"{{ENDPOINT}}",
+								"customer"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "store",
+			"item": [
+				{
+					"name": "create store",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"var response = pm.response.json();",
+									"pm.test(\"Reponse Object ok\", function () {",
+									"    pm.expect(response.id).to.eq(1);",
+									"    pm.expect(response.storeName).to.eq(\"Nike\");",
+									"    pm.expect(response.detail).to.eq(\"test create store.\");",
+									"    pm.expect(response.storeImages[0].createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.storeImages[0].isDeleted).to.eq(false);",
+									"    pm.expect(response.storeImages[0].id).to.eq(1);",
+									"    pm.expect(response.storeImages[0].image.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.storeImages[0].image.isDeleted).to.eq(false);",
+									"    pm.expect(response.storeImages[0].image.createdBy).to.eq(1);",
+									"    pm.expect(response.storeImages[0].image.id).to.eq(1);",
+									"    pm.expect(response.storeImages[0].image.key).to.eq(\"string\");",
+									"    pm.expect(response.storeImages[0].storeImageType.nameTh).to.eq(\"โปรไฟล์\");",
+									"    pm.expect(response.storeImages[0].storeImageType.nameEn).to.eq(\"Profile\");",
+									"    pm.expect(response.storeImages[0].storeImageType.id).to.eq(1);",
+									"    pm.expect(response.address.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.address.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.address.id).to.eq(1);",
+									"    pm.expect(response.address.tal).to.eq(\"0899999999\");",
+									"    pm.expect(response.address.is_active).to.eq(true);",
+									"    pm.expect(response.address.houseNumber).to.eq(\"45\");",
+									"    pm.expect(response.address.subdistrict).to.eq(\"phungern\");",
+									"    pm.expect(response.address.district).to.eq(\"kantaralak\");",
+									"    pm.expect(response.address.province).to.eq(\"sisaket\");",
+									"    pm.expect(response.address.postalcode).to.eq(33110);",
+									"    pm.expect(response.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.createdBy).to.eq(1);",
+									"});",
+									"",
+									"pm.environment.set(\"storeId1\", response.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"address\": {\n        \"active\": true,\n        \"district\": \"kantaralak\",\n        \"houseNumber\": \"45\",\n        \"postalcode\": 33110,\n        \"province\": \"sisaket\",\n        \"subdistrict\": \"phungern\",\n        \"tal\": \"0899999999\"\n    },\n    \"customerId\": {{customerId1}},\n    \"detail\": \"test create store.\",\n    \"storeImages\": [\n        {\n            \"key\": \"string\",\n            \"storeImageTypeId\": 1\n        }\n    ],\n    \"storeName\": \"Nike\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{HOST_NAME}}:{{POST}}/{{ENDPOINT}}/store",
+							"protocol": "http",
+							"host": [
+								"{{HOST_NAME}}"
+							],
+							"port": "{{POST}}",
+							"path": [
+								"{{ENDPOINT}}",
+								"store"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get store page",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"var response = pm.response.json();",
+									"pm.test(\"Reponse Object ok\", function () {",
+									"    pm.expect(response.entities[0].id).to.eq(1);",
+									"    pm.expect(response.entities[0].name).to.eq(\"Nike\");",
+									"    pm.expect(response.entities[0].detail).to.eq(\"test create store.\");",
+									"    pm.expect(response.entities[0].storeProfileUrl).to.eq(\"string\");",
+									"    pm.expect(response.entities[0].createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.entities[0].createdBy).to.eq(1);",
+									"    pm.expect(response.entities[0].updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.entities[0].following_customers).to.eq(1);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{HOST_NAME}}:{{POST}}/{{ENDPOINT}}/store",
+							"protocol": "http",
+							"host": [
+								"{{HOST_NAME}}"
+							],
+							"port": "{{POST}}",
+							"path": [
+								"{{ENDPOINT}}",
+								"store"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create store code discount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"var response = pm.response.json();",
+									"pm.test(\"Reponse Object ok\", function () {",
+									"    pm.expect(response[0].createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response[0].updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response[0].id).to.eq(1);",
+									"    pm.expect(response[0].codeAmount).to.eq(100);",
+									"    pm.expect(response[0].discountAmount).to.eq(100);",
+									"    pm.expect(response[0].usedCodeAmount).to.eq(0);",
+									"    pm.expect(response[0].codeText).to.eq(\"BATH100\");",
+									"    pm.expect(response[0].store.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response[0].store.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response[0].store.id).to.eq(1);",
+									"    pm.expect(response[0].store.storeName).to.eq(\"Nike\");",
+									"    pm.expect(response[0].store.detail).to.eq(\"test create store.\");",
+									"    pm.expect(response[0].store.address.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response[0].store.address.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response[0].store.address.id).to.eq(1);",
+									"    pm.expect(response[0].store.address.tal).to.eq(\"0899999999\");",
+									"    pm.expect(response[0].store.address.is_active).to.eq(true);",
+									"    pm.expect(response[0].store.address.houseNumber).to.eq(\"45\");",
+									"    pm.expect(response[0].store.address.subdistrict).to.eq(\"phungern\");",
+									"    pm.expect(response[0].store.address.district).to.eq(\"kantaralak\");",
+									"    pm.expect(response[0].store.address.province).to.eq(\"sisaket\");",
+									"    pm.expect(response[0].store.address.postalcode).to.eq(33110);",
+									"    pm.expect(response[0].codeDiscountType.nameTh).to.eq(\"บาท\");",
+									"    pm.expect(response[0].codeDiscountType.nameEn).to.eq(\"Bath\");",
+									"    pm.expect(response[0].codeDiscountType.id).to.eq(1);",
+									"    pm.expect(response[0].minAmount).to.eq(500);",
+									"    pm.expect(response[0].maxDiscount).to.eq(null);",
+									"    pm.expect(response[0].isActive).to.eq(true);",
+									"    pm.expect(response[0].expridDate).to.eq(\"2029-00-19\");",
+									"    pm.expect(response[1].createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response[1].updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response[1].id).to.eq(2);",
+									"    pm.expect(response[1].codeAmount).to.eq(100);",
+									"    pm.expect(response[1].discountAmount).to.eq(15);",
+									"    pm.expect(response[1].usedCodeAmount).to.eq(0);",
+									"    pm.expect(response[1].codeText).to.eq(\"PERCENT\");",
+									"    pm.expect(response[1].store.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response[1].store.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response[1].store.id).to.eq(1);",
+									"    pm.expect(response[1].store.storeName).to.eq(\"Nike\");",
+									"    pm.expect(response[1].store.detail).to.eq(\"test create store.\");",
+									"    pm.expect(response[1].store.address.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response[1].store.address.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response[1].store.address.id).to.eq(1);",
+									"    pm.expect(response[1].store.address.tal).to.eq(\"0899999999\");",
+									"    pm.expect(response[1].store.address.is_active).to.eq(true);",
+									"    pm.expect(response[1].store.address.houseNumber).to.eq(\"45\");",
+									"    pm.expect(response[1].store.address.subdistrict).to.eq(\"phungern\");",
+									"    pm.expect(response[1].store.address.district).to.eq(\"kantaralak\");",
+									"    pm.expect(response[1].store.address.province).to.eq(\"sisaket\");",
+									"    pm.expect(response[1].store.address.postalcode).to.eq(33110);",
+									"    pm.expect(response[1].codeDiscountType.nameTh).to.eq(\"เปอร์เซ็น\");",
+									"    pm.expect(response[1].codeDiscountType.nameEn).to.eq(\"Percent\");",
+									"    pm.expect(response[1].codeDiscountType.id).to.eq(2);",
+									"    pm.expect(response[1].minAmount).to.eq(1000);",
+									"    pm.expect(response[1].maxDiscount).to.eq(null);",
+									"    pm.expect(response[1].isActive).to.eq(true);",
+									"    pm.expect(response[1].expridDate).to.eq(\"2029-00-19\");",
+									"});",
+									"",
+									"pm.environment.set(\"storeCodeDiscountId1\", response[0].id);",
+									"pm.environment.set(\"storeCodeDiscountId2\", response[1].id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"storeId\": {{storeId1}},\n        \"codeText\": \"BATH100\",\n        \"codeAmount\": 100,\n        \"discountAmount\": 100,\n        \"codeDiscountTypeId\": 1,\n        \"minPurchase\": 500,\n        \"isActive\": true,\n        \"expridDate\": \"2029-01-19\"\n    },\n    {\n        \"storeId\": {{storeId1}},\n        \"codeText\": \"PERCENT\",\n        \"codeAmount\": 100,\n        \"discountAmount\": 15,\n        \"codeDiscountTypeId\": 2,\n        \"minPurchase\": 1000,\n        \"isActive\": true,\n        \"expridDate\": \"2029-01-19\"\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{HOST_NAME}}:{{POST}}/{{ENDPOINT}}/store-code-discount",
+							"protocol": "http",
+							"host": [
+								"{{HOST_NAME}}"
+							],
+							"port": "{{POST}}",
+							"path": [
+								"{{ENDPOINT}}",
+								"store-code-discount"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "product",
+			"item": [
+				{
+					"name": "create product 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"var response = pm.response.json();",
+									"pm.test(\"Reponse Object ok\", function () {",
+									"    pm.expect(response.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.id).to.eq(1);",
+									"    pm.expect(response.name).to.eq(\"Nike Ultra Boots\");",
+									"    pm.expect(response.price).to.eq(3900);",
+									"    pm.expect(response.amount).to.eq(1000);",
+									"    pm.expect(response.detail).to.eq(\"Ultra Boots\");",
+									"    pm.expect(response.store.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.store.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.store.id).to.eq(1);",
+									"    pm.expect(response.store.storeName).to.eq(\"Nike\");",
+									"    pm.expect(response.store.detail).to.eq(\"test create store.\");",
+									"    pm.expect(response.store.address.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.store.address.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.store.address.id).to.eq(1);",
+									"    pm.expect(response.store.address.tal).to.eq(\"0899999999\");",
+									"    pm.expect(response.store.address.is_active).to.eq(true);",
+									"    pm.expect(response.store.address.houseNumber).to.eq(\"45\");",
+									"    pm.expect(response.store.address.subdistrict).to.eq(\"phungern\");",
+									"    pm.expect(response.store.address.district).to.eq(\"kantaralak\");",
+									"    pm.expect(response.store.address.province).to.eq(\"sisaket\");",
+									"    pm.expect(response.store.address.postalcode).to.eq(33110);",
+									"    pm.expect(response.productStatus.nameTh).to.eq(\"พร้อมขาย\");",
+									"    pm.expect(response.productStatus.nameEn).to.eq(\"Ready for sale\");",
+									"    pm.expect(response.productStatus.id).to.eq(1);",
+									"    pm.expect(response.productDetailType[0].createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.productDetailType[0].isDeleted).to.eq(false);",
+									"    pm.expect(response.productDetailType[0].id).to.eq(1);",
+									"    pm.expect(response.productDetailType[0].productType.nameTh).to.eq(\"เสื้อผ้าแฟชั่น\");",
+									"    pm.expect(response.productDetailType[0].productType.nameEn).to.eq(\"Fashion clothes\");",
+									"    pm.expect(response.productDetailType[0].productType.id).to.eq(3);",
+									"    pm.expect(response.isActive).to.eq(true);",
+									"    pm.expect(response.images[0].createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.images[0].isDeleted).to.eq(false);",
+									"    pm.expect(response.images[0].createdBy).to.eq(1);",
+									"    pm.expect(response.images[0].id).to.eq(2);",
+									"    pm.expect(response.images[0].key).to.eq(\"key1\");",
+									"});",
+									"",
+									"pm.environment.set(\"productId1\", response.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 1000,\n    \"detail\": \"Ultra Boots\",\n    \"isActive\": true,\n    \"name\": \"Nike Ultra Boots\",\n    \"price\": 3900,\n    \"productImages\": [\n        {\n            \"key\": \"key1\"\n        }\n    ],\n    \"productStatus\": {\n        \"id\": 1\n    },\n    \"productTypes\": [\n        {\n            \"id\": 3\n        }\n    ],\n    \"storeId\": {{storeId1}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{HOST_NAME}}:{{POST}}/{{ENDPOINT}}/product",
+							"protocol": "http",
+							"host": [
+								"{{HOST_NAME}}"
+							],
+							"port": "{{POST}}",
+							"path": [
+								"{{ENDPOINT}}",
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get product by id 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"var response = pm.response.json();",
+									"pm.test(\"Reponse Object ok\", function () {",
+									"    pm.expect(response.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.id).to.eq(1);",
+									"    pm.expect(response.name).to.eq(\"Nike Ultra Boots\");",
+									"    pm.expect(response.price).to.eq(3900);",
+									"    pm.expect(response.amount).to.eq(1000);",
+									"    pm.expect(response.detail).to.eq(\"Ultra Boots\");",
+									"    pm.expect(response.store.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.store.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.store.id).to.eq(1);",
+									"    pm.expect(response.store.storeName).to.eq(\"Nike\");",
+									"    pm.expect(response.store.detail).to.eq(\"test create store.\");",
+									"    pm.expect(response.store.address.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.store.address.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.store.address.id).to.eq(1);",
+									"    pm.expect(response.store.address.tal).to.eq(\"0899999999\");",
+									"    pm.expect(response.store.address.is_active).to.eq(true);",
+									"    pm.expect(response.store.address.houseNumber).to.eq(\"45\");",
+									"    pm.expect(response.store.address.subdistrict).to.eq(\"phungern\");",
+									"    pm.expect(response.store.address.district).to.eq(\"kantaralak\");",
+									"    pm.expect(response.store.address.province).to.eq(\"sisaket\");",
+									"    pm.expect(response.store.address.postalcode).to.eq(33110);",
+									"    pm.expect(response.productStatus.nameTh).to.eq(\"พร้อมขาย\");",
+									"    pm.expect(response.productStatus.nameEn).to.eq(\"Ready for sale\");",
+									"    pm.expect(response.productStatus.id).to.eq(1);",
+									"    pm.expect(response.productDetailType[0].createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.productDetailType[0].isDeleted).to.eq(false);",
+									"    pm.expect(response.productDetailType[0].id).to.eq(1);",
+									"    pm.expect(response.productDetailType[0].productType.nameTh).to.eq(\"เสื้อผ้าแฟชั่น\");",
+									"    pm.expect(response.productDetailType[0].productType.nameEn).to.eq(\"Fashion clothes\");",
+									"    pm.expect(response.productDetailType[0].productType.id).to.eq(3);",
+									"    pm.expect(response.isActive).to.eq(true);",
+									"    pm.expect(response.images[0].createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.images[0].isDeleted).to.eq(false);",
+									"    pm.expect(response.images[0].createdBy).to.eq(1);",
+									"    pm.expect(response.images[0].id).to.eq(2);",
+									"    pm.expect(response.images[0].key).to.eq(\"key1\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{HOST_NAME}}:{{POST}}/{{ENDPOINT}}/product/{{productId1}}",
+							"protocol": "http",
+							"host": [
+								"{{HOST_NAME}}"
+							],
+							"port": "{{POST}}",
+							"path": [
+								"{{ENDPOINT}}",
+								"product",
+								"{{productId1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get product pages 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"var response = pm.response.json();",
+									"pm.test(\"Reponse Object ok\", function () {",
+									"    pm.expect(response.pageInformation.number).to.eq(1);",
+									"    pm.expect(response.pageInformation.size).to.eq(20);",
+									"    pm.expect(response.first).to.eq(true);",
+									"    pm.expect(response.last).to.eq(true);",
+									"    pm.expect(response.totalPages).to.eq(1);",
+									"    pm.expect(response.totalElement).to.eq(1);",
+									"    pm.expect(response.entities[0].id).to.eq(1);",
+									"    pm.expect(response.entities[0].name).to.eq(\"Nike Ultra Boots\");",
+									"    pm.expect(response.entities[0].price).to.eq(3900);",
+									"    pm.expect(response.entities[0].statusId).to.eq(1);",
+									"    pm.expect(response.entities[0].imageId).to.eq(2);",
+									"    pm.expect(response.entities[0].productImageKey).to.eq(\"key1\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{HOST_NAME}}:{{POST}}/{{ENDPOINT}}/product",
+							"protocol": "http",
+							"host": [
+								"{{HOST_NAME}}"
+							],
+							"port": "{{POST}}",
+							"path": [
+								"{{ENDPOINT}}",
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create product 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"var response = pm.response.json();",
+									"pm.test(\"Reponse Object ok\", function () {",
+									"    pm.expect(response.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.id).to.eq(2);",
+									"    pm.expect(response.name).to.eq(\"Nike Jordan 1 low\");",
+									"    pm.expect(response.price).to.eq(6400);",
+									"    pm.expect(response.amount).to.eq(1000);",
+									"    pm.expect(response.detail).to.eq(\"Nike Jordan 1 low\");",
+									"    pm.expect(response.store.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.store.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.store.id).to.eq(1);",
+									"    pm.expect(response.store.storeName).to.eq(\"Nike\");",
+									"    pm.expect(response.store.detail).to.eq(\"test create store.\");",
+									"    pm.expect(response.store.address.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.store.address.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.store.address.id).to.eq(1);",
+									"    pm.expect(response.store.address.tal).to.eq(\"0899999999\");",
+									"    pm.expect(response.store.address.is_active).to.eq(true);",
+									"    pm.expect(response.store.address.houseNumber).to.eq(\"45\");",
+									"    pm.expect(response.store.address.subdistrict).to.eq(\"phungern\");",
+									"    pm.expect(response.store.address.district).to.eq(\"kantaralak\");",
+									"    pm.expect(response.store.address.province).to.eq(\"sisaket\");",
+									"    pm.expect(response.store.address.postalcode).to.eq(33110);",
+									"    pm.expect(response.productStatus.nameTh).to.eq(\"พร้อมขาย\");",
+									"    pm.expect(response.productStatus.nameEn).to.eq(\"Ready for sale\");",
+									"    pm.expect(response.productStatus.id).to.eq(1);",
+									"    pm.expect(response.productDetailType[0].createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.productDetailType[0].isDeleted).to.eq(false);",
+									"    pm.expect(response.productDetailType[0].id).to.eq(2);",
+									"    pm.expect(response.productDetailType[0].productType.nameTh).to.eq(\"เสื้อผ้าแฟชั่น\");",
+									"    pm.expect(response.productDetailType[0].productType.nameEn).to.eq(\"Fashion clothes\");",
+									"    pm.expect(response.productDetailType[0].productType.id).to.eq(3);",
+									"    pm.expect(response.isActive).to.eq(true);",
+									"    pm.expect(response.images[0].createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.images[0].isDeleted).to.eq(false);",
+									"    pm.expect(response.images[0].createdBy).to.eq(1);",
+									"    pm.expect(response.images[0].id).to.eq(3);",
+									"    pm.expect(response.images[0].key).to.eq(\"key2\");",
+									"});",
+									"",
+									"pm.environment.set(\"productId2\", response.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 1000,\n    \"detail\": \"Nike Jordan 1 low\",\n    \"isActive\": true,\n    \"name\": \"Nike Jordan 1 low\",\n    \"price\": 6400,\n    \"productImages\": [\n        {\n            \"key\": \"key2\"\n        }\n    ],\n    \"productStatus\": {\n        \"id\": 1\n    },\n    \"productTypes\": [\n        {\n            \"id\": 3\n        }\n    ],\n    \"storeId\": {{storeId1}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{HOST_NAME}}:{{POST}}/{{ENDPOINT}}/product",
+							"protocol": "http",
+							"host": [
+								"{{HOST_NAME}}"
+							],
+							"port": "{{POST}}",
+							"path": [
+								"{{ENDPOINT}}",
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get product by id 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"var response = pm.response.json();",
+									"pm.test(\"Reponse Object ok\", function () {",
+									"    pm.expect(response.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.id).to.eq(2);",
+									"    pm.expect(response.name).to.eq(\"Nike Jordan 1 low\");",
+									"    pm.expect(response.price).to.eq(6400);",
+									"    pm.expect(response.amount).to.eq(1000);",
+									"    pm.expect(response.detail).to.eq(\"Nike Jordan 1 low\");",
+									"    pm.expect(response.store.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.store.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.store.id).to.eq(1);",
+									"    pm.expect(response.store.storeName).to.eq(\"Nike\");",
+									"    pm.expect(response.store.detail).to.eq(\"test create store.\");",
+									"    pm.expect(response.store.address.createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.store.address.updatedAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.store.address.id).to.eq(1);",
+									"    pm.expect(response.store.address.tal).to.eq(\"0899999999\");",
+									"    pm.expect(response.store.address.is_active).to.eq(true);",
+									"    pm.expect(response.store.address.houseNumber).to.eq(\"45\");",
+									"    pm.expect(response.store.address.subdistrict).to.eq(\"phungern\");",
+									"    pm.expect(response.store.address.district).to.eq(\"kantaralak\");",
+									"    pm.expect(response.store.address.province).to.eq(\"sisaket\");",
+									"    pm.expect(response.store.address.postalcode).to.eq(33110);",
+									"    pm.expect(response.productStatus.nameTh).to.eq(\"พร้อมขาย\");",
+									"    pm.expect(response.productStatus.nameEn).to.eq(\"Ready for sale\");",
+									"    pm.expect(response.productStatus.id).to.eq(1);",
+									"    pm.expect(response.productDetailType[0].createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.productDetailType[0].isDeleted).to.eq(false);",
+									"    pm.expect(response.productDetailType[0].id).to.eq(2);",
+									"    pm.expect(response.productDetailType[0].productType.nameTh).to.eq(\"เสื้อผ้าแฟชั่น\");",
+									"    pm.expect(response.productDetailType[0].productType.nameEn).to.eq(\"Fashion clothes\");",
+									"    pm.expect(response.productDetailType[0].productType.id).to.eq(3);",
+									"    pm.expect(response.isActive).to.eq(true);",
+									"    pm.expect(response.images[0].createdAt).to.eq(\"2024-01-27\");",
+									"    pm.expect(response.images[0].isDeleted).to.eq(false);",
+									"    pm.expect(response.images[0].createdBy).to.eq(1);",
+									"    pm.expect(response.images[0].id).to.eq(3);",
+									"    pm.expect(response.images[0].key).to.eq(\"key2\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{HOST_NAME}}:{{POST}}/{{ENDPOINT}}/product/{{productId2}}",
+							"protocol": "http",
+							"host": [
+								"{{HOST_NAME}}"
+							],
+							"port": "{{POST}}",
+							"path": [
+								"{{ENDPOINT}}",
+								"product",
+								"{{productId2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get product pages 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Response time is less than 2000ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+									"});",
+									"var response = pm.response.json();",
+									"pm.test(\"Reponse Object ok\", function () {",
+									"    pm.expect(response.pageInformation.number).to.eq(1);",
+									"    pm.expect(response.pageInformation.size).to.eq(20);",
+									"    pm.expect(response.first).to.eq(true);",
+									"    pm.expect(response.last).to.eq(true);",
+									"    pm.expect(response.totalPages).to.eq(1);",
+									"    pm.expect(response.totalElement).to.eq(2);",
+									"    pm.expect(response.entities[0].id).to.eq(1);",
+									"    pm.expect(response.entities[0].name).to.eq(\"Nike Ultra Boots\");",
+									"    pm.expect(response.entities[0].price).to.eq(3900);",
+									"    pm.expect(response.entities[0].statusId).to.eq(1);",
+									"    pm.expect(response.entities[0].imageId).to.eq(2);",
+									"    pm.expect(response.entities[0].productImageKey).to.eq(\"key1\");",
+									"    pm.expect(response.entities[1].id).to.eq(2);",
+									"    pm.expect(response.entities[1].name).to.eq(\"Nike Jordan 1 low\");",
+									"    pm.expect(response.entities[1].price).to.eq(6400);",
+									"    pm.expect(response.entities[1].statusId).to.eq(1);",
+									"    pm.expect(response.entities[1].imageId).to.eq(3);",
+									"    pm.expect(response.entities[1].productImageKey).to.eq(\"key2\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{HOST_NAME}}:{{POST}}/{{ENDPOINT}}/product",
+							"protocol": "http",
+							"host": [
+								"{{HOST_NAME}}"
+							],
+							"port": "{{POST}}",
+							"path": [
+								"{{ENDPOINT}}",
+								"product"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "order",
+			"item": [
+				{
+					"name": "post order discount bath",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerId\": {{customerId1}},\n    \"paymentDetailTypeId\": 1,\n    \"orders\": [\n        {\n            \"storeId\": {{storeId1}},\n            \"storeCodeDiscountId\": {{storeCodeDiscountId1}},\n            \"products\": [\n                {\n                    \"productId\": {{productId1}},\n                    \"amount\": 1\n                },\n                {\n                    \"productId\": {{productId2}},\n                    \"amount\": 2\n                }\n            ]\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{HOST_NAME}}:{{POST}}/{{ENDPOINT}}/order",
+							"protocol": "http",
+							"host": [
+								"{{HOST_NAME}}"
+							],
+							"port": "{{POST}}",
+							"path": [
+								"{{ENDPOINT}}",
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post order discount percent",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerId\": {{customerId1}},\n    \"paymentDetailTypeId\": 1,\n    \"orders\": [\n        {\n            \"storeId\": {{storeId1}},\n            \"storeCodeDiscountId\": {{storeCodeDiscountId2}},\n            \"products\": [\n                {\n                    \"productId\": {{productId1}},\n                    \"amount\": 1\n                },\n                {\n                    \"productId\": {{productId2}},\n                    \"amount\": 2\n                }\n            ]\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{HOST_NAME}}:{{POST}}/{{ENDPOINT}}/order",
+							"protocol": "http",
+							"host": [
+								"{{HOST_NAME}}"
+							],
+							"port": "{{POST}}",
+							"path": [
+								"{{ENDPOINT}}",
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post order unused discount",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"customerId\": {{customerId1}},\n    \"paymentDetailTypeId\": 1,\n    \"orders\": [\n        {\n            \"storeId\": {{storeId1}},\n            \"products\": [\n                {\n                    \"productId\": {{productId1}},\n                    \"amount\": 1\n                },\n                {\n                    \"productId\": {{productId2}},\n                    \"amount\": 2\n                }\n            ]\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{HOST_NAME}}:{{POST}}/{{ENDPOINT}}/order",
+							"protocol": "http",
+							"host": [
+								"{{HOST_NAME}}"
+							],
+							"port": "{{POST}}",
+							"path": [
+								"{{ENDPOINT}}",
+								"order"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

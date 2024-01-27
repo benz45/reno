@@ -66,8 +66,8 @@ public class OrderBusiness {
                         .shouldGetStoreCodeDiscountByIdOrElseThrows(_order.getStoreCodeDiscountId());
                 orderProductDetails = storeCodeDiscountBusiness
                         .calculateDiscountToOrderProductDetail(orderProductDetails, storeCodeDiscount);
-                orderProductDetailBusiness.saveAllOrderProductDetail(orderProductDetails);
             }
+            orderProductDetailBusiness.saveAllOrderProductDetail(orderProductDetails);
         }
         return orderRepository.save(order);
     }

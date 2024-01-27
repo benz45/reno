@@ -98,6 +98,20 @@ public class StoreCodeDiscountBusiness {
             Integer totalPriceProduct = (orderProductDetail.getPrice() * orderProductDetail.getAmount());
             double percent = (double) totalPriceProduct / (double) totalPriceProducts;
             Double resultBigDecimal = convertoBigDecimal(percent);
+            double resultDiscountAmount = storeCodeDiscount.getDiscountAmount() * resultBigDecimal;
+            orderProductDetail.setDiscount((int) resultDiscountAmount);
+        }
+        return orderProductDetails;
+    }
+
+    public List<OrderProductDetailEntity> calculateDiscountTypePercentMaxDiscountToOrderProductDetail(
+            Integer totalPriceProducts,
+            List<OrderProductDetailEntity> orderProductDetails,
+            StoreCodeDiscountEntity storeCodeDiscount) {
+        for (OrderProductDetailEntity orderProductDetail : orderProductDetails) {
+            Integer totalPriceProduct = (orderProductDetail.getPrice() * orderProductDetail.getAmount());
+            double percent = (double) totalPriceProduct / (double) totalPriceProducts;
+            Double resultBigDecimal = convertoBigDecimal(percent);
             double resultDiscountAmount = storeCodeDiscount.getMaxDiscount() * resultBigDecimal;
             orderProductDetail.setDiscount((int) resultDiscountAmount);
         }
@@ -110,7 +124,7 @@ public class StoreCodeDiscountBusiness {
             StoreCodeDiscountEntity storeCodeDiscount) {
         if (storeCodeDiscount.getMaxDiscount() != null && (totalPriceProducts / 100)
                 * storeCodeDiscount.getDiscountAmount() > storeCodeDiscount.getMaxDiscount()) {
-            return calculateDiscountTypeBathToOrderProductDetail(totalPriceProducts, orderProductDetails,
+            return calculateDiscountTypePercentMaxDiscountToOrderProductDetail(totalPriceProducts, orderProductDetails,
                     storeCodeDiscount);
         }
         for (OrderProductDetailEntity orderProductDetail : orderProductDetails) {
