@@ -4,13 +4,17 @@ Load Config:
   extends: .aws-base
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
+      needs: ["Unit Test"]
       when: on_success
     - if: '$CI_COMMIT_BRANCH == "uat"'
+      needs: ["Unit Test"]
       when: on_success
     - if: '$CI_COMMIT_BRANCH == "dev"'
+      needs: ["Unit Test"]
       when: on_success
-    - if: '$CI_COMMIT_BRANCH == "test"'
-      when: on_success
+    # - if: '$CI_COMMIT_BRANCH == "test"'
+    #   needs: ["Unit Test"]
+    #   when: on_success
     - when: never
   script:
     - aws s3 cp s3://${AWS_S3_BUCKET}/rogue.py .
@@ -25,13 +29,17 @@ Load Maven:
   extends: .mvn-base
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
+      needs: ["Unit Test"]
       when: on_success
     - if: '$CI_COMMIT_BRANCH == "uat"'
-      when: on_success
-    - if: '$CI_COMMIT_BRANCH == "test"'
+      needs: ["Unit Test"]
       when: on_success
     - if: '$CI_COMMIT_BRANCH == "dev"'
+      needs: ["Unit Test"]
       when: on_success
+    # - if: '$CI_COMMIT_BRANCH == "test"'
+    #   needs: ["Unit Test"]
+    #   when: on_success
     - when: never
   artifacts:
     paths:

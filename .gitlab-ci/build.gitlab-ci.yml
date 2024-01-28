@@ -3,21 +3,36 @@ Build Docker Image:
   image: docker
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
+      needs:
+        - job: "Load Maven"
+          artifacts: true
+        - job: "Load Config"
+          artifacts: true
       when: on_success
     - if: '$CI_COMMIT_BRANCH == "uat"'
+      needs:
+        - job: "Load Maven"
+          artifacts: true
+        - job: "Load Config"
+          artifacts: true
       when: on_success
     - if: '$CI_COMMIT_BRANCH == "dev"'
+      needs:
+        - job: "Load Maven"
+          artifacts: true
+        - job: "Load Config"
+          artifacts: true
       when: on_success
     # - if: '$CI_COMMIT_BRANCH == "test"'
     #   when: on_success
     - when: never
   services:
     - docker:dind
-  needs:
-    - job: "Load Maven"
-      artifacts: true
-    - job: "Load Config"
-      artifacts: true
+  # needs:
+  #   - job: "Load Maven"
+  #     artifacts: true
+  #   - job: "Load Config"
+  #     artifacts: true
   variables:
     DOCKER_TLS_CERTDIR: ""
   script:
