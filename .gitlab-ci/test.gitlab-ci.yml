@@ -4,8 +4,7 @@ Unit Test:
   # rules:
   #   - if: $CI_COMMIT_BRANCH == "dev"
   only:
-    refs:
-      - master
+    - master
   script:
     - "mvn clean install"
     - "mvn test"

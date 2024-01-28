@@ -13,8 +13,7 @@ Generate ENV:
     reports:
       dotenv: .env
   only:
-    refs:
-      - master
+    - master
 
 Generate SSH:
   stage: Checkout
@@ -31,8 +30,7 @@ Generate SSH:
     paths:
       - ./main.pem
   only:
-    refs:
-      - master
+    - master
 
 Checkout Image:
   stage: Checkout
@@ -47,5 +45,4 @@ Checkout Image:
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $CI_PROJECT_NAME || true" && "docker rm $CI_PROJECT_NAME || true" && "docker rmi $CI_REGISTRY_IMAGE || true"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -a -f --volumes"
   only:
-    refs:
-      - master
+    - master
