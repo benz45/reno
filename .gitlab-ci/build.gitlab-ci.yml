@@ -1,8 +1,8 @@
 Build Docker Image:
   stage: Build
   image: docker
-  # rules:
-  #   - if: $CI_COMMIT_BRANCH == "dev" && $CI_COMMIT_BRANCH == "master"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
   services:
     - docker:dind
   needs:
@@ -18,5 +18,3 @@ Build Docker Image:
     - docker build -t $CI_REGISTRY_IMAGE .
     - docker images
     - docker push --all-tags $CI_REGISTRY_IMAGE
-  only:
-    - master
