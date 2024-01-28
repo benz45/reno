@@ -6,10 +6,10 @@ Build Docker Image:
       when: on_success
     - if: '$CI_COMMIT_BRANCH == "uat"'
       when: on_success
-    - if: '$CI_COMMIT_BRANCH == "test"'
-      when: on_success
     - if: '$CI_COMMIT_BRANCH == "dev"'
       when: on_success
+    # - if: '$CI_COMMIT_BRANCH == "test"'
+    #   when: on_success
     - when: never
   services:
     - docker:dind
