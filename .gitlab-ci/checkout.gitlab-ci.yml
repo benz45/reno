@@ -3,7 +3,15 @@ Generate ENV:
   needs: ["Build Docker Image"]
   extends: .aws-base
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "uat"'
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "test"'
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+      when: on_success
+    - when: never
   script:
     - apt-get update && apt-get install -y jq
     - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
@@ -21,7 +29,15 @@ Generate SSH:
     - job: "Build Docker Image"
   extends: .aws-base
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "uat"'
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "test"'
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+      when: on_success
+    - when: never
   script:
     - aws s3 cp s3://${AWS_S3_BUCKET}/beauty_pem.sh .
     - chmod 700 ./beauty_pem.sh
@@ -34,7 +50,15 @@ Checkout Image:
   stage: Checkout
   extends: .ssh
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "uat"'
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "test"'
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+      when: on_success
+    - when: never
   needs:
     - job: "Generate SSH"
       artifacts: true

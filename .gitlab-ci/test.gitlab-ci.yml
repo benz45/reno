@@ -2,7 +2,15 @@ Unit Test:
   stage: Test
   extends: .mvn-base
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "uat"'
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "test"'
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+      when: on_success
+    - when: never
   script:
     - "mvn clean install"
     - "mvn test"
