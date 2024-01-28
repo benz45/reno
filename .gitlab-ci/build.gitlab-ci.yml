@@ -18,3 +18,6 @@ Build Docker Image:
     - docker build -t $CI_REGISTRY_IMAGE .
     - docker images
     - docker push --all-tags $CI_REGISTRY_IMAGE
+  only:
+    refs:
+      - master

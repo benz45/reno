@@ -3,6 +3,9 @@ Unit Test:
   extends: .mvn-base
   # rules:
   #   - if: $CI_COMMIT_BRANCH == "dev"
+  only:
+    refs:
+      - master
   script:
     - "mvn clean install"
     - "mvn test"

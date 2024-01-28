@@ -9,6 +9,9 @@ Load Config:
   artifacts:
     paths:
       - ./rogue.py
+  only:
+    refs:
+      - master
 
 Load Maven:
   stage: Package
@@ -20,3 +23,6 @@ Load Maven:
   artifacts:
     paths:
       - target/*.jar
+  only:
+    refs:
+      - master

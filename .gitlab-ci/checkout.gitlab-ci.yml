@@ -12,6 +12,9 @@ Generate ENV:
   artifacts:
     reports:
       dotenv: .env
+  only:
+    refs:
+      - master
 
 Generate SSH:
   stage: Checkout
@@ -27,6 +30,9 @@ Generate SSH:
   artifacts:
     paths:
       - ./main.pem
+  only:
+    refs:
+      - master
 
 Checkout Image:
   stage: Checkout
@@ -40,3 +46,6 @@ Checkout Image:
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $CI_PROJECT_NAME || true" && "docker rm $CI_PROJECT_NAME || true" && "docker rmi $CI_REGISTRY_IMAGE || true"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -a -f --volumes"
+  only:
+    refs:
+      - master
