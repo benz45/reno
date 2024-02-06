@@ -22,8 +22,7 @@ include:
     - chmod 700 ~/.ssh
     - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
-    - chmod 0400 key_pair.pem
-    # - chmod 0400 main.pem
+    - chmod 0400 main.pem
 
 stages:
   - Test
