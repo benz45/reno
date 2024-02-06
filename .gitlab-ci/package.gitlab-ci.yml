@@ -12,15 +12,17 @@ Load Config:
     - if: '$CI_COMMIT_BRANCH == "dev"'
       needs: ["Unit Test"]
       when: on_success
-    # - if: '$CI_COMMIT_BRANCH == "test"'
+      # - if: '$CI_COMMIT_BRANCH == "test"' # TODO: remove
     #   needs: ["Unit Test"]
     #   when: on_success
     - when: never
   script:
     - aws s3 cp s3://${AWS_S3_BUCKET}/rogue.py .
+    - aws s3 cp s3://${AWS_S3_BUCKET}/${CI_PROJECT_NAME}/${CI_COMMIT_BRANCH}/key_pair.pem .
   artifacts:
     paths:
       - ./rogue.py
+      - ./key_pair.pem
 
 Load Maven:
   stage: Package
@@ -37,7 +39,7 @@ Load Maven:
     - if: '$CI_COMMIT_BRANCH == "dev"'
       needs: ["Unit Test"]
       when: on_success
-    # - if: '$CI_COMMIT_BRANCH == "test"'
+    # - if: '$CI_COMMIT_BRANCH == "test"' # TODO: remove
     #   needs: ["Unit Test"]
     #   when: on_success
     - when: never

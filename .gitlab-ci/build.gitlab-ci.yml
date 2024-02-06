@@ -23,12 +23,12 @@ Build Docker Image:
         - job: "Load Config"
           artifacts: true
       when: on_success
-    # - if: '$CI_COMMIT_BRANCH == "test"'
+    # - if: '$CI_COMMIT_BRANCH == "test"' # TODO: remove
     #   when: on_success
     - when: never
   services:
     - docker:dind
-  # needs:
+  # needs: # TODO: remove
   #   - job: "Load Maven"
   #     artifacts: true
   #   - job: "Load Config"
