@@ -65,9 +65,9 @@ Checkout Image:
           artifacts: true
       when: on_success
     - when: never
-  needs:
-    - job: "Generate SSH"
-      artifacts: true
+  # needs:
+  #   - job: "Generate SSH"
+  #     artifacts: true
   script:
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
     - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $CI_PROJECT_NAME || true" && "docker rm $CI_PROJECT_NAME || true" && "docker rmi $CI_REGISTRY_IMAGE || true"
