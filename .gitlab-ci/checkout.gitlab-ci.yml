@@ -1,30 +1,30 @@
-# Generate ENV:
-#   stage: Checkout
-#   # needs: ["Build Docker Image"]
-#   extends: .aws-base
-#   rules:
-#     - if: '$CI_COMMIT_BRANCH == "master"'
-#       needs: ["Build Docker Image"]
-#       when: on_success
-#     - if: '$CI_COMMIT_BRANCH == "uat"'
-#       needs: ["Build Docker Image"]
-#       when: on_success
-#     - if: '$CI_COMMIT_BRANCH == "dev"'
-#       needs: ["Build Docker Image"]
-#       when: on_success
-#     # - if: '$CI_COMMIT_BRANCH == "test"'
-#     #   when: on_success
-#     - when: never
-#   script:
-#     - apt-get update && apt-get install -y jq
-#     - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
-#     - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
-#     - aws configure set default.region ap-southeast-1
-#     - aws configure set default.output json
-#     - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" >> .env
-#   artifacts:
-#     reports:
-#       dotenv: .env
+Generate ENV:
+  stage: Checkout
+  # needs: ["Build Docker Image"]
+  extends: .aws-base
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      needs: ["Build Docker Image"]
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "uat"'
+      needs: ["Build Docker Image"]
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+      needs: ["Build Docker Image"]
+      when: on_success
+    # - if: '$CI_COMMIT_BRANCH == "test"'
+    #   when: on_success
+    - when: never
+  script:
+    - apt-get update && apt-get install -y jq
+    - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+    - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+    - aws configure set default.region ap-southeast-1
+    - aws configure set default.output json
+    - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" >> .env
+  artifacts:
+    reports:
+      dotenv: .env
 
 # Generate SSH:
 #   stage: Checkout
@@ -52,6 +52,30 @@
 #   artifacts:
 #     paths:
 #       - ./main.pem
+
+Load Key Pair:
+  stage: Checkout
+  # needs: ["Unit Test"]
+  extends: .aws-base
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      needs: ["Unit Test"]
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "uat"'
+      needs: ["Unit Test"]
+      when: on_success
+    - if: '$CI_COMMIT_BRANCH == "dev"'
+      needs: ["Unit Test"]
+      when: on_success
+      # - if: '$CI_COMMIT_BRANCH == "test"' # TODO: remove
+    #   needs: ["Unit Test"]
+    #   when: on_success
+    - when: never
+  script:
+    - aws s3 cp s3://${AWS_S3_BUCKET}/${CI_PROJECT_NAME}/${CI_COMMIT_BRANCH}/key_pair.pem .
+  artifacts:
+    paths:
+      - ./key_pair.pem
 
 Checkout Image:
   stage: Checkout
@@ -82,9 +106,10 @@ Checkout Image:
   #   - job: "Generate SSH"
   #     artifacts: true
   needs:
-    - job: "Load Config"
+    - job: "Load Key Pair"
       artifacts: true
   script:
+    - ls
     # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
     # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $CI_PROJECT_NAME || true" && "docker rm $CI_PROJECT_NAME || true" && "docker rmi $CI_REGISTRY_IMAGE || true"
     # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -a -f --volumes"
