@@ -18,50 +18,69 @@ Generate ENV:
     - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
     - aws configure set default.region ap-southeast-1
     - aws configure set default.output json
-    - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:ap-southeast-1:772962499539:secret:secret/spartan/db-0fkj3U --query SecretString --output text`" >> .env
+    - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id ${CI_COMMIT_BRANCH}/${CI_PROJECT_NAME} --query SecretString --output text`" >> .env
+    - echo "SECRET_ENV_EC2_PUBLIC_IP_ADDRESS=`aws secretsmanager get-secret-value --secret-id dev/reno | jq --raw-output .SecretString | jq -r .SECRET_ENV_EC2_PUBLIC_IP_ADDRESS`"
   artifacts:
     reports:
       dotenv: .env
 
-Generate SSH:
-  stage: Checkout
-  extends: .aws-base
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
-      needs: ["Build Docker Image"]
-      when: on_success
-    - if: '$CI_COMMIT_BRANCH == "uat"'
-      needs: ["Build Docker Image"]
-      when: on_success
-    - if: '$CI_COMMIT_BRANCH == "dev"'
-      needs: ["Build Docker Image"]
-      when: on_success
-    - when: never
-  script:
-    - aws s3 cp s3://${AWS_S3_BUCKET}/beauty_pem.sh .
-    - chmod 700 ./beauty_pem.sh
-    - ./beauty_pem.sh "${AWS_PRIVATE_KEY}" ./main.pem > /dev/null
-  artifacts:
-    paths:
-      - ./main.pem
+# ! previous
+# Generate SSH:
+#   stage: Checkout
+#   extends: .aws-base
+#   rules:
+#     - if: '$CI_COMMIT_BRANCH == "master"'
+#       needs: ["Build Docker Image"]
+#       when: on_success
+#     - if: '$CI_COMMIT_BRANCH == "uat"'
+#       needs: ["Build Docker Image"]
+#       when: on_success
+#     - if: '$CI_COMMIT_BRANCH == "dev"'
+#       needs: ["Build Docker Image"]
+#       when: on_success
+#     - when: never
+#   script:
+#     - aws s3 cp s3://${AWS_S3_BUCKET}/beauty_pem.sh .
+#     - chmod 700 ./beauty_pem.sh
+#     - ./beauty_pem.sh "${AWS_PRIVATE_KEY}" ./main.pem > /dev/null
+#   artifacts:
+#     paths:
+#       - ./main.pem
 
 Checkout Image:
   stage: Checkout
   extends: .ssh
+  # rules:
+  #   - if: '$CI_COMMIT_BRANCH == "master"'
+  #     needs:
+  #       - job: "Generate SSH"
+  #         artifacts: true
+  #     when: on_success
+  #   - if: '$CI_COMMIT_BRANCH == "uat"'
+  #     needs:
+  #       - job: "Generate SSH"
+  #         artifacts: true
+  #     when: on_success
+  #   - if: '$CI_COMMIT_BRANCH == "dev"'
+  #     needs:
+  #       - job: "Generate SSH"
+  #         artifacts: true
+  #     when: on_success
+  #   - when: never
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
       needs:
-        - job: "Generate SSH"
+        - job: "Generate ENV"
           artifacts: true
       when: on_success
     - if: '$CI_COMMIT_BRANCH == "uat"'
       needs:
-        - job: "Generate SSH"
+        - job: "Generate ENV"
           artifacts: true
       when: on_success
     - if: '$CI_COMMIT_BRANCH == "dev"'
       needs:
-        - job: "Generate SSH"
+        - job: "Generate ENV"
           artifacts: true
       when: on_success
     - when: never
@@ -69,6 +88,9 @@ Checkout Image:
   #   - job: "Generate SSH"
   #     artifacts: true
   script:
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $CI_PROJECT_NAME || true" && "docker rm $CI_PROJECT_NAME || true" && "docker rmi $CI_REGISTRY_IMAGE || true"
-    - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -a -f --volumes"
+    - ssh -i key_pair.pem $AWS_USER@$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
+    - ssh -i key_pair.pem $AWS_USER@$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS "docker kill $CI_PROJECT_NAME || true" && "docker rm $CI_PROJECT_NAME || true" && "docker rmi $CI_REGISTRY_IMAGE || true"
+    - ssh -i key_pair.pem $AWS_USER@$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS "docker system prune -a -f --volumes"
+    # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
+    # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker kill $CI_PROJECT_NAME || true" && "docker rm $CI_PROJECT_NAME || true" && "docker rmi $CI_REGISTRY_IMAGE || true"
+    # - ssh -i main.pem $AWS_USER@$AWS_SERVER_IP "docker system prune -a -f --volumes"

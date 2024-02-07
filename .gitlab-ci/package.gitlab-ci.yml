@@ -13,10 +13,12 @@ Load Config:
       when: on_success
     - when: never
   script:
-    - aws s3 cp s3://${AWS_S3_BUCKET}/rogue.py .
+    - aws s3 cp s3://${AWS_S3_BUCKET}/config/rogue.py .
+    - aws s3 cp s3://spartan-config/${CI_COMMIT_BRANCH}/${CI_PROJECT_NAME}/key_pair.pem .
   artifacts:
     paths:
       - ./rogue.py
+      - ./key_pair.pem
 
 Load Maven:
   stage: Package
