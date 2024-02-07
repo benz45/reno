@@ -19,12 +19,14 @@ Generate ENV:
     - aws configure set default.region ap-southeast-1
     - aws configure set default.output json
     - echo "PROJECT_CONFIG=`aws secretsmanager get-secret-value --secret-id ${CI_COMMIT_BRANCH}/${CI_PROJECT_NAME} --query SecretString --output text`" >> .env
-    - echo $SECRET_ENV_EC2_PUBLIC_IP_ADDRESS
+    # - echo "SECRET_ENV_EC2_PUBLIC_IP_ADDRESS="`aws secretsmanager get-secret-value --secret-id dev/reno | jq --raw-output .SecretString | jq -r .SECRET_ENV_EC2_PUBLIC_IP_ADDRESS`"" >> SECRET_ENV_EC2_PUBLIC_IP_ADDRESS.txt
+    - echo "SECRET_ENV_EC2_PUBLIC_IP_ADDRESS=123" >> SECRET_ENV_EC2_PUBLIC_IP_ADDRESS.txt
   artifacts:
     reports:
       dotenv: .env
-  variables:
-    SECRET_ENV_EC2_PUBLIC_IP_ADDRESS: "`aws secretsmanager get-secret-value --secret-id dev/reno | jq --raw-output .SecretString | jq -r .SECRET_ENV_EC2_PUBLIC_IP_ADDRESS`"
+    paths:
+      - SECRET_ENV_EC2_PUBLIC_IP_ADDRESS.txt
+    expire_in: never
 
 # ! previous
 # Generate SSH:
