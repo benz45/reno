@@ -1,10 +1,10 @@
 include:
-  # - local: /.gitlab-ci/test.gitlab-ci.yml
-  # - local: /.gitlab-ci/package.gitlab-ci.yml
-  # - local: /.gitlab-ci/build.gitlab-ci.yml
-  # - local: /.gitlab-ci/checkout.gitlab-ci.yml
-  # - local: /.gitlab-ci/deploy.gitlab-ci.yml
-  - local: /.gitlab-ci/example.gitlab-ci.yml
+  - local: /.gitlab-ci/test.gitlab-ci.yml
+  - local: /.gitlab-ci/package.gitlab-ci.yml
+  - local: /.gitlab-ci/build.gitlab-ci.yml
+  - local: /.gitlab-ci/checkout.gitlab-ci.yml
+  - local: /.gitlab-ci/deploy.gitlab-ci.yml
+  # - local: /.gitlab-ci/example.gitlab-ci.yml
 
 .alpine-base:
   image: alpine:3.16
@@ -27,13 +27,12 @@ include:
     - chmod 0400 key_pair.pem
     # - chmod 0400 main.pem
 
-# stages:
-#   - Test
-#   - Package
-#   - Build
-#   - Checkout
-#   - Deploy
-
 stages:
-  - Example
-  - ExampleDeploy
+  - Test
+  - Package
+  - Build
+  - Checkout
+  - Deploy
+# stages:
+#   - Example
+#   - ExampleDeploy
