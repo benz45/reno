@@ -20,7 +20,8 @@ include:
     - apk update && apk add openssh
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - ssh-keyscan $AWS_SERVER_IP >> ~/.ssh/known_hosts
+    - echo $SECRET_ENV_EC2_PUBLIC_IP_ADDRESS
+    - ssh-keyscan $SECRET_ENV_EC2_PUBLIC_IP_ADDRESS >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     - chmod 0400 key_pair.pem
     # - chmod 0400 main.pem
