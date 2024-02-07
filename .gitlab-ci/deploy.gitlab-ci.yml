@@ -7,6 +7,8 @@ Deploy:
         - job: "Checkout Image"
         - job: "Generate ENV"
           artifacts: true
+        - job: "Load Config"
+          artifacts: true
         # - job: "Generate SSH"
         #   artifacts: true
       when: on_success
@@ -15,6 +17,8 @@ Deploy:
         - job: "Checkout Image"
         - job: "Generate ENV"
           artifacts: true
+        - job: "Load Config"
+          artifacts: true
         # - job: "Generate SSH"
         #   artifacts: true
       when: on_success
@@ -22,6 +26,8 @@ Deploy:
       needs:
         - job: "Checkout Image"
         - job: "Generate ENV"
+          artifacts: true
+        - job: "Load Config"
           artifacts: true
         # - job: "Generate SSH"
         #   artifacts: true
