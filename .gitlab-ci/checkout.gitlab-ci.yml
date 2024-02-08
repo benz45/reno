@@ -16,11 +16,15 @@ Generate ENV:
     - apt-get update && apt-get install -y jq
     - aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
     - aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
-    - aws configure set default.region ap-southeast-1
+    - aws configure set default.region ${AWS_REGION}
     - aws configure set default.output json
     - export SECRET_STRING=`aws secretsmanager get-secret-value --secret-id ${CI_COMMIT_BRANCH}/${CI_PROJECT_NAME} | jq --raw-output .SecretString `
     - export SECRET_ENV_EC2_PUBLIC_IP_ADDRESS=`echo $SECRET_STRING | jq -r .SECRET_ENV_EC2_PUBLIC_IP_ADDRESS`
+    - export SECRET_ENV_EC2_USERNAME=`echo $SECRET_STRING | jq -r .SECRET_ENV_EC2_USERNAME`
+    - export SECRET_ENV_AWS_EC2_PORT_INSTANCE=`echo $SECRET_STRING | jq -r .SECRET_ENV_AWS_EC2_PORT_INSTANCE`
     - echo SECRET_ENV_EC2_PUBLIC_IP_ADDRESS=$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS >> build.env
+    - echo SECRET_ENV_EC2_USERNAME=$SECRET_ENV_EC2_USERNAME >> build.env
+    - echo SECRET_ENV_AWS_EC2_PORT_INSTANCE=$SECRET_ENV_AWS_EC2_PORT_INSTANCE >> build.env
     - echo PROJECT_CONFIG="$SECRET_STRING" >> build.env
   artifacts:
     reports:
@@ -53,6 +57,6 @@ Checkout Image:
       when: on_success
     - when: never
   script:
-    - ssh -i key_pair.pem $AWS_USER@$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
-    - ssh -i key_pair.pem $AWS_USER@$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS "docker kill $CI_PROJECT_NAME || true" && "docker rm $CI_PROJECT_NAME || true" && "docker rmi $CI_REGISTRY_IMAGE || true"
-    - ssh -i key_pair.pem $AWS_USER@$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS "docker system prune -a -f --volumes"
+    - ssh -i key_pair.pem $SECRET_ENV_EC2_USERNAME@$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
+    - ssh -i key_pair.pem $SECRET_ENV_EC2_USERNAME@$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS "docker kill $CI_PROJECT_NAME || true" && "docker rm $CI_PROJECT_NAME || true" && "docker rmi $CI_REGISTRY_IMAGE || true"
+    - ssh -i key_pair.pem $SECRET_ENV_EC2_USERNAME@$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS "docker system prune -a -f --volumes"

@@ -28,7 +28,7 @@ Deploy:
       when: on_success
     - when: never
   script:
-    - ssh -i key_pair.pem $AWS_USER@$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
-    - ssh -i key_pair.pem $AWS_USER@$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS "docker pull $CI_REGISTRY_IMAGE:latest"
-    - ssh -i key_pair.pem $AWS_USER@$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS "docker run -d -p 8080:8080 --entrypoint /app/src/main/resources/run.sh -e ACTIVE_PROFILE='${CI_COMMIT_BRANCH}' -e PROJECT_CONFIG='${PROJECT_CONFIG}' --name $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:latest"
-    - ssh -i key_pair.pem $AWS_USER@$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS "docker ps"
+    - ssh -i key_pair.pem $SECRET_ENV_EC2_USERNAME@$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS "docker login --username gitlab-ci-token --password ${CI_JOB_TOKEN} ${CI_REGISTRY}"
+    - ssh -i key_pair.pem $SECRET_ENV_EC2_USERNAME@$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS "docker pull $CI_REGISTRY_IMAGE:latest"
+    - ssh -i key_pair.pem $SECRET_ENV_EC2_USERNAME@$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS "docker run -d -p $SECRET_ENV_AWS_EC2_PORT_INSTANCE --entrypoint /app/src/main/resources/run.sh -e ACTIVE_PROFILE='${CI_COMMIT_BRANCH}' -e PROJECT_CONFIG='${PROJECT_CONFIG}' --name $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:latest"
+    - ssh -i key_pair.pem $SECRET_ENV_EC2_USERNAME@$SECRET_ENV_EC2_PUBLIC_IP_ADDRESS "docker ps"
