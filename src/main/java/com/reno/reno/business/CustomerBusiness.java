@@ -12,12 +12,15 @@ import com.reno.reno.model.customer.CustomerEntity;
 import com.reno.reno.model.customer.CustomerLevalEntity;
 import com.reno.reno.model.customer.CustomerRequest;
 import com.reno.reno.model.exception.ApiException;
+import com.reno.reno.model.service.SignUpRequest;
+import com.reno.reno.model.service.signup.SignUpResponse;
 import com.reno.reno.repository.customer.CustomerRepository;
+import com.reno.reno.service.supabase.SupabaseServiceImpl;
 
 import lombok.NonNull;
 
 @Component
-public class CustomerBusiness {
+public class CustomerBusiness extends SupabaseServiceImpl {
 
     private @Autowired CustomerRepository customerRepository;
 
@@ -27,13 +30,18 @@ public class CustomerBusiness {
     GenderBusiness genderBusiness;
 
     @Transactional(rollbackFor = Exception.class)
-    public CustomerEntity createCustomer(CustomerRequest request) throws ApiException {
+    public CustomerEntity createCustomer(CustomerRequest request) throws Exception {
         checkCustomerUsernameThrowIfDuplicate(request.getUsername());
         CustomerEntity customer = convertCustomerRequestToEntity(request);
         CustomerLevalEntity customerLeval = customerLevalBusiness.shouldGetCustomerLevalByIdOrElseThrowIfNotExists(1);
         GenderEntity gender = genderBusiness.shouldGetGenderByIdOrElseThrowIfNotExists(request.getGender().getId());
         customer.setCustomerLeval(customerLeval);
         customer.setGender(gender);
+        SignUpRequest signUpEmailRequest = new SignUpRequest();
+        signUpEmailRequest.setEmail(customer.getEmail());
+        signUpEmailRequest.setPassword(request.getPassword());
+        SignUpResponse authUser = postSignUp(signUpEmailRequest);
+        customer.setAuthUserId(authUser.getUser().getId());
         return customerRepository.save(customer);
     }
 

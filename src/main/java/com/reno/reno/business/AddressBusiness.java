@@ -3,10 +3,12 @@ package com.reno.reno.business;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import com.reno.reno.model.AddressEntiry;
 import com.reno.reno.model.CreateAddressRequest;
+import com.reno.reno.model.exception.ApiException;
 import com.reno.reno.repository.AddressRepository;
 import com.reno.reno.util.Util;
 
@@ -14,13 +16,11 @@ import com.reno.reno.util.Util;
 public class AddressBusiness {
     private @Autowired AddressRepository addressRepository;
 
-    public AddressEntiry saveAddress(CreateAddressRequest addressRequest) {
-        AddressEntiry address = shouldSetAddress(addressRequest);
-        address = addressRepository.save(address);
-        return address;
+    public AddressEntiry shouldSavaAddressOrElseThrow(AddressEntiry address) throws ApiException {
+        return Util.applyIfNotNullOrElseThrow(address, addressRepository::save, "Request address some is null.");
     }
 
-    public AddressEntiry shouldSetAddress(CreateAddressRequest request) {
+    public AddressEntiry convertRequestToAddress(CreateAddressRequest request) {
         AddressEntiry address = new AddressEntiry();
         Util.setIfNotNull(request.getTal(), address::setTal);
         Util.setIfNotNull(request.getHouseNumber(), address::setHouseNumber);

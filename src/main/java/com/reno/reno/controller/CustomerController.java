@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.reno.reno.business.CustomerBusiness;
 import com.reno.reno.model.customer.CustomerEntity;
 import com.reno.reno.model.customer.CustomerRequest;
-import com.reno.reno.model.exception.ApiException;
 
 @Validated
 @RestController
@@ -20,7 +19,7 @@ public class CustomerController {
     CustomerBusiness customerBusiness;
 
     @PostMapping("/customer")
-    public CustomerEntity postCustomeCustomer(@Valid @RequestBody CustomerRequest request) throws ApiException {
+    public CustomerEntity postCustomeCustomer(@Valid @RequestBody CustomerRequest request) throws Exception {
         return customerBusiness.createCustomer(request);
     }
 }

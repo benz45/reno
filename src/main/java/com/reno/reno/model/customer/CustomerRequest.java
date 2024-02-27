@@ -13,6 +13,10 @@ import lombok.Data;
 public class CustomerRequest {
     @NotNull(message = "username required.")
     private String username;
+
+    @NotNull(message = "password required.")
+    private String password;
+
     @NotNull(message = "name required.")
     private String name;
 

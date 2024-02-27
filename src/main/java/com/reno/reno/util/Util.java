@@ -3,6 +3,7 @@ package com.reno.reno.util;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.modelmapper.ModelMapper;
 
@@ -20,6 +21,14 @@ public class Util {
         if (Objects.nonNull(value)) {
             setter.accept(value);
         }
+    }
+
+    public static <T> T applyIfNotNullOrElseThrow(T value, Function<T, T> setter, String throwMessage)
+            throws ApiException {
+        if (Objects.isNull(value)) {
+            throw new ApiException("400", throwMessage);
+        }
+        return setter.apply(value);
     }
 
     @SuppressWarnings("unchecked")
