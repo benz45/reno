@@ -14,7 +14,7 @@ import com.reno.reno.model.base.BaseColumnCreatedIsDeleted;
 import com.reno.reno.model.product.ProductEntity;
 
 @Entity
-@Table(name = "customer_product_favority", schema = "ecommerce_store")
+@Table(name = "customer_product_favority", schema = "e_commerce_info")
 @Where(clause = "is_deleted = false")
 public class CustomerProductFavorityEntity extends BaseColumnCreatedIsDeleted {
     @Id

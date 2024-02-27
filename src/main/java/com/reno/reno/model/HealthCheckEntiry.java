@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(schema = "ecommerce_store", name = "health_check")
+@Table(schema = "e_commerce_info", name = "health_check")
 public class HealthCheckEntiry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

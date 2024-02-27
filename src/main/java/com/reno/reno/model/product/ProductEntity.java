@@ -24,7 +24,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
-@Table(name = "product", schema = "ecommerce_store")
+@Table(name = "product", schema = "e_commerce_info")
 @Where(clause = "is_deleted = false")
 @Data
 @EqualsAndHashCode(callSuper = false)

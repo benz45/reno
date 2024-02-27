@@ -21,7 +21,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
-@Table(name = "customer", schema = "ecommerce_store")
+@Table(name = "customer", schema = "e_commerce_info")
 @Where(clause = "is_deleted = false")
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -29,6 +29,9 @@ public class CustomerEntity extends BaseColumnCreatedUpdatedIsDeleted {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "auth_user_id")
+    private String authUserId;
 
     @Column(name = "username")
     private String username;

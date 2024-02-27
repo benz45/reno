@@ -102,7 +102,7 @@ public class ProductBusiness extends BaseCustomRepository {
     public String generateQueryStringGetProduct(String productName, Pageable pageable) {
         StringBuilder s = new StringBuilder();
         s.append(
-                "select distinct p.id, p.name, p.price, p.status_id, p.updated_at, p.created_at, i.id as image_id, i.key as product_image_key from ecommerce_store.product p ");
+                "select distinct p.id, p.name, p.price, p.status_id, p.updated_at, p.created_at, i.id as image_id, i.key as product_image_key from e_commerce_info.product p ");
         s.append(generateQueryStringGetProductFrom());
         s.append(generateQueryStringGetProductFilter(productName));
         s.append(" group by p.id, i.id ");
@@ -113,7 +113,7 @@ public class ProductBusiness extends BaseCustomRepository {
 
     public String generateQueryStringGetProductCount(String productName, Pageable pageable) {
         StringBuilder s = new StringBuilder();
-        s.append("select count(distinct p.id) from ecommerce_store.product p ");
+        s.append("select count(distinct p.id) from e_commerce_info.product p ");
         s.append(generateQueryStringGetProductFrom());
         s.append(generateQueryStringGetProductFilter(productName));
         return s.toString();
@@ -137,9 +137,9 @@ public class ProductBusiness extends BaseCustomRepository {
         StringBuilder s = new StringBuilder();
         s.append(
 
-                "left join ecommerce_store.product_image pi2 on pi2.product_id = p.id and pi2.is_deleted = false "
-                        + "left join ecommerce_store.image i on i.id = pi2.image_id and i.is_deleted = false "
-                        + "join ecommerce_store.store s on s.id = p.store_id and s.is_deleted = false where true "
+                "left join e_commerce_info.product_image pi2 on pi2.product_id = p.id and pi2.is_deleted = false "
+                        + "left join e_commerce_info.image i on i.id = pi2.image_id and i.is_deleted = false "
+                        + "join e_commerce_info.store s on s.id = p.store_id and s.is_deleted = false where true "
                         + "and p.is_active = true ");
         return s.toString();
     }

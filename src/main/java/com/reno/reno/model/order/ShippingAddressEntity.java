@@ -15,7 +15,7 @@ import com.reno.reno.model.AddressEntiry;
 import com.reno.reno.model.base.BaseColumnCreatedIsDeleted;
 
 @Entity
-@Table(name = "shipping_address", schema = "ecommerce_store")
+@Table(name = "shipping_address", schema = "e_commerce_info")
 @Where(clause = "is_deleted = false")
 public class ShippingAddressEntity extends BaseColumnCreatedIsDeleted {
     @Id

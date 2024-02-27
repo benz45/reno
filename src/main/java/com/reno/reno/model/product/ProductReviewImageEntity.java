@@ -14,7 +14,7 @@ import com.reno.reno.model.ImageEntity;
 import com.reno.reno.model.base.BaseColumnCreatedIsDeleted;
 
 @Entity
-@Table(name = "product_review_image", schema = "ecommerce_store")
+@Table(name = "product_review_image", schema = "e_commerce_info")
 @Where(clause = "is_deleted = false")
 public class ProductReviewImageEntity extends BaseColumnCreatedIsDeleted {
     @Id

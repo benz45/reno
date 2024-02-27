@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
-@Table(name = "customer_leval", schema = "ecommerce_store")
+@Table(name = "customer_leval", schema = "e_commerce_info")
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class CustomerLevalEntity extends BaseNameThNameEn {

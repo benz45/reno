@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
-@Table(schema = "ecommerce_store", name = "gender")
+@Table(schema = "e_commerce_info", name = "gender")
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class GenderEntity extends BaseNameThNameEn {

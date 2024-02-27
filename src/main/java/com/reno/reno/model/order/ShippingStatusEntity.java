@@ -13,7 +13,7 @@ import org.hibernate.annotations.Where;
 import com.reno.reno.model.base.BaseColumnCreatedIsDeleted;
 
 @Entity
-@Table(name = "shipping_status", schema = "ecommerce_store")
+@Table(name = "shipping_status", schema = "e_commerce_info")
 @Where(clause = "is_deleted = false")
 public class ShippingStatusEntity extends BaseColumnCreatedIsDeleted {
     @Id

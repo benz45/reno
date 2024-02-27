@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name = "payment_detail_type", schema = "ecommerce_store")
+@Table(name = "payment_detail_type", schema = "e_commerce_info")
 @EqualsAndHashCode(callSuper = false)
 public class PaymentDetailTypeEntity extends BaseNameThNameEn {
     @Id
