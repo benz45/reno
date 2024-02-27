@@ -13,6 +13,9 @@ public class GenderBusiness {
     private GenderRepository genderRepository;
 
     public GenderEntity shouldGetGenderByIdOrElseThrowIfNotExists(Integer genderId) throws ApiException {
+        if (genderId == null) {
+            throw new ApiException("400", "Gender id is not null");
+        }
         return genderRepository.findById(genderId)
                 .orElseThrow(() -> new ApiException("404", "can't find gender id " + genderId));
     }
