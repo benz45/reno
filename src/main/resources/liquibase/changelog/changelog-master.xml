@@ -6,15 +6,16 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <includeAll path="1-healthcheck/" relativeToChangelogFile="true" />
-    <includeAll path="2-general/" relativeToChangelogFile="true" />
-    <includeAll path="3-customer/" relativeToChangelogFile="true" />
-    <includeAll path="4-order/" relativeToChangelogFile="true" />
-    <includeAll path="5-payment/" relativeToChangelogFile="true" />
-    <includeAll path="6-product/" relativeToChangelogFile="true" />
-    <includeAll path="7-store/" relativeToChangelogFile="true" />
-    <includeAll path="8-relation/" relativeToChangelogFile="true" />
-    <includeAll path="9-drop/" relativeToChangelogFile="true" />
-    <includeAll path="10-seed/" relativeToChangelogFile="true" />
+    <includeAll path="a1-healthcheck/" relativeToChangelogFile="true" />
+    <includeAll path="a2-general/" relativeToChangelogFile="true" />
+    <includeAll path="a3-customer/" relativeToChangelogFile="true" />
+    <includeAll path="a4-order/" relativeToChangelogFile="true" />
+    <includeAll path="a5-payment/" relativeToChangelogFile="true" />
+    <includeAll path="a6-product/" relativeToChangelogFile="true" />
+    <includeAll path="a7-store/" relativeToChangelogFile="true" />
+    <includeAll path="a8-employee/" relativeToChangelogFile="true" />
+    <includeAll path="b1-relation/" relativeToChangelogFile="true" />
+    <includeAll path="b2-drop/" relativeToChangelogFile="true" />
+    <includeAll path="b3-seed/" relativeToChangelogFile="true" />
 
 </databaseChangeLog>

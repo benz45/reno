@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="fk-employee" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-employee-to-employee_leval"
+            baseColumnNames="employee_leval_id"
+            baseTableName="employee"
+            referencedColumnNames="id"
+            referencedTableName="employee_leval"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-employee-to-gender"
+            baseColumnNames="gender_id"
+            baseTableName="employee"
+            referencedColumnNames="id"
+            referencedTableName="gender"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-employee-to-employee_role_type"
+            baseColumnNames="employee_role_type_id"
+            baseTableName="employee"
+            referencedColumnNames="id"
+            referencedTableName="employee_role_type"
+        />
+    </changeSet>
+
+    <changeSet id="fk-employee_cart" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-employee_cart-to-employee"
+            baseColumnNames="employee_id"
+            baseTableName="employee_cart"
+            referencedColumnNames="id"
+            referencedTableName="employee"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-employee_cart-to-product"
+            baseColumnNames="product_id"
+            baseTableName="employee_cart"
+            referencedColumnNames="id"
+            referencedTableName="product"
+        />
+    </changeSet>
+
+    <changeSet id="fk-employee_store" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-employee_store-to-employee"
+            baseColumnNames="employee_id"
+            baseTableName="employee_store"
+            referencedColumnNames="id"
+            referencedTableName="employee"
+        />
+        <addForeignKeyConstraint
+            constraintName="fk-employee_store-to-store"
+            baseColumnNames="store_id"
+            baseTableName="employee_store"
+            referencedColumnNames="id"
+            referencedTableName="store"
+        />
+    </changeSet>
+
+</databaseChangeLog>

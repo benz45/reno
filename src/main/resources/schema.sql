@@ -1,1 +1,1 @@
-CREATE SCHEMA IF NOT EXISTS ecommerce_store;
+CREATE SCHEMA IF NOT EXISTS e_commerce_info;

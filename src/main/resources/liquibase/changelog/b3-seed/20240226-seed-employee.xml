@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="seed-table-employee_leval" author="pao">
+        <insert tableName="employee_leval">
+            <column name="id" value="1" />
+            <column name="name_th" value="รับการสั่งซื้อน้อยกว่า 100 ออเดอร์" />
+            <column name="name_en" value="Classic" />
+        </insert>
+        <insert tableName="employee_leval">
+            <column name="id" value="2" />
+            <column name="name_th" value="รับการสั่งซื้อมากกว่า 100 ออเดอร์" />
+            <column name="name_en" value="Silver" />
+        </insert>
+        <insert tableName="employee_leval">
+            <column name="id" value="3" />
+            <column name="name_th" value="รับการสั่งซื้อมากกว่า 500 ออเดอร์" />
+            <column name="name_en" value="Gold" />
+        </insert>
+        <insert tableName="employee_leval">
+            <column name="id" value="4" />
+            <column name="name_th" value="รับการสั่งซื้อมากกว่า 1000 ออเดอร์" />
+            <column name="name_en" value="Platinum" />
+        </insert>
+    </changeSet>
+    <changeSet id="seed-table-employee_role_type" author="pao">
+        <insert tableName="employee_role_type">
+            <column name="id" value="1" />
+            <column name="name_th" value="ผู้บริหารสูงสุด" />
+            <column name="name_en" value="ceo" />
+        </insert>
+        <insert tableName="employee_role_type">
+            <column name="id" value="2" />
+            <column name="name_th" value="ผู้จัดการร้าน" />
+            <column name="name_en" value="sm" />
+        </insert>
+        <insert tableName="employee_role_type">
+            <column name="id" value="3" />
+            <column name="name_th" value="พนักงานร้าน" />
+            <column name="name_en" value="se" />
+        </insert>
+    </changeSet>
+
+
+</databaseChangeLog>
