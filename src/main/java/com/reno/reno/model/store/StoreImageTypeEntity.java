@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
-@Table(name = "store_image_type", schema = "ecommerce_store")
+@Table(name = "store_image_type", schema = "e_commerce_info")
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class StoreImageTypeEntity extends BaseNameThNameEn {

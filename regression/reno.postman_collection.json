@@ -15,7 +15,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8089/api/e-commerce-store/healthcheck",
+							"raw": "http://localhost:8089/api/e-commerce-info/healthcheck",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -23,7 +23,7 @@
 							"port": "8089",
 							"path": [
 								"api",
-								"e-commerce-store",
+								"e-commerce-info",
 								"healthcheck"
 							]
 						}

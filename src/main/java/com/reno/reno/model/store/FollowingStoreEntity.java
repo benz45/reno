@@ -14,7 +14,7 @@ import com.reno.reno.model.base.BaseColumnCreatedUpdatedIsDeleted;
 import com.reno.reno.model.customer.CustomerEntity;
 
 @Entity
-@Table(name = "following_store", schema = "ecommerce_store")
+@Table(name = "following_store", schema = "e_commerce_info")
 @Where(clause = "is_deleted = false")
 public class FollowingStoreEntity extends BaseColumnCreatedUpdatedIsDeleted {
     @Id

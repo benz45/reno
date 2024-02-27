@@ -21,7 +21,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name = "store_code_discount", schema = "ecommerce_store")
+@Table(name = "store_code_discount", schema = "e_commerce_info")
 @Where(clause = "is_deleted = false")
 @EqualsAndHashCode(callSuper = false)
 public class StoreCodeDiscountEntity extends BaseColumnCreatedUpdatedIsDeleted {

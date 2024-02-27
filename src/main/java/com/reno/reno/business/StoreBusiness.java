@@ -47,7 +47,7 @@ public class StoreBusiness extends BaseCustomRepository {
     public String generateQueryString(StorePageFilter filter) {
         StringBuilder s = new StringBuilder();
         s.append(
-                "select distinct s.id, s.store_name, s.detail, i.\"key\" as store_profile_url, s.updated_at, s.created_at, count(s.id) as following_customers, so.customer_id as created_by from ecommerce_store.store s");
+                "select distinct s.id, s.store_name, s.detail, i.\"key\" as store_profile_url, s.updated_at, s.created_at, count(s.id) as following_customers, so.customer_id as created_by from e_commerce_info.store s");
         s.append(generateFromQuery());
         s.append(generateFilterQuery(filter));
         s.append(" group by s.id, i.id, so.id order by following_customers desc\n");
@@ -58,7 +58,7 @@ public class StoreBusiness extends BaseCustomRepository {
     public String generateQueryStringCount(StorePageFilter filter) {
         StringBuilder s = new StringBuilder();
         s.append(
-                "select distinct count(s.id) from ecommerce_store.store s");
+                "select distinct count(s.id) from e_commerce_info.store s");
         s.append(generateFromQuery());
         s.append(generateFilterQuery(filter));
         return s.toString();
@@ -67,12 +67,12 @@ public class StoreBusiness extends BaseCustomRepository {
     public String generateFromQuery() {
         StringBuilder s = new StringBuilder();
         s.append(
-                " left join ecommerce_store.store_image si on si.store_id = s.id and si.is_deleted = false");
+                " left join e_commerce_info.store_image si on si.store_id = s.id and si.is_deleted = false");
         s.append(
-                " left join ecommerce_store.store_owner so on so.store_id = s.id and so.is_deleted = false");
+                " left join e_commerce_info.store_owner so on so.store_id = s.id and so.is_deleted = false");
         s.append(
-                " left join ecommerce_store.following_store fs2 on fs2.store_id = s.id and fs2.is_deleted = false and s.is_deleted = false");
-        s.append(" left join ecommerce_store.image i on i.id = si.image_id and i.is_deleted = false ");
+                " left join e_commerce_info.following_store fs2 on fs2.store_id = s.id and fs2.is_deleted = false and s.is_deleted = false");
+        s.append(" left join e_commerce_info.image i on i.id = si.image_id and i.is_deleted = false ");
         return s.toString();
     }
 
@@ -123,10 +123,11 @@ public class StoreBusiness extends BaseCustomRepository {
         }
     }
 
-    public StoreEntity shouldSaveStore(CreateStoreRequest request) {
+    public StoreEntity shouldSaveStore(CreateStoreRequest request) throws ApiException {
         StoreEntity store = new StoreEntity();
         if (Util.isNotNull(request.getAddress())) {
-            AddressEntiry address = addressBusiness.saveAddress(request.getAddress());
+            AddressEntiry address = addressBusiness.convertRequestToAddress(request.getAddress());
+            address = addressBusiness.shouldSavaAddressOrElseThrow(address);
             store.setAddress(address);
         }
         Util.setIfNotNull(request.getStoreName(), store::setStoreName);

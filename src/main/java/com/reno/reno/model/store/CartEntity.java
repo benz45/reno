@@ -16,7 +16,7 @@ import com.reno.reno.model.customer.CustomerEntity;
 import com.reno.reno.model.product.ProductEntity;
 
 @Entity
-@Table(name = "cart", schema = "ecommerce_store")
+@Table(name = "cart", schema = "e_commerce_info")
 @Where(clause = "is_deleted = false")
 public class CartEntity extends BaseColumnCreatedUpdatedIsDeleted {
     @Id

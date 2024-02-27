@@ -20,7 +20,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name = "order_store", schema = "ecommerce_store")
+@Table(name = "order_store", schema = "e_commerce_info")
 @Where(clause = "is_deleted = false")
 @EqualsAndHashCode(callSuper = false)
 public class OrderStoreEntity extends BaseColumnCreatedUpdatedIsDeleted {
