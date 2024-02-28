@@ -137,10 +137,12 @@ public class ProductBusiness extends BaseCustomRepository {
         StringBuilder s = new StringBuilder();
         s.append(
 
-                "left join e_commerce_info.product_image pi2 on pi2.product_id = p.id and pi2.is_deleted = false "
-                        + "left join e_commerce_info.image i on i.id = pi2.image_id and i.is_deleted = false "
-                        + "join e_commerce_info.store s on s.id = p.store_id and s.is_deleted = false where true "
-                        + "and p.is_active = true ");
+                """
+                        left join e_commerce_info.product_image pi2 on pi2.product_id = p.id and pi2.is_deleted = false \
+                        left join e_commerce_info.image i on i.id = pi2.image_id and i.is_deleted = false \
+                        join e_commerce_info.store s on s.id = p.store_id and s.is_deleted = false where true \
+                        and p.is_active = true \
+                        """);
         return s.toString();
     }
 

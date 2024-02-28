@@ -1,6 +1,6 @@
 package com.reno.reno.controller;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -17,7 +17,7 @@ import com.reno.reno.model.employee.EmployeeRequest;
 public class EmployeeController {
     private @Autowired EmployeeBusiness employeeBusiness;
 
-    @PostMapping("/employee")
+    @PostMapping("/e-commerce-info/employee")
     public EmployeeEntity postEmployee(@Valid @RequestBody EmployeeRequest request) throws Exception {
         return employeeBusiness.createEmployee(request);
     }

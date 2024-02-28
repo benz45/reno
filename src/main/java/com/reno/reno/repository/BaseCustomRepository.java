@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceUnit;
-import javax.persistence.Query;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceUnit;
+import jakarta.persistence.Query;
 
 public class BaseCustomRepository {
 	protected EntityManagerFactory _entityManagerFactory;
@@ -57,29 +57,29 @@ public class BaseCustomRepository {
 	}
 
 	protected Long convertToLongFromBigInteger(Object data) {
-		if (data instanceof BigInteger) {
-			return ((BigInteger) data).longValue();
+		if (data instanceof BigInteger integer) {
+			return integer.longValue();
 		}
 		return null;
 	}
 
 	protected Long convertToLongFromIntegerObject(Object data) {
-		if (data instanceof Integer) {
-			return ((Integer) data).longValue();
+		if (data instanceof Integer integer) {
+			return integer.longValue();
 		}
 		return null;
 	}
 
 	protected Double convertToDouble(Object data) {
-		if (data instanceof Double) {
-			return (Double) data;
+		if (data instanceof Double double1) {
+			return double1;
 		}
 		return null;
 	}
 
 	protected Integer convertToInteger(Object data) {
-		if (data instanceof Integer) {
-			return (Integer) data;
+		if (data instanceof Integer integer) {
+			return integer;
 		}
 		return null;
 	}
@@ -92,23 +92,23 @@ public class BaseCustomRepository {
 	}
 
 	protected Date convertToDate(Object data) {
-		if (data instanceof Date) {
-			return (Date) data;
+		if (data instanceof Date date) {
+			return date;
 		}
 		return null;
 	}
 
 	protected Boolean convertToBoolean(Object data) {
-		if (data instanceof Boolean) {
-			return (Boolean) data;
+		if (data instanceof Boolean boolean1) {
+			return boolean1;
 		}
 		return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	protected <T> T convertToUniqueType(Object data) {
-		if (data instanceof BigInteger) {
-			return (T) Long.valueOf(((BigInteger) data).longValue());
+		if (data instanceof BigInteger integer) {
+			return (T) Long.valueOf(integer.longValue());
 		}
 		if (data instanceof Long | data instanceof Integer | data instanceof Double | data instanceof String
 				| data instanceof Date | data instanceof Boolean) {

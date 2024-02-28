@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
@@ -46,8 +46,8 @@ public class GlobalControllerExceptionHandler {
     public ApiError handleApiException(HttpServletRequest req, Exception ex) {
         String statusCode = getStatusCode(HttpStatus.BAD_REQUEST);
         ApiException apiException = new ApiException(statusCode, "System cannot process");
-        if (ex instanceof ApiException) {
-            apiException = (ApiException) ex;
+        if (ex instanceof ApiException exception) {
+            apiException = exception;
         }
         StringWriter errors = new StringWriter();
         ex.printStackTrace(new PrintWriter(errors));

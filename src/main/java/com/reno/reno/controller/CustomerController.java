@@ -1,6 +1,6 @@
 package com.reno.reno.controller;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -18,7 +18,7 @@ public class CustomerController {
     @Autowired
     CustomerBusiness customerBusiness;
 
-    @PostMapping("/customer")
+    @PostMapping("/e-commerce-info/customer")
     public CustomerEntity postCustomeCustomer(@Valid @RequestBody CustomerRequest request) throws Exception {
         return customerBusiness.createCustomer(request);
     }

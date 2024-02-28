@@ -33,7 +33,7 @@ public class Util {
 
     @SuppressWarnings("unchecked")
     public static <T> boolean isNullOrEmpty(T value) {
-        return value == null || ((boolean) (value instanceof String && ((String) value).isEmpty()))
+        return value == null || ((boolean) (value instanceof String s && s.isEmpty()))
                 || (value instanceof List && ((boolean) ((List<T>) value).isEmpty()));
     }
 

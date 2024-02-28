@@ -2,7 +2,7 @@ package com.reno.reno.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +21,7 @@ public class StoreCodeDiscountController {
 
     private @Autowired StoreCodeDiscountBusiness storeCodeDiscountBusiness;
 
-    @PostMapping("/store-code-discount")
+    @PostMapping("/e-commerce-info/store-code-discount")
     public List<StoreCodeDiscountEntity> postStores(@Valid @RequestBody List<StoreCodeDiscountRequest> requests)
             throws ApiException {
         return storeCodeDiscountBusiness.createStoreCodeDiscount(requests);

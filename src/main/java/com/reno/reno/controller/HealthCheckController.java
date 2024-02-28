@@ -14,7 +14,7 @@ public class HealthCheckController {
     @Autowired
     private HealthCheckRepository healthCheckRepository;
 
-    @GetMapping("/healthcheck")
+    @GetMapping("/e-commerce-info/healthcheck")
     public HealthCheckEntiry getHealthCheck() throws ApiException {
         HealthCheckEntiry healthCheckEntiry = healthCheckRepository.findById(1)
                 .orElseThrow(() -> new ApiException("404", "API Not working"));

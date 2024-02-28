@@ -2,7 +2,7 @@ package com.reno.reno.model.customer;
 
 import java.util.Date;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.reno.reno.model.GenderEntity;

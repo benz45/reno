@@ -2,7 +2,7 @@ package com.reno.reno.model.store;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import com.reno.reno.model.CreateAddressRequest;
 

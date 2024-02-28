@@ -19,7 +19,7 @@ public class StoreOwnerBusiness {
 
     public StoreOwnerEntity getStoreOwnerByStoreIdOrElseThrow(Long storeId) throws ApiException {
         Optional<StoreOwnerEntity> storeOwener = storeOwnerRepository.findByStoreId(storeId);
-        if (!storeOwener.isPresent()) {
+        if (storeOwener.isEmpty()) {
             throw new ApiException("400", "Can't find store owener by store id store id " + storeId.toString());
         }
         return storeOwener.get();

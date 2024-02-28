@@ -1,6 +1,6 @@
 package com.reno.reno.controller;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -24,14 +24,14 @@ public class StoreController {
 
     private @Autowired StoreBusinessFlow storeBusinessFlow;
 
-    @GetMapping("/store")
+    @GetMapping("/e-commerce-info/store")
     public PageResponse<StorePageResponse> getStorePages(String storeName, Integer customerId, Pageable pageable)
             throws ApiException {
         StorePageFilter filter = new StorePageFilter(storeName, customerId, pageable);
         return storeBusinessFlow.getStorePages(filter);
     }
 
-    @PostMapping("/store")
+    @PostMapping("/e-commerce-info/store")
     public CreateStoreResponse postStores(@Valid @RequestBody CreateStoreRequest request) throws ApiException {
         return storeBusinessFlow.createStore(request);
     }

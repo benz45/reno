@@ -1,6 +1,6 @@
 package com.reno.reno.controller;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -25,17 +25,17 @@ public class ProductController {
     private @Autowired ProductBusiness productBusiness;
     private @Autowired ProductBusinessFlow productBusinessFlow;
 
-    @PostMapping("/product")
+    @PostMapping("/e-commerce-info/product")
     public CreateProductResponse postProduct(@Valid @RequestBody CreateProductRequest request) throws ApiException {
         return productBusinessFlow.shouldCreateProduct(request);
     }
 
-    @GetMapping("/product/{id}")
-    public CreateProductResponse getProductById(@PathVariable("id") Long id) throws ApiException {
+    @GetMapping("/e-commerce-info/product/{id}")
+    public CreateProductResponse getProductById(@PathVariable Long id) throws ApiException {
         return productBusiness.shouldGetProductAndProductImageByIdOrElseThrow(id);
     }
 
-    @GetMapping("/product")
+    @GetMapping("/e-commerce-info/product")
     public PageResponse<ProductPageResponse> getProduct(String productName, Pageable pageable) throws ApiException {
         return productBusinessFlow.shouldGetProductPage(productName, pageable);
     }

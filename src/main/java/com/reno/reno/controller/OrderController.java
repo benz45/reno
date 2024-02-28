@@ -1,6 +1,6 @@
 package com.reno.reno.controller;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +20,7 @@ public class OrderController {
 
     private @Autowired OrderBusiness orderBusiness;
 
-    @PostMapping("/order")
+    @PostMapping("/e-commerce-info/order")
     @ResponseBody
     public OrderEntity createOrder(@Valid @RequestBody RequestCreateOrder requestCreateOrder) throws ApiException {
         return orderBusiness.createOrder(requestCreateOrder);

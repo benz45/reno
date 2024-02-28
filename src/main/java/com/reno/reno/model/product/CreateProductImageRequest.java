@@ -1,6 +1,6 @@
 package com.reno.reno.model.product;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import lombok.Data;
 
