@@ -3,6 +3,7 @@ package com.reno.reno.controller;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ public class CustomerController {
     CustomerBusiness customerBusiness;
 
     @PostMapping("/e-commerce-info/customer")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public CustomerEntity postCustomeCustomer(@Valid @RequestBody CustomerRequest request) throws Exception {
         return customerBusiness.createCustomer(request);
     }

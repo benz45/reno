@@ -7,21 +7,18 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="seed-table-role_type" author="pao">
-        <insert tableName="role_type">
+    <changeSet id="seed-table-roles" author="pao">
+        <insert tableName="roles">
             <column name="id" value="1" />
-            <column name="name_th" value="USER" />
-            <column name="name_en" value="USER" />
+            <column name="name" value="ROLE_USER" />
         </insert>
-        <insert tableName="role_type">
+        <insert tableName="roles">
             <column name="id" value="2" />
-            <column name="name_th" value="PM" />
-            <column name="name_en" value="PM" />
+            <column name="name" value="ROLE_MODERATOR" />
         </insert>
-        <insert tableName="role_type">
+        <insert tableName="roles">
             <column name="id" value="3" />
-            <column name="name_th" value="ADMIN" />
-            <column name="name_en" value="ADMIN" />
+            <column name="name" value="ROLE_ADMIN" />
         </insert>
     </changeSet>
 
