@@ -13,8 +13,7 @@
     <includeAll path="a6-product/" relativeToChangelogFile="true" />
     <includeAll path="a7-store/" relativeToChangelogFile="true" />
     <includeAll path="a8-employee/" relativeToChangelogFile="true" />
-    <includeAll path="a9-user/" relativeToChangelogFile="true" />
-    <includeAll path="a10-role/" relativeToChangelogFile="true" />
+    <includeAll path="a9-auth/" relativeToChangelogFile="true" />
     <includeAll path="b1-relation/" relativeToChangelogFile="true" />
     <includeAll path="b2-drop/" relativeToChangelogFile="true" />
     <includeAll path="b3-seed/" relativeToChangelogFile="true" />

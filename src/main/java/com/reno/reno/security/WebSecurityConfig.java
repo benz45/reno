@@ -1,28 +1,36 @@
 package com.reno.reno.security;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-//import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.reno.reno.security.jwt.AuthEntryPointJwt;
 import com.reno.reno.security.jwt.AuthTokenFilter;
 import com.reno.reno.security.services.UserDetailsServiceImpl;
 
 @Configuration
-// @EnableWebSecurity
+@EnableWebSecurity
 // @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableMethodSecurity // Spring Boot 3
 public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
@@ -32,16 +40,15 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
   @Autowired
   private AuthEntryPointJwt unauthorizedHandler;
 
-  @Bean
-  public AuthTokenFilter authenticationJwtTokenFilter() {
-    return new AuthTokenFilter();
-  }
+  @Autowired
+  private AuthTokenFilter authenticationJwtTokenFilter;
 
-  // @Override
-  // public void configure(AuthenticationManagerBuilder
-  // authenticationManagerBuilder) throws Exception {
-  // authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-  // }
+  private static final String[] AUTH_WHITELIST = {
+      "/api/csrf/**",
+      "/api/auth/**",
+      "/swagger-ui/**",
+      "/v3/api-docs/**",
+  };
 
   @Bean
   public DaoAuthenticationProvider authenticationProvider() {
@@ -53,12 +60,6 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     return authProvider;
   }
 
-  // @Bean
-  // @Override
-  // public AuthenticationManager authenticationManagerBean() throws Exception {
-  // return super.authenticationManagerBean();
-  // }
-
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
     return authConfig.getAuthenticationManager();
@@ -69,32 +70,55 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
 
-  // @Override
-  // protected void configure(HttpSecurity http) throws Exception {
-  // http.cors().and().csrf().disable()
-  // .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-  // .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-  // .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-  // .antMatchers("/api/test/**").permitAll()
-  // .anyRequest().authenticated();
-  //
-  // http.addFilterBefore(authenticationJwtTokenFilter(),
-  // UsernamePasswordAuthenticationFilter.class);
-  // }
-
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf(csrf -> csrf.disable())
-        .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()
-            .requestMatchers("/api/test/**").permitAll()
+    // ***** CSRF Enable *****
+    CookieCsrfTokenRepository tokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+    CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
+    // set the name of the attribute the CsrfToken will be populated on
+    requestHandler.setCsrfRequestAttributeName("_csrf");
+    http.cors(Customizer.withDefaults())
+        .exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandler))
+        .addFilterBefore(authenticationJwtTokenFilter,
+            UsernamePasswordAuthenticationFilter.class)
+        .csrf((csrf) -> csrf
+            .csrfTokenRepository(tokenRepository)
+            .csrfTokenRequestHandler(requestHandler))
+        .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(requests -> requests
+            .requestMatchers(AUTH_WHITELIST).permitAll()
+            .requestMatchers("/api/e-commerce-info/**").authenticated()
             .anyRequest().authenticated());
-
     http.authenticationProvider(authenticationProvider());
 
-    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
+    // ***** CSRF Disable *****
+    // http.cors().and().csrf().disable()
+    // .authorizeHttpRequests()
+    // .requestMatchers("/api/auth/**").permitAll()
+    // .requestMatchers("/api/e-commerce-info/**").authenticated()
+    // .anyRequest().authenticated()
+    // .and()
+    // .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+    // .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    // http.authenticationProvider(authenticationProvider());
+    // http.addFilterBefore(authenticationJwtTokenFilter,
+    // UsernamePasswordAuthenticationFilter.class);
     return http.build();
   }
+
+  @Bean
+  public CorsFilter corsFilter() {
+    List<String> allowedMethods = Arrays.asList("GET", "PUT", "DELETE", "PATCH",
+        "POST", "HEAD", "OPTIONS");
+    CorsConfiguration config = new CorsConfiguration();
+    config.setAllowedOriginPatterns(Collections.singletonList("*"));
+    config.setAllowedMethods(allowedMethods);
+    config.setAllowCredentials(true);
+    config.addAllowedHeader("*");
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config);
+
+    return new CorsFilter(source);
+  }
+
 }

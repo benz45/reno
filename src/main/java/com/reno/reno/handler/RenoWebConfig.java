@@ -1,6 +1,7 @@
 package com.reno.reno.handler;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -12,6 +13,6 @@ public class RenoWebConfig implements WebMvcConfigurer {
 
 		// registry.addMapping("/**").allowedOrigins("*").allowedMethods("*").allowCredentials(true);
 
-		// registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
+		registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
 	}
 }

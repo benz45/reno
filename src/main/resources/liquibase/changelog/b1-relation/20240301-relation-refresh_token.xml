@@ -7,14 +7,14 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="create-table-roles" author="pao">
-        <createTable tableName="roles">
-            <column name="id" autoIncrement="true" type="int">
-                <constraints primaryKey="true" nullable="false" />
-            </column>
-            <column name="name" type="varchar(50)" />
-        </createTable>
+    <changeSet id="fk-refresh_token" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-refresh_token-to-user"
+            baseColumnNames="user_id"
+            baseTableName="refresh_token"
+            referencedColumnNames="id"
+            referencedTableName="user"
+        />
     </changeSet>
-
 
 </databaseChangeLog>

@@ -1,11 +1,7 @@
 package com.reno.reno.security.jwt;
 
 import java.io.IOException;
-
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,17 +10,29 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.reno.reno.model.auth.RefreshTokenEntity;
+import com.reno.reno.security.services.RefreshTokenService;
 import com.reno.reno.security.services.UserDetailsServiceImpl;
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@Component
 public class AuthTokenFilter extends OncePerRequestFilter {
   @Autowired
   private JwtUtils jwtUtils;
 
   @Autowired
   private UserDetailsServiceImpl userDetailsService;
+
+  @Autowired
+  private RefreshTokenService refreshTokenService;
 
   private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
@@ -33,7 +41,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
     try {
       String jwt = parseJwt(request);
-      if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+      String rft = parseRft(request);
+      Optional<RefreshTokenEntity> refreshTokenOpt = refreshTokenService.findByToken(rft);
+      RefreshTokenEntity refreshToken = null;
+      if (refreshTokenOpt.isPresent()) {
+        refreshToken = refreshTokenService.verifyExpiration(refreshTokenOpt.get());
+      }
+      if (jwt != null && jwtUtils.validateJwtToken(jwt) && refreshToken != null) {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -59,4 +73,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     return null;
   }
+
+  private String parseRft(HttpServletRequest request) {
+    String headerRft = request.getHeader("RefreshToken");
+    if (StringUtils.hasText(headerRft)) {
+      return headerRft;
+    }
+
+    return null;
+  }
+
 }

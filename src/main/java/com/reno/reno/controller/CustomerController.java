@@ -20,7 +20,6 @@ public class CustomerController {
     CustomerBusiness customerBusiness;
 
     @PostMapping("/e-commerce-info/customer")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public CustomerEntity postCustomeCustomer(@Valid @RequestBody CustomerRequest request) throws Exception {
         return customerBusiness.createCustomer(request);
     }

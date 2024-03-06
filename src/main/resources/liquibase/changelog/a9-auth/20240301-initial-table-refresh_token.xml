@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="create-table-refresh_token" author="pao">
+        <createTable tableName="refresh_token">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="user_id" type="bigint" />
+            <column name="token" type="varchar(255)" />
+            <column name="expiry_date" type="timestamptz" defaultValueComputed="now()">
+                <constraints nullable="false"></constraints>
+            </column>
+            <column name="created_at" type="timestamptz" defaultValueComputed="now()">
+                <constraints nullable="false"></constraints>
+            </column>
+            <column name="is_deleted" type="boolean" defaultValueComputed="false" />
+        </createTable>
+    </changeSet>
+
+
+</databaseChangeLog>

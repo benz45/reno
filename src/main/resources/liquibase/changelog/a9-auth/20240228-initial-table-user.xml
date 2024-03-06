@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="create-table-user" author="pao">
+        <createTable tableName="user">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="username" type="varchar(50)" />
+            <column name="email" type="varchar(50)" />
+            <column name="password" type="varchar(200)" />
+            <column name="created_at" type="timestamptz" defaultValueComputed="now()">
+                <constraints nullable="false"></constraints>
+            </column>
+            <column name="updated_at" type="timestamptz" defaultValueComputed="now()">
+                <constraints nullable="false"></constraints>
+            </column>
+            <column name="is_deleted" type="boolean" />
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-user_role" author="pao">
+        <createTable tableName="user_role">
+            <column name="id" autoIncrement="true" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="user_id" type="bigint" />
+            <column name="role_type_id" type="bigint" />
+            <column name="created_at" type="timestamptz" defaultValueComputed="now()">
+                <constraints nullable="false"></constraints>
+            </column>
+            <column name="updated_at" type="timestamptz" defaultValueComputed="now()">
+                <constraints nullable="false"></constraints>
+            </column>
+            <column name="is_deleted" type="boolean" defaultValueComputed="false" />
+        </createTable>
+    </changeSet>
+
+
+</databaseChangeLog>

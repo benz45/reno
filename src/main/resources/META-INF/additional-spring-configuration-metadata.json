@@ -19,6 +19,26 @@
             "name": "api.supabase.anon_key",
             "type": "java.lang.String",
             "description": "A description for 'api.supabase.anon_key'"
+        },
+        {
+            "name": "jwtSecret",
+            "type": "java.lang.String",
+            "description": "A description for 'jwtSecret'"
+        },
+        {
+            "name": "jwtRefreshExpirationMs",
+            "type": "java.lang.String",
+            "description": "A description for 'jwtRefreshExpirationMs'"
+        },
+        {
+            "name": "jwtExpirationMs",
+            "type": "java.lang.String",
+            "description": "A description for 'jwtExpirationMs'"
+        },
+        {
+            "name": "jwtSecret",
+            "type": "java.lang.String",
+            "description": "A description for 'jwtSecret'"
         }
     ]
 }

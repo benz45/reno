@@ -42,15 +42,15 @@ public class SwaggerConfiguration {
   public GroupedOpenApi authApi() {
     return GroupedOpenApi.builder()
         .group("Authentication API")
-        .pathsToMatch("/auth/**")
+        .pathsToMatch("/api/auth/**")
         .build();
   }
 
   @Bean
   public GroupedOpenApi userApi() {
     return GroupedOpenApi.builder()
-        .group("User API")
-        .pathsToMatch("/e-commerce-info/**")
+        .group("E-Commerce-Info API")
+        .pathsToMatch("/api/e-commerce-info/**")
         .build();
   }
 }
