@@ -16,7 +16,7 @@ import com.reno.reno.repository.auth.UserRepository;
 
 @Service
 public class RefreshTokenService {
-    @Value("${jwtRefreshExpirationMs}")
+    @Value("${jwt.refresh.expiration.ms}")
     private Long refreshTokenDurationMs;
 
     @Autowired
