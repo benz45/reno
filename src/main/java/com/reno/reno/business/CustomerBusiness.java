@@ -59,4 +59,9 @@ public class CustomerBusiness {
         return customerRepository.findById(id)
                 .orElseThrow(() -> new ApiException("400", "Can't find customer by id: " + id));
     }
+
+    public CustomerEntity getCustomerByUserId(@NonNull Long id) throws ApiException {
+        return customerRepository.findOneByUserId(id)
+                .orElseThrow(() -> new ApiException("400", "Can't find customer by user id: " + id));
+    }
 }
