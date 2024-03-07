@@ -2,6 +2,13 @@ package com.reno.reno.model.employee;
 
 import java.util.Date;
 
+import org.hibernate.annotations.Where;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.reno.reno.model.GenderEntity;
+import com.reno.reno.model.auth.UserEntity;
+import com.reno.reno.model.base.BaseColumnCreatedUpdatedIsDeleted;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,14 +21,6 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
-import org.hibernate.annotations.Where;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.reno.reno.model.GenderEntity;
-import com.reno.reno.model.auth.UserEntity;
-import com.reno.reno.model.base.BaseColumnCreatedUpdatedIsDeleted;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

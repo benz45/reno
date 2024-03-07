@@ -66,4 +66,9 @@ public class EmployeeBusiness {
         return employeeRepository.findById(id)
                 .orElseThrow(() -> new ApiException("400", "Can't find employee by id: " + id));
     }
+
+    public EmployeeEntity getEmployeeByUserId(@NonNull Long id) throws ApiException {
+        return employeeRepository.findOneByUserId(id)
+                .orElseThrow(() -> new ApiException("400", "Can't find employee by user id: " + id));
+    }
 }
