@@ -44,7 +44,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
   private AuthTokenFilter authenticationJwtTokenFilter;
 
   private static final String[] AUTH_WHITELIST = {
-      "/api/csrf/**",
+      "/api/csrf**",
       "/api/auth/**",
       "/swagger-ui/**",
       "/v3/api-docs/**",
@@ -77,18 +77,18 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
     // set the name of the attribute the CsrfToken will be populated on
     requestHandler.setCsrfRequestAttributeName("_csrf");
-    http.cors(Customizer.withDefaults())
-        .exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandler))
-        .addFilterBefore(authenticationJwtTokenFilter,
-            UsernamePasswordAuthenticationFilter.class)
+    http.cors().and()
+        .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+        .addFilterBefore(authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
         .csrf((csrf) -> csrf
             .csrfTokenRepository(tokenRepository)
             .csrfTokenRequestHandler(requestHandler))
-        .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(requests -> requests
-            .requestMatchers(AUTH_WHITELIST).permitAll()
-            .requestMatchers("/api/e-commerce-info/**").authenticated()
-            .anyRequest().authenticated());
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+        .authorizeHttpRequests()
+        .requestMatchers(AUTH_WHITELIST).permitAll()
+        .requestMatchers("/api/e-commerce-info/**").authenticated()
+        .anyRequest().authenticated();
+
     http.authenticationProvider(authenticationProvider());
 
     // ***** CSRF Disable *****

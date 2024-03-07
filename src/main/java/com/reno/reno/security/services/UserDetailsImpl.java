@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.reno.reno.model.auth.UserEntity;
+import com.reno.reno.model.auth.UserTypeEntity;
 
 public class UserDetailsImpl implements UserDetails {
   private static final long serialVersionUID = 1L;
@@ -19,15 +20,18 @@ public class UserDetailsImpl implements UserDetails {
 
   private String username;
 
+  private UserTypeEntity userType;
+
   @JsonIgnore
   private String password;
 
   private Collection<? extends GrantedAuthority> authorities;
 
-  public UserDetailsImpl(Long id, String username, String password,
+  public UserDetailsImpl(Long id, String username, String password, UserTypeEntity userType,
       Collection<? extends GrantedAuthority> authorities) {
     this.id = id;
     this.username = username;
+    this.userType = userType;
     this.password = password;
     this.authorities = authorities;
   }
@@ -36,10 +40,10 @@ public class UserDetailsImpl implements UserDetails {
     List<GrantedAuthority> authorities = user.getRoleTypes().stream()
         .map(role -> new SimpleGrantedAuthority(role.getNameEn().name()))
         .collect(Collectors.toList());
-
     return new UserDetailsImpl(user.getId(),
         user.getUsername(),
         user.getPassword(),
+        user.getUserType(),
         authorities);
   }
 
@@ -60,6 +64,10 @@ public class UserDetailsImpl implements UserDetails {
   @Override
   public String getUsername() {
     return username;
+  }
+
+  public UserTypeEntity getUserType() {
+    return userType;
   }
 
   @Override

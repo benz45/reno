@@ -61,10 +61,11 @@ public class AuthBusiness {
         List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
                 .collect(Collectors.toList());
         JwtResponse jwtResponse = new JwtResponse();
-        jwtResponse.setRefreshToken(jwt);
-        jwtResponse.setAccessToken(refreshToken.getToken());
+        jwtResponse.setRefreshToken(refreshToken.getToken());
+        jwtResponse.setAccessToken(jwt);
         jwtResponse.setId(userDetails.getId());
         jwtResponse.setUsername(userDetails.getUsername());
+        jwtResponse.setUserType(userDetails.getUserType());
         jwtResponse.setRoles(roles);
         return ResponseEntity.ok(jwtResponse);
     }
