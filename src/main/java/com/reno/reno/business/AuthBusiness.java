@@ -17,17 +17,19 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.reno.reno.constant.RoleTypeConstant;
+import com.reno.reno.constant.UserTypeIdConstant;
 import com.reno.reno.model.auth.RefreshTokenEntity;
 import com.reno.reno.model.auth.RoleTypeEntity;
 import com.reno.reno.model.auth.TokenRefreshRequest;
 import com.reno.reno.model.auth.TokenRefreshResponse;
 import com.reno.reno.model.auth.UserEntity;
+import com.reno.reno.model.auth.UserTypeEntity;
 import com.reno.reno.model.exception.TokenRefreshException;
 import com.reno.reno.payload.request.SigninRequest;
 import com.reno.reno.payload.request.SignupRequest;
 import com.reno.reno.payload.response.JwtResponse;
 import com.reno.reno.payload.response.MessageResponse;
-import com.reno.reno.repository.auth.RoleRepository;
+import com.reno.reno.repository.auth.RoleTypeRepository;
 import com.reno.reno.repository.auth.UserRepository;
 import com.reno.reno.security.jwt.JwtUtils;
 import com.reno.reno.security.services.RefreshTokenService;
@@ -41,8 +43,11 @@ public class AuthBusiness {
     private @Autowired AuthenticationManager authenticationManager;
     private @Autowired RefreshTokenService refreshTokenService;
     private @Autowired UserRepository userRepository;
+    private @Autowired UserTypeBusiness userTypeBusiness;
     private @Autowired PasswordEncoder encoder;
-    private @Autowired RoleRepository roleRepository;
+    private @Autowired RoleTypeRepository roleRepository;
+    private @Autowired CustomerBusiness customerBusiness;
+    private @Autowired EmployeeBusiness employeeBusiness;
 
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<JwtResponse> signinUser(SigninRequest signinRequest) {
@@ -55,28 +60,37 @@ public class AuthBusiness {
         RefreshTokenEntity refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
         List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-        return ResponseEntity
-                .ok(new JwtResponse(jwt, refreshToken.getToken(), userDetails.getId(), userDetails.getUsername(),
-                        userDetails.getEmail(),
-                        roles));
+        JwtResponse jwtResponse = new JwtResponse();
+        jwtResponse.setRefreshToken(jwt);
+        jwtResponse.setAccessToken(refreshToken.getToken());
+        jwtResponse.setId(userDetails.getId());
+        jwtResponse.setUsername(userDetails.getUsername());
+        jwtResponse.setRoles(roles);
+        return ResponseEntity.ok(jwtResponse);
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> signupUaer(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+    public ResponseEntity<MessageResponse> signupUser(@Valid @RequestBody SignupRequest request) throws Exception {
+        if (userRepository.existsByUsername(request.getUsername())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
         }
-
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
-        }
-
+        UserTypeEntity userType = userTypeBusiness.shouldGetUserTypeByIdOrElseThrow(request.getUserTypeId());
         UserEntity user = new UserEntity();
-        user.setUsername(signUpRequest.getUsername());
-        user.setEmail(signUpRequest.getEmail());
-        user.setPassword(encoder.encode(signUpRequest.getPassword()));
+        user.setUsername(request.getUsername());
+        user.setPassword(encoder.encode(request.getPassword()));
+        user.setUserType(userType);
+        shouldSetRoleToUserOrElseThrow(user, request);
+        userRepository.save(user);
+        if (userType.getId().equals(UserTypeIdConstant.CUSTOMER)) {
+            customerBusiness.createCustomer(request, user);
+        } else if (userType.getId().equals(UserTypeIdConstant.EMPLOYEE)) {
+            employeeBusiness.createEmployee(request, user);
+        }
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
 
-        Set<Integer> roleTypeRequests = signUpRequest.getRole();
+    public UserEntity shouldSetRoleToUserOrElseThrow(UserEntity user, SignupRequest request) {
+        Set<Integer> roleTypeRequests = request.getRole();
         Set<RoleTypeEntity> roleTypes = new HashSet<>();
 
         if (roleTypeRequests == null) {
@@ -90,11 +104,8 @@ public class AuthBusiness {
                 roleTypes.add(_roleTypes);
             });
         }
-
         user.setRoleTypes(roleTypes);
-        userRepository.save(user);
-
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return user;
     }
 
     public ResponseEntity<?> getRefreshToken(@Valid @RequestBody TokenRefreshRequest request) {

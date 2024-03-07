@@ -1,19 +1,19 @@
 package com.reno.reno.business;
 
 import java.util.Date;
-import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.reno.reno.constant.CustomerLevalIdConstant;
 import com.reno.reno.model.GenderEntity;
+import com.reno.reno.model.auth.UserEntity;
 import com.reno.reno.model.customer.CustomerEntity;
 import com.reno.reno.model.customer.CustomerLevalEntity;
-import com.reno.reno.model.customer.CustomerRequest;
 import com.reno.reno.model.exception.ApiException;
-import com.reno.reno.model.service.SignUpRequest;
-import com.reno.reno.model.service.signup.SignUpResponse;
+import com.reno.reno.payload.request.SignupRequest;
 import com.reno.reno.repository.customer.CustomerRepository;
 import com.reno.reno.service.supabase.SupabaseServiceImpl;
 
@@ -30,31 +30,23 @@ public class CustomerBusiness extends SupabaseServiceImpl {
     GenderBusiness genderBusiness;
 
     @Transactional(rollbackFor = Exception.class)
-    public CustomerEntity createCustomer(CustomerRequest request) throws Exception {
-        checkCustomerUsernameThrowIfDuplicate(request.getUsername());
+    public CustomerEntity createCustomer(SignupRequest request, UserEntity user) throws ApiException {
+        if (customerRepository.existsByEmail(request.getUsername())) {
+            throw new ApiException("400", "Error: Email is already taken!");
+        }
         CustomerEntity customer = convertCustomerRequestToEntity(request);
-        CustomerLevalEntity customerLeval = customerLevalBusiness.shouldGetCustomerLevalByIdOrElseThrowIfNotExists(1);
+        CustomerLevalEntity customerLeval = customerLevalBusiness
+                .shouldGetCustomerLevalByIdOrElseThrowIfNotExists(CustomerLevalIdConstant.Classic);
         GenderEntity gender = genderBusiness.shouldGetGenderByIdOrElseThrowIfNotExists(request.getGender().getId());
         customer.setCustomerLeval(customerLeval);
         customer.setGender(gender);
-        SignUpRequest signUpEmailRequest = new SignUpRequest();
-        signUpEmailRequest.setEmail(customer.getEmail());
-        signUpEmailRequest.setPassword(request.getPassword());
-        SignUpResponse authUser = postSignUp(signUpEmailRequest);
-        customer.setAuthUserId(authUser.getUser().getId());
+        customer.setAuthUserId(UUID.randomUUID().toString());
+        customer.setUser(user);
         return customerRepository.save(customer);
     }
 
-    public void checkCustomerUsernameThrowIfDuplicate(String username) throws ApiException {
-        Optional<CustomerEntity> optionalCustomer = customerRepository.findByUsername(username);
-        if (optionalCustomer.isPresent()) {
-            throw new ApiException("400", "Username already taken.");
-        }
-    }
-
-    public CustomerEntity convertCustomerRequestToEntity(CustomerRequest request) {
+    public CustomerEntity convertCustomerRequestToEntity(SignupRequest request) {
         CustomerEntity customer = new CustomerEntity();
-        customer.setUsername(request.getUsername());
         customer.setName(request.getName());
         customer.setTal(request.getTal());
         customer.setEmail(request.getEmail());

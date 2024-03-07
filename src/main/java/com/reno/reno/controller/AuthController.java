@@ -13,6 +13,7 @@ import com.reno.reno.model.auth.TokenRefreshRequest;
 import com.reno.reno.payload.request.SigninRequest;
 import com.reno.reno.payload.request.SignupRequest;
 import com.reno.reno.payload.response.JwtResponse;
+import com.reno.reno.payload.response.MessageResponse;
 
 import jakarta.validation.Valid;
 
@@ -23,8 +24,9 @@ public class AuthController {
 	private @Autowired AuthBusiness authBusiness;
 
 	@PostMapping("/signup")
-	public ResponseEntity<?> signupUser(@Valid @RequestBody SignupRequest signUpRequest) {
-		return authBusiness.signupUaer(signUpRequest);
+	public ResponseEntity<MessageResponse> signupUser(@Valid @RequestBody SignupRequest signUpRequest)
+			throws Exception {
+		return authBusiness.signupUser(signUpRequest);
 	}
 
 	@PostMapping("/signin")

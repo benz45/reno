@@ -15,9 +15,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -27,7 +27,6 @@ import lombok.ToString;
 @Entity
 @Table(schema = "e_commerce_info", name = "user", uniqueConstraints = {
     @UniqueConstraint(columnNames = "username"),
-    @UniqueConstraint(columnNames = "email")
 })
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -40,15 +39,14 @@ public class UserEntity extends BaseColumnCreatedUpdatedIsDeleted {
   @Size(max = 50)
   private String username;
 
-  @NotBlank
-  @Size(max = 50)
-  @Email
-  private String email;
-
   @JsonIgnore
   @NotBlank
   @Size(max = 200)
   private String password;
+
+  @ManyToOne
+  @JoinColumn(name = "user_type_id", referencedColumnName = "id")
+  private UserTypeEntity userType;
 
   @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
   @JoinTable(schema = "e_commerce_info", name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_type_id"))

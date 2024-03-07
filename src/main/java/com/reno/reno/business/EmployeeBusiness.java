@@ -1,21 +1,21 @@
 package com.reno.reno.business;
 
 import java.util.Date;
-import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.reno.reno.constant.EmployeeLevalIdConstant;
 import com.reno.reno.constant.EmployeeRoleTypeConstant;
 import com.reno.reno.model.GenderEntity;
+import com.reno.reno.model.auth.UserEntity;
 import com.reno.reno.model.employee.EmployeeEntity;
 import com.reno.reno.model.employee.EmployeeLevalEntity;
-import com.reno.reno.model.employee.EmployeeRequest;
 import com.reno.reno.model.employee.EmployeeRoleTypeEntity;
 import com.reno.reno.model.exception.ApiException;
-import com.reno.reno.model.service.SignUpRequest;
-import com.reno.reno.model.service.signup.SignUpResponse;
+import com.reno.reno.payload.request.SignupRequest;
 import com.reno.reno.repository.employee.EmployeeRepository;
 import com.reno.reno.service.supabase.SupabaseServiceImpl;
 
@@ -30,35 +30,30 @@ public class EmployeeBusiness extends SupabaseServiceImpl {
     private @Autowired GenderBusiness genderBusiness;
 
     @Transactional(rollbackFor = Exception.class)
-    public EmployeeEntity createEmployee(EmployeeRequest request) throws Exception {
-        checkEmployeeUsernameThrowIfDuplicate(request.getUsername());
+    public EmployeeEntity createEmployee(SignupRequest request, UserEntity user) throws Exception {
+        checkEmployeeEmailThrowIfDuplicate(request.getEmail());
         EmployeeEntity employee = convertEmployeeRequestToEntity(request);
         EmployeeLevalEntity employeeLeval = employeeLevalBusiness
-                .shouldGetEmployeeLevalByIdOrElseThrowIfNotExists(1);
+                .shouldGetEmployeeLevalByIdOrElseThrowIfNotExists(EmployeeLevalIdConstant.Classic);
         GenderEntity gender = genderBusiness.shouldGetGenderByIdOrElseThrowIfNotExists(request.getGender().getId());
         EmployeeRoleTypeEntity employeeRoleType = employeeRoleTypeBusiness
                 .shouldGetEmployeeRoleTyoeByIdOrElseThrowIfNotExists(EmployeeRoleTypeConstant.SE);
         employee.setEmployeeRoleType(employeeRoleType);
         employee.setEmployeeLeval(employeeLeval);
         employee.setGender(gender);
-        SignUpRequest signUpEmailRequest = new SignUpRequest();
-        signUpEmailRequest.setEmail(employee.getEmail());
-        signUpEmailRequest.setPassword(request.getPassword());
-        SignUpResponse authUser = postSignUp(signUpEmailRequest);
-        employee.setAuthUserId(authUser.getUser().getId());
+        employee.setAuthUserId(UUID.randomUUID().toString());
+        employee.setUser(user);
         return employeeRepository.save(employee);
     }
 
-    public void checkEmployeeUsernameThrowIfDuplicate(String username) throws ApiException {
-        Optional<EmployeeEntity> optionalCustomer = employeeRepository.findByUsername(username);
-        if (optionalCustomer.isPresent()) {
-            throw new ApiException("400", "Username already taken.");
+    public void checkEmployeeEmailThrowIfDuplicate(String email) throws ApiException {
+        if (employeeRepository.existsByEmail(email)) {
+            throw new ApiException("400", "Email already taken.");
         }
     }
 
-    public EmployeeEntity convertEmployeeRequestToEntity(EmployeeRequest request) {
+    public EmployeeEntity convertEmployeeRequestToEntity(SignupRequest request) {
         EmployeeEntity employee = new EmployeeEntity();
-        employee.setUsername(request.getUsername());
         employee.setName(request.getName());
         employee.setTal(request.getTal());
         employee.setEmail(request.getEmail());

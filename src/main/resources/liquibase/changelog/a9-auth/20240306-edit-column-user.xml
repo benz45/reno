@@ -7,20 +7,10 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="add-column-auth_user_id_to-customer" author="pao">
-        <addColumn tableName="customer">
-            <column name="auth_user_id" type="varchar(100)" />
+    <changeSet id="add-column-user_type_id-to-user" author="pao">
+        <addColumn tableName="user">
+            <column name="user_type_id" type="int" />
         </addColumn>
-    </changeSet>
-
-    <changeSet id="add-column-user_id_to-customer" author="pao">
-        <addColumn tableName="customer">
-            <column name="user_id" type="bigint" />
-        </addColumn>
-    </changeSet>
-
-    <changeSet id="drop-column-username_to-customer" author="pao">
-        <dropColumn tableName="customer" columnName="username" />
     </changeSet>
 
 

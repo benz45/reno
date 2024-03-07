@@ -75,4 +75,15 @@
         />
     </changeSet>
 
+    <changeSet id="fk-user" author="pao">
+        <addForeignKeyConstraint
+            constraintName="fk-customer-to-user"
+            baseColumnNames="user_id"
+            baseTableName="customer"
+            referencedColumnNames="id"
+            referencedTableName="user"
+        />
+    </changeSet>
+
+
 </databaseChangeLog>
