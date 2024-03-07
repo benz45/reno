@@ -15,12 +15,11 @@ import com.reno.reno.model.customer.CustomerLevalEntity;
 import com.reno.reno.model.exception.ApiException;
 import com.reno.reno.payload.request.SignupRequest;
 import com.reno.reno.repository.customer.CustomerRepository;
-import com.reno.reno.service.supabase.SupabaseServiceImpl;
 
 import lombok.NonNull;
 
 @Component
-public class CustomerBusiness extends SupabaseServiceImpl {
+public class CustomerBusiness {
 
     private @Autowired CustomerRepository customerRepository;
 

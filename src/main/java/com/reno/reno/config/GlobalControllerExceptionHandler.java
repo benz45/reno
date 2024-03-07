@@ -1,4 +1,4 @@
-package com.reno.reno.handler;
+package com.reno.reno.config;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

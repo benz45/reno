@@ -17,12 +17,11 @@ import com.reno.reno.model.employee.EmployeeRoleTypeEntity;
 import com.reno.reno.model.exception.ApiException;
 import com.reno.reno.payload.request.SignupRequest;
 import com.reno.reno.repository.employee.EmployeeRepository;
-import com.reno.reno.service.supabase.SupabaseServiceImpl;
 
 import lombok.NonNull;
 
 @Component
-public class EmployeeBusiness extends SupabaseServiceImpl {
+public class EmployeeBusiness {
 
     private @Autowired EmployeeRepository employeeRepository;
     private @Autowired EmployeeRoleTypeBusiness employeeRoleTypeBusiness;

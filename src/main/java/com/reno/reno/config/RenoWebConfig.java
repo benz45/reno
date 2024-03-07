@@ -1,4 +1,4 @@
-package com.reno.reno.handler;
+package com.reno.reno.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
