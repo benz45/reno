@@ -16,14 +16,12 @@ import com.reno.reno.repository.auth.UserRepository;
 
 @Service
 public class RefreshTokenService {
-    @Value("${jwt.refresh.expiration.ms}")
+    @Value("${jwtRefreshExpirationMs}")
     private Long refreshTokenDurationMs;
 
-    @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
+    private @Autowired RefreshTokenRepository refreshTokenRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private @Autowired UserRepository userRepository;
 
     public Optional<RefreshTokenEntity> findByToken(String token) {
         return refreshTokenRepository.findByToken(token);
