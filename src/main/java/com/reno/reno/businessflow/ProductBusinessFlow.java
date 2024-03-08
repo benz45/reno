@@ -57,6 +57,9 @@ public class ProductBusinessFlow {
         List<ProductPageResponse> productPageResponses = productBusiness
                 .convertQueryResultToProductPageResponse(queryResults);
         Long count = productBusiness.executeCountSqlString(sqlCount);
+        if (count == null) {
+            count = 0L;
+        }
         return PageResponse.create(productPageResponses, count, pageable, ProductPageResponse.class);
     }
 }
