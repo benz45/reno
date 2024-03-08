@@ -1,4 +1,4 @@
-FROM openjdk:11-jre-slim
+FROM openjdk:18-jdk-slim
 WORKDIR /app
 
 ARG API_VERSION="latest"
@@ -7,15 +7,16 @@ ENV PROJECT_NAME="reno"
 
 ADD /target/${PROJECT_NAME}-0.0.1-SNAPSHOT.jar target/${PROJECT_NAME}-0.0.1-SNAPSHOT.jar
 
-RUN apt-get update
-RUN apt-get -y install python3-pip
-
 RUN mkdir -p BOOT-INF/classes/
 ADD src/main/resources/application-template.properties BOOT-INF/classes/
 
 WORKDIR /app/src/main/resources
 
+ADD ./rogue.sh ./rogue.sh
 ADD ./run.sh ./run.sh
-ADD ./rogue.py ./rogue.py
+
+RUN sed -i 's/\r$//' rogue.sh
 RUN sed -i 's/\r$//' run.sh
+
+RUN chmod +x 'rogue.sh'
 RUN chmod +x 'run.sh'
