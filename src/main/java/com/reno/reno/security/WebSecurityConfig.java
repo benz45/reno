@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,14 +33,11 @@ import com.reno.reno.security.services.UserDetailsServiceImpl;
 // @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableMethodSecurity // Spring Boot 3
 public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
-  @Autowired
-  UserDetailsServiceImpl userDetailsService;
+  private @Autowired UserDetailsServiceImpl userDetailsService;
 
-  @Autowired
-  private AuthEntryPointJwt unauthorizedHandler;
+  private @Autowired AuthEntryPointJwt unauthorizedHandler;
 
-  @Autowired
-  private AuthTokenFilter authenticationJwtTokenFilter;
+  private @Autowired AuthTokenFilter authenticationJwtTokenFilter;
 
   private static final String[] AUTH_WHITELIST = {
       "/api/csrf**",

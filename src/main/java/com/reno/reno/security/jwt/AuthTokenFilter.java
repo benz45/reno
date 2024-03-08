@@ -25,14 +25,12 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class AuthTokenFilter extends OncePerRequestFilter {
-  @Autowired
-  private JwtUtils jwtUtils;
 
-  @Autowired
-  private UserDetailsServiceImpl userDetailsService;
+  private @Autowired JwtUtils jwtUtils;
 
-  @Autowired
-  private RefreshTokenService refreshTokenService;
+  private @Autowired UserDetailsServiceImpl userDetailsService;
+
+  private @Autowired RefreshTokenService refreshTokenService;
 
   private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 

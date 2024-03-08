@@ -9,8 +9,7 @@ import com.reno.reno.repository.employee.EmployeeLevalRepository;
 
 @Component
 public class EmployeeLevalBusiness {
-    @Autowired
-    EmployeeLevalRepository employeeLevalRepository;
+    private @Autowired EmployeeLevalRepository employeeLevalRepository;
 
     public EmployeeLevalEntity shouldGetEmployeeLevalByIdOrElseThrowIfNotExists(Integer employeeLevalId)
             throws ApiException {

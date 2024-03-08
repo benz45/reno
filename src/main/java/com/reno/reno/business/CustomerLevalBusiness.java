@@ -9,8 +9,8 @@ import com.reno.reno.repository.customer.CustomerLevalRepository;
 
 @Component
 public class CustomerLevalBusiness {
-    @Autowired
-    CustomerLevalRepository customerLevalRepository;
+
+    private @Autowired CustomerLevalRepository customerLevalRepository;
 
     public CustomerLevalEntity shouldGetCustomerLevalByIdOrElseThrowIfNotExists(Integer customerLevalId)
             throws ApiException {

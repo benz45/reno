@@ -25,8 +25,7 @@ public class CustomerBusiness {
 
     private @Autowired CustomerLevalBusiness customerLevalBusiness;
 
-    @Autowired
-    GenderBusiness genderBusiness;
+    private @Autowired GenderBusiness genderBusiness;
 
     @Transactional(rollbackFor = Exception.class)
     public CustomerEntity createCustomer(SignupRequest request, UserEntity user) throws ApiException {

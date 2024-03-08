@@ -16,8 +16,7 @@ import com.reno.reno.repository.HealthCheckRepository;
 @RequestMapping("/api/e-commerce-info")
 public class HealthCheckController {
 
-    @Autowired
-    private HealthCheckRepository healthCheckRepository;
+    private @Autowired HealthCheckRepository healthCheckRepository;
 
     @GetMapping("/healthcheck")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")

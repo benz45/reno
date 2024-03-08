@@ -9,8 +9,8 @@ import com.reno.reno.repository.GenderRepository;
 
 @Component
 public class GenderBusiness {
-    @Autowired
-    private GenderRepository genderRepository;
+
+    private @Autowired GenderRepository genderRepository;
 
     public GenderEntity shouldGetGenderByIdOrElseThrowIfNotExists(Integer genderId) throws ApiException {
         if (genderId == null) {
