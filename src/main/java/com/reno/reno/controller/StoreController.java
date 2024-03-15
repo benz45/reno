@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,9 +38,17 @@ public class StoreController {
         return storeBusinessFlow.getStorePages(filter);
     }
 
-    @PostMapping("/store")
+    @PostMapping("/store/customer/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public CreateStoreResponse postStore(@Valid @RequestBody CreateStoreRequest request) throws ApiException {
-        return storeBusinessFlow.createStore(request);
+    public CreateStoreResponse postStoreCustomer(@PathVariable Long id, @Valid @RequestBody CreateStoreRequest request)
+            throws ApiException {
+        return storeBusinessFlow.createStoreCustomer(id, request);
+    }
+
+    @PostMapping("/store/employee/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public CreateStoreResponse postStoreEmployee(@PathVariable Long id, @Valid @RequestBody CreateStoreRequest request)
+            throws ApiException {
+        return storeBusinessFlow.createStoreEmployee(id, request);
     }
 }

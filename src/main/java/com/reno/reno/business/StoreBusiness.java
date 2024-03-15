@@ -111,14 +111,16 @@ public class StoreBusiness extends BaseCustomRepository {
 
     public void checkStoreImageTypeThrowIfDuplicate(List<CreateStoreImageRequest> storeImageRequests)
             throws ApiException {
-        HashMap<Integer, Boolean> duplicateMap = new HashMap<Integer, Boolean>();
-        for (CreateStoreImageRequest storeImageRequest : storeImageRequests) {
-            if (Util.isNotNull(storeImageRequest.getStoreImageTypeId())) {
-                Integer storeImageTypeId = storeImageRequest.getStoreImageTypeId();
-                if (duplicateMap.get(storeImageTypeId) != null) {
-                    throw new ApiException("400", "Duplicate store image");
+        if (Util.isNotNull(storeImageRequests)) {
+            HashMap<Integer, Boolean> duplicateMap = new HashMap<Integer, Boolean>();
+            for (CreateStoreImageRequest storeImageRequest : storeImageRequests) {
+                if (Util.isNotNull(storeImageRequest.getStoreImageTypeId())) {
+                    Integer storeImageTypeId = storeImageRequest.getStoreImageTypeId();
+                    if (duplicateMap.get(storeImageTypeId) != null) {
+                        throw new ApiException("400", "Duplicate store image");
+                    }
+                    duplicateMap.put(storeImageRequest.getStoreImageTypeId(), true);
                 }
-                duplicateMap.put(storeImageRequest.getStoreImageTypeId(), true);
             }
         }
     }
@@ -136,7 +138,7 @@ public class StoreBusiness extends BaseCustomRepository {
     }
 
     public CreateStoreResponse convertToCreateStoreResponse(StoreEntity store, List<StoreImageEntity> storeImages,
-            Long customerId) {
+            Long createdById) {
         CreateStoreResponse response = new CreateStoreResponse();
         Util.setIfNotNull(store.getId(), response::setId);
         Util.setIfNotNull(store.getStoreName(), response::setStoreName);
@@ -145,7 +147,7 @@ public class StoreBusiness extends BaseCustomRepository {
         Util.setIfNotNull(storeImages, response::setStoreImages);
         Util.setIfNotNull(store.getCreatedAt(), response::setCreatedAt);
         Util.setIfNotNull(store.getUpdatedAt(), response::setUpdatedAt);
-        Util.setIfNotNull(customerId, response::setCreatedBy);
+        Util.setIfNotNull(createdById, response::setCreatedBy);
         return response;
     }
 

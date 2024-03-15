@@ -12,6 +12,7 @@ import org.hibernate.annotations.Where;
 
 import com.reno.reno.model.base.BaseColumnCreatedIsDeleted;
 import com.reno.reno.model.customer.CustomerEntity;
+import com.reno.reno.model.employee.EmployeeEntity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,5 +34,9 @@ public class StoreOwnerEntity extends BaseColumnCreatedIsDeleted {
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private CustomerEntity customer;
+
+    @ManyToOne
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")
+    private EmployeeEntity employee;
 
 }

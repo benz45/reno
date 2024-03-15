@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.reno.reno.model.ImageEntity;
-import com.reno.reno.model.customer.CustomerEntity;
 import com.reno.reno.model.store.CreateStoreImageRequest;
+import com.reno.reno.model.store.CreateStoreRequest;
 import com.reno.reno.model.store.StoreEntity;
 import com.reno.reno.model.store.StoreImageEntity;
 import com.reno.reno.model.store.StoreImageTypeEntity;
@@ -25,17 +25,17 @@ public class StoreImageBusiness {
     private @Autowired StoreImageTypeRepository storeImageTypeRepository;
     private @Autowired ImageBusiness imageBusiness;
 
-    public List<StoreImageEntity> shouldSaveStoreImage(List<CreateStoreImageRequest> storeImageRequestList,
-            StoreEntity store, CustomerEntity customer) {
+    public List<StoreImageEntity> shouldSaveStoreImage(CreateStoreRequest request,
+            StoreEntity store, Long createdById) {
         List<StoreImageEntity> storeImages = new ArrayList<>();
-        if (!Util.isNullOrEmpty(storeImageRequestList)) {
+        if (!Util.isNullOrEmpty(request.getStoreImages())) {
             List<StoreImageTypeEntity> storeImageTypes = storeImageTypeRepository.findAll();
             HashMap<Integer, StoreImageTypeEntity> storeImageTypesMap = new HashMap<Integer, StoreImageTypeEntity>();
             storeImageTypes.forEach(e -> storeImageTypesMap.put(e.getId(), e));
-            for (CreateStoreImageRequest storeImageRequest : storeImageRequestList) {
+            for (CreateStoreImageRequest storeImageRequest : request.getStoreImages()) {
                 StoreImageTypeEntity storeImageType = storeImageTypesMap.get(storeImageRequest.getStoreImageTypeId());
                 if (storeImageType != null) {
-                    ImageEntity image = imageBusiness.saveImage(storeImageRequest.getKey(), customer.getId());
+                    ImageEntity image = imageBusiness.saveImage(storeImageRequest.getKey(), createdById);
                     StoreImageEntity storeImage = saveStoreImage(image, store, storeImageType);
                     storeImages.add(storeImage);
                 }

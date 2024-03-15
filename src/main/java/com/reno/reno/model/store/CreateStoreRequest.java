@@ -11,9 +11,6 @@ import lombok.Data;
 @Data
 public class CreateStoreRequest {
 
-    @NotNull(message = "Customer id required.")
-    private Long customerId;
-
     @NotNull(message = "Store name required.")
     private String storeName;
 
