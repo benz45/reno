@@ -40,7 +40,6 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
     body.put("error", "Unauthorized");
     body.put("message", authException.getMessage());
     body.put("path", request.getServletPath());
-
     if (authException instanceof BadCredentialsException) {
       body.put("status", HttpServletResponse.SC_BAD_REQUEST);
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

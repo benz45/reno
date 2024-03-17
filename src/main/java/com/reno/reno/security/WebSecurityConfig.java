@@ -31,7 +31,8 @@ import com.reno.reno.security.services.UserDetailsServiceImpl;
 @Configuration
 @EnableWebSecurity
 // @EnableGlobalMethodSecurity(prePostEnabled = true)
-@EnableMethodSecurity // Spring Boot 3
+// @EnableMethodSecurity // Spring Boot 3
+@EnableMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
   private @Autowired UserDetailsServiceImpl userDetailsService;
 
