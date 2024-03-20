@@ -1,6 +1,7 @@
 package com.reno.reno.repository;
 
 import java.math.BigInteger;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +49,9 @@ public class BaseCustomRepository {
 		try {
 			Query query = em.createNativeQuery(sqlString);
 			Object resultObj = query.getSingleResult();
+			if (resultObj instanceof Long value) {
+				return value;
+			}
 			return convertToLongFromBigInteger(resultObj);
 		} catch (NoResultException e) {
 			return 0L;
@@ -57,7 +61,7 @@ public class BaseCustomRepository {
 	}
 
 	protected Long convertToLongFromBigInteger(Object data) {
-		if (data instanceof BigInteger integer) {
+		if (data instanceof Long integer) {
 			return integer.longValue();
 		}
 		return null;
@@ -92,8 +96,8 @@ public class BaseCustomRepository {
 	}
 
 	protected Date convertToDate(Object data) {
-		if (data instanceof Date date) {
-			return date;
+		if (data instanceof Instant date) {
+			return Date.from(date);
 		}
 		return null;
 	}

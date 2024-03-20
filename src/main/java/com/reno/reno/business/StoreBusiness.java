@@ -5,9 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.validation.constraints.NotNull;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.reno.reno.model.AddressEntiry;
@@ -17,12 +16,13 @@ import com.reno.reno.model.store.CreateStoreRequest;
 import com.reno.reno.model.store.CreateStoreResponse;
 import com.reno.reno.model.store.StoreEntity;
 import com.reno.reno.model.store.StoreImageEntity;
-import com.reno.reno.model.store.StorePageFilter;
 import com.reno.reno.model.store.StorePageResponse;
 import com.reno.reno.repository.BaseCustomRepository;
 import com.reno.reno.repository.store.StoreRepository;
 import com.reno.reno.util.StringUtil;
 import com.reno.reno.util.Util;
+
+import jakarta.validation.constraints.NotNull;
 
 @Component
 public class StoreBusiness extends BaseCustomRepository {
@@ -44,23 +44,43 @@ public class StoreBusiness extends BaseCustomRepository {
                 .orElseThrow(() -> new ApiException("400", "Can't find store id: " + storeId));
     }
 
-    public String generateQueryString(StorePageFilter filter) {
+    public String generateQueryStringGetStoreCustomer(String storeName, Integer customerId, Pageable pageable) {
         StringBuilder s = new StringBuilder();
         s.append(
                 "select distinct s.id, s.store_name, s.detail, i.\"key\" as store_profile_url, s.updated_at, s.created_at, count(s.id) as following_customers, so.customer_id as created_by from e_commerce_info.store s");
         s.append(generateFromQuery());
-        s.append(generateFilterQuery(filter));
+        s.append(generateFilterQueryGetStoreCustomer(storeName, customerId));
         s.append(" group by s.id, i.id, so.id order by following_customers desc\n");
-        s.append(pageCustomBusiness.generatePaginationQuery(filter.getPageable()));
+        s.append(pageCustomBusiness.generatePaginationQuery(pageable));
         return s.toString();
     }
 
-    public String generateQueryStringCount(StorePageFilter filter) {
+    public String generateQueryStringGetStoreEmployee(String storeName, Integer employeeId, Pageable pageable) {
+        StringBuilder s = new StringBuilder();
+        s.append(
+                "select distinct s.id, s.store_name, s.detail, i.\"key\" as store_profile_url, s.updated_at, s.created_at, count(s.id) as following_customers, so.employee_id as created_by from e_commerce_info.store s");
+        s.append(generateFromQuery());
+        s.append(generateFilterQueryGetStoreEmployee(storeName, employeeId));
+        s.append(" group by s.id, i.id, so.id order by following_customers desc\n");
+        s.append(pageCustomBusiness.generatePaginationQuery(pageable));
+        return s.toString();
+    }
+
+    public String generateQueryStringCountGetCustomer(String storeName, Integer customerId) {
         StringBuilder s = new StringBuilder();
         s.append(
                 "select distinct count(s.id) from e_commerce_info.store s");
         s.append(generateFromQuery());
-        s.append(generateFilterQuery(filter));
+        s.append(generateFilterQueryGetStoreCustomer(storeName, customerId));
+        return s.toString();
+    }
+
+    public String generateQueryStringCountGetEmployee(String storeName, Integer employeeId) {
+        StringBuilder s = new StringBuilder();
+        s.append(
+                "select distinct count(s.id) from e_commerce_info.store s");
+        s.append(generateFromQuery());
+        s.append(generateFilterQueryGetStoreEmployee(storeName, employeeId));
         return s.toString();
     }
 
@@ -76,15 +96,28 @@ public class StoreBusiness extends BaseCustomRepository {
         return s.toString();
     }
 
-    public String generateFilterQuery(StorePageFilter filter) {
+    public String generateFilterQueryGetStoreCustomer(String storeName, Integer customerId) {
         StringBuilder s = new StringBuilder();
         s.append(" where true ");
-        if (filter.getStoreName() != null) {
+        if (storeName != null) {
             s.append(" and (lower(s.store_name) like  '%"
-                    + StringUtil.replaceSpecialString(filter.getStoreName()).toLowerCase() + "%') ");
+                    + StringUtil.replaceSpecialString(storeName).toLowerCase() + "%') ");
         }
-        if (filter.getCustomerId() != null) {
-            s.append(" and so.customer_id = " + filter.getCustomerId());
+        if (customerId != null) {
+            s.append(" and so.customer_id = " + customerId);
+        }
+        return s.toString();
+    }
+
+    public String generateFilterQueryGetStoreEmployee(String storeName, Integer employeeId) {
+        StringBuilder s = new StringBuilder();
+        s.append(" where true ");
+        if (storeName != null) {
+            s.append(" and (lower(s.store_name) like  '%"
+                    + StringUtil.replaceSpecialString(storeName).toLowerCase() + "%') ");
+        }
+        if (employeeId != null) {
+            s.append(" and so.employee_id = " + employeeId);
         }
         return s.toString();
     }

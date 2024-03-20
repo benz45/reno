@@ -19,7 +19,8 @@ import com.reno.reno.model.base.PageResponse;
 import com.reno.reno.model.exception.ApiException;
 import com.reno.reno.model.store.CreateStoreRequest;
 import com.reno.reno.model.store.CreateStoreResponse;
-import com.reno.reno.model.store.StorePageFilter;
+import com.reno.reno.model.store.StoreCustomerPageFilter;
+import com.reno.reno.model.store.StoreEmployeePageFilter;
 import com.reno.reno.model.store.StorePageResponse;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -30,12 +31,22 @@ public class StoreController {
 
     private @Autowired StoreBusinessFlow storeBusinessFlow;
 
-    @GetMapping("/store")
+    @GetMapping("/store/customer")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public PageResponse<StorePageResponse> getStorePages(String storeName, Integer customerId, Pageable pageable)
+    public PageResponse<StorePageResponse> getStoreCustomerPages(String storeName, Integer customerId,
+            Pageable pageable)
             throws ApiException {
-        StorePageFilter filter = new StorePageFilter(storeName, customerId, pageable);
-        return storeBusinessFlow.getStorePages(filter);
+        StoreCustomerPageFilter filter = new StoreCustomerPageFilter(storeName, customerId, pageable);
+        return storeBusinessFlow.getStoreCustomerPages(filter);
+    }
+
+    @GetMapping("/store/employee")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public PageResponse<StorePageResponse> getStoreEmployeePages(String storeName, Integer employeeId,
+            Pageable pageable)
+            throws ApiException {
+        StoreEmployeePageFilter filter = new StoreEmployeePageFilter(storeName, employeeId, pageable);
+        return storeBusinessFlow.getStoreEmployeePages(filter);
     }
 
     @PostMapping("/store/customer/{id}")

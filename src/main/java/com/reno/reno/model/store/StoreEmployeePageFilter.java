@@ -5,17 +5,17 @@ import org.springframework.data.domain.Pageable;
 import lombok.Data;
 
 @Data
-public class StorePageFilter {
+public class StoreEmployeePageFilter {
 
-    public StorePageFilter(String storeName, Integer customerId, Pageable pageable) {
+    public StoreEmployeePageFilter(String storeName, Integer employeeId, Pageable pageable) {
         this.storeName = storeName;
-        this.customerId = customerId;
+        this.employeeId = employeeId;
         this.pageable = pageable;
     }
 
     private String storeName;
 
-    private Integer customerId;
+    private Integer employeeId;
 
     private Pageable pageable;
 }

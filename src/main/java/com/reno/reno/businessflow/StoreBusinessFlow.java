@@ -19,7 +19,8 @@ import com.reno.reno.model.store.CreateStoreRequest;
 import com.reno.reno.model.store.CreateStoreResponse;
 import com.reno.reno.model.store.StoreEntity;
 import com.reno.reno.model.store.StoreImageEntity;
-import com.reno.reno.model.store.StorePageFilter;
+import com.reno.reno.model.store.StoreCustomerPageFilter;
+import com.reno.reno.model.store.StoreEmployeePageFilter;
 import com.reno.reno.model.store.StorePageResponse;
 
 @Component
@@ -30,9 +31,24 @@ public class StoreBusinessFlow {
     private @Autowired EmployeeBusiness employeeBusiness;
     private @Autowired StoreOwnerBusiness storeOwnerBusiness;
 
-    public PageResponse<StorePageResponse> getStorePages(StorePageFilter filter) {
-        String sqlQuery = storeBusiness.generateQueryString(filter);
-        String sqlCount = storeBusiness.generateQueryStringCount(filter);
+    public PageResponse<StorePageResponse> getStoreCustomerPages(StoreCustomerPageFilter filter) {
+        String sqlQuery = storeBusiness.generateQueryStringGetStoreCustomer(filter.getStoreName(),
+                filter.getCustomerId(),
+                filter.getPageable());
+        String sqlCount = storeBusiness.generateQueryStringCountGetCustomer(filter.getStoreName(),
+                filter.getCustomerId());
+        List<Object[]> queryResults = storeBusiness.exceutePageableSqlString(sqlQuery);
+        List<StorePageResponse> responses = storeBusiness.convertQueryToResponse(queryResults);
+        Long count = storeBusiness.executeCountSqlString(sqlCount);
+        return PageResponse.create(responses, count, filter.getPageable(), StorePageResponse.class);
+    }
+
+    public PageResponse<StorePageResponse> getStoreEmployeePages(StoreEmployeePageFilter filter) {
+        String sqlQuery = storeBusiness.generateQueryStringGetStoreEmployee(filter.getStoreName(),
+                filter.getEmployeeId(),
+                filter.getPageable());
+        String sqlCount = storeBusiness.generateQueryStringCountGetEmployee(filter.getStoreName(),
+                filter.getEmployeeId());
         List<Object[]> queryResults = storeBusiness.exceutePageableSqlString(sqlQuery);
         List<StorePageResponse> responses = storeBusiness.convertQueryToResponse(queryResults);
         Long count = storeBusiness.executeCountSqlString(sqlCount);
